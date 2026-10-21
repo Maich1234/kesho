@@ -18,7 +18,7 @@ jobs:
       GODOT_VERSION: 4.5.1
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -38,7 +38,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sdkmanager 'platform-tools' 'build-tools;35.0.0' 'platforms;android-35'
+          export ANDROID_HOME="$RUNNER_TEMP/android-sdk"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          curl --fail --location --retry 3 https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip -o /tmp/android-tools.zip
+          echo '7ec965280a073311c339e571cd5de778b9975026cfcbe79f2b1cdcb1e15317ee  /tmp/android-tools.zip' | sha256sum --check
+          mkdir -p "$ANDROID_HOME/cmdline-tools"
+          unzip -q /tmp/android-tools.zip -d "$ANDROID_HOME/cmdline-tools"
+          mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+          sdk_manager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          (yes || true) | "$sdk_manager" --sdk_root="$ANDROID_HOME" --licenses > /tmp/android-licenses.log
+          "$sdk_manager" --sdk_root="$ANDROID_HOME" 'platform-tools' 'build-tools;35.0.0' 'platforms;android-35' 
           mkdir -p "$HOME/.config/godot" build
           python3 - <<'PY'
           import os
