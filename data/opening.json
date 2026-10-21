@@ -1,0 +1,370 @@
+{
+  "contact": {
+    "speaker": "Your city contact",
+    "title": "Someone knows your name",
+    "text": "The bus is gone. Your bag suddenly feels heavier. Across the square, someone waves: a familiar face in a city that owes you nothing.",
+    "choices": [
+      {
+        "id": "meet",
+        "label": "Ask what starting over here really costs.",
+        "result": "\"A bed first. Then a plan. People here sell shortcuts before they sell breakfast.\" Your contact points out the courtyard, the work yard and the learning centre. \"And call home. They have been pretending not to worry. Hata mimi nimechoka with their calls.\"",
+        "sets": [
+          "met_contact"
+        ],
+        "hours": 1,
+        "excludes": [
+          "met_contact"
+        ]
+      },
+      {
+        "id": "home",
+        "label": "Call home before exploring.",
+        "result": "The conversation starts with advice and ends with someone asking whether you have eaten. You almost say yes. You tell the truth instead. For a moment, the city feels less enormous.",
+        "sets": [
+          "called_home"
+        ],
+        "hours": 1,
+        "requires": [
+          "met_contact"
+        ],
+        "excludes": [
+          "called_home"
+        ]
+      },
+      {
+        "id": "listen",
+        "label": "Ask what people say about the fees office.",
+        "result": "\"Listen to what someone wants you to do quickly,\" your contact says. \"Urgency is sometimes just a way of stopping questions.\" You have a lead, not proof.",
+        "sets": [
+          "heard_warning"
+        ],
+        "requires": [
+          "met_contact"
+        ],
+        "excludes": [
+          "heard_warning"
+        ]
+      }
+    ]
+  },
+  "courtyard": {
+    "speaker": "Sifa • courtyard caretaker",
+    "title": "A place before dark",
+    "text": "Laundry moves above the courtyard. Someone is cooking onions; someone else is arguing with a radio. Sifa opens a ledger. \"A city introduction is free. A room is not.\"",
+    "choices": [
+      {
+        "id": "relative_bed",
+        "label": "Accept your relative’s spare room: C150 for three nights.",
+        "result": "Your relative clears a space and hands you a spare key. \"No miracles after ten. Also, if anyone calls, I am not home. Unless they owe me money.\" You have a bed for the opening chapter, and a household expecting you to help.",
+        "cost": 150,
+        "sets": [
+          "shelter",
+          "family_obligation"
+        ],
+        "requires": [
+          "met_contact"
+        ],
+        "excludes": [
+          "shelter"
+        ],
+        "background": "Family household"
+      },
+      {
+        "id": "friend_bed",
+        "label": "Share your friend’s room: C240 for three nights.",
+        "result": "There are two mattresses and one working socket. Your friend calls this \"fully connected accommodation.\" You laugh, split the cleaning and agree to keep business debts separate.",
+        "cost": 240,
+        "sets": [
+          "shelter",
+          "friend_room"
+        ],
+        "requires": [
+          "met_contact"
+        ],
+        "excludes": [
+          "shelter"
+        ],
+        "background": "Independent parent"
+      },
+      {
+        "id": "community_bed",
+        "label": "Take the community hostel bed: C300 for three nights.",
+        "result": "The coordinator gives you a receipt and the quiet-hours rules. Another resident is revising under a corridor light. You are strangers for now. The chapter’s three nights are covered.",
+        "cost": 300,
+        "sets": [
+          "shelter",
+          "hostel"
+        ],
+        "requires": [
+          "met_contact"
+        ],
+        "excludes": [
+          "shelter"
+        ]
+      },
+      {
+        "id": "family_talk",
+        "label": "Help prepare supper and listen.",
+        "result": "Sifa laughs about an uncle who announced he had \"connections\" and then asked everyone for bus fare. Later, quietly, she mentions that the official training desk has a fee-waiver list. \"Ask the desk itself. Not the man outside.\"",
+        "hours": 1,
+        "effort": 5,
+        "sets": [
+          "waiver_tip"
+        ],
+        "requires": [
+          "shelter"
+        ],
+        "excludes": [
+          "waiver_tip"
+        ]
+      }
+    ]
+  },
+  "work": {
+    "speaker": "Tendo • dispatch supervisor",
+    "title": "An honest day. A better offer.",
+    "text": "A delivery van idles beside a warehouse. Tendo checks names against a clipboard. A man in a pressed shirt waits away from the queue. He seems interested in people who are running out of options.",
+    "choices": [
+      {
+        "id": "shift",
+        "label": "Take a sorting shift. Four hours, C360.",
+        "result": "The work is repetitive, the supervisor impatient, and the payment real. You leave with C360 and aching shoulders. A colleague shares water and asks whether you are coming back tomorrow.",
+        "hours": 4,
+        "effort": 30,
+        "gain": 360,
+        "sets": [
+          "worked"
+        ],
+        "excludes": [
+          "worked"
+        ]
+      },
+      {
+        "id": "contract",
+        "label": "Ask for the delivery terms in writing.",
+        "result": "Tendo shows you a legitimate route: three hours, C280, no deposit. The man in the pressed shirt stops smiling when you ask whether his offer has a receipt too.",
+        "hours": 1,
+        "sets": [
+          "delivery_terms"
+        ],
+        "excludes": [
+          "delivery_terms"
+        ]
+      },
+      {
+        "id": "delivery",
+        "label": "Complete the documented delivery route.",
+        "result": "You return the signed slips. Tendo pays C280 and writes your name on next week’s list. A modest beginning, but one you can explain.",
+        "hours": 3,
+        "effort": 20,
+        "gain": 280,
+        "requires": [
+          "delivery_terms"
+        ],
+        "sets": [
+          "delivery_done"
+        ],
+        "excludes": [
+          "delivery_done"
+        ]
+      },
+      {
+        "id": "shortcut",
+        "label": "Take the stranger’s sealed-envelope errand. C700 promised.",
+        "result": "",
+        "hours": 2,
+        "effort": 10,
+        "sets": [
+          "shortcut_taken"
+        ],
+        "excludes": [
+          "shortcut_taken"
+        ],
+        "outcomes": [
+          {
+            "weight": 0.6,
+            "gain": 700,
+            "sets": [
+              "owed_favour"
+            ],
+            "result": "He pays exactly what he promised. \"Reliable people are hard to find,\" he says, saving your number. Later, he texts: SAME TIME NEXT WEEK. Payment has arrived. The terms are only beginning."
+          },
+          {
+            "weight": 0.4,
+            "gain": 0,
+            "sets": [
+              "unpaid_errand"
+            ],
+            "result": "The recipient takes the envelope. The promised payment never comes. Back at the yard, the stranger has gone. Tendo remembers his car, but not his name. You have lost time, and someone now has your phone number."
+          }
+        ]
+      },
+      {
+        "id": "ask_stranger",
+        "label": "Ask who the envelope is for and why the pay is high.",
+        "result": "\"You want a job or an interview?\" the stranger asks. Tendo looks up from the clipboard, then looks away. You can still accept or decline. The silence is information.",
+        "sets": [
+          "questioned_stranger"
+        ],
+        "excludes": [
+          "questioned_stranger"
+        ]
+      }
+    ]
+  },
+  "learning": {
+    "speaker": "Rehema • learning-centre clerk",
+    "title": "The price of a chance",
+    "text": "The learning centre has a real noticeboard, a long queue and a printer that appears to be negotiating its own employment contract. Outside, a broker promises to move names to the top of the list.",
+    "choices": [
+      {
+        "id": "official",
+        "label": "Read the official application notice.",
+        "result": "Applications cost C100 and do not guarantee admission. Fee waivers are available through the clerk. No person outside the office is authorised to sell priority. You photograph the notice.",
+        "hours": 1,
+        "sets": [
+          "read_notice"
+        ],
+        "excludes": [
+          "read_notice"
+        ]
+      },
+      {
+        "id": "apply",
+        "label": "Submit an official training application. C100.",
+        "result": "Rehema checks your documents and gives you a reference number. \"A reference is not an admission,\" she says. \"Keep looking for work while we process it.\" It is slower than a promise, but it leaves a record.",
+        "hours": 2,
+        "cost": 100,
+        "sets": [
+          "training_application"
+        ],
+        "requires": [
+          "read_notice"
+        ],
+        "excludes": [
+          "training_application"
+        ]
+      },
+      {
+        "id": "waiver",
+        "label": "Request the documented fee waiver.",
+        "result": "You complete the waiver form and explain your circumstances. Rehema accepts the application without a fee and gives you a reference number. Asking for help has saved money, not guaranteed a place.",
+        "hours": 3,
+        "sets": [
+          "training_application",
+          "waiver_used"
+        ],
+        "requires": [
+          "read_notice",
+          "waiver_tip"
+        ],
+        "excludes": [
+          "training_application"
+        ]
+      },
+      {
+        "id": "campus",
+        "label": "Ask about campus sponsorship routes.",
+        "result": "Rehema lists the documents and deadlines for two sponsorship routes. None requires paying a private broker. A student volunteer offers to review your statement next week. The work of getting to campus has begun.",
+        "hours": 2,
+        "sets": [
+          "campus_lead"
+        ],
+        "excludes": [
+          "campus_lead"
+        ]
+      },
+      {
+        "id": "broker",
+        "label": "Pay C600 for the broker’s promised priority.",
+        "result": "",
+        "hours": 1,
+        "cost": 600,
+        "sets": [
+          "paid_broker"
+        ],
+        "excludes": [
+          "paid_broker"
+        ],
+        "outcomes": [
+          {
+            "weight": 0.35,
+            "sets": [
+              "broker_introduction"
+            ],
+            "result": "Your name is introduced to someone inside. They offer a meeting next week, not an admission. The broker insists that the next step \"is a separate arrangement.\" You have gained access without knowing its price."
+          },
+          {
+            "weight": 0.65,
+            "sets": [
+              "broker_missing"
+            ],
+            "result": "The broker’s phone stops connecting. Rehema cannot find your name in the register. A second applicant describes the same receipt. You can keep quiet or bring the accounts together."
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "label": "Compare accounts with the other applicant and file a complaint.",
+        "result": "You submit both accounts and keep copies. The clerk records the complaint without promising recovery. The other applicant thanks you. Someone outside watches you leave together.",
+        "hours": 2,
+        "requires": [
+          "broker_missing"
+        ],
+        "sets": [
+          "complaint"
+        ],
+        "excludes": [
+          "complaint"
+        ]
+      }
+    ]
+  },
+  "kiosk": {
+    "speaker": "Nuru • tea kiosk",
+    "title": "Tea, rumours and small mercies",
+    "text": "Nuru slides a cup across the counter. \"You can sit without buying. But if you start explaining the economy, buy two.\" Workers, students and drivers pass through; everyone brings part of a story.",
+    "choices": [
+      {
+        "id": "meal",
+        "label": "Buy a meal and rest. C80, one hour.",
+        "result": "Warm food, a little quiet. Nuru turns down the radio and lets you finish without asking for your life story.",
+        "cost": 80,
+        "hours": 1,
+        "restore": 30,
+        "sets": [
+          "meal_today"
+        ],
+        "excludes": [
+          "meal_today"
+        ]
+      },
+      {
+        "id": "rumour",
+        "label": "Listen before asking for favours.",
+        "result": "A driver describes the envelope man as a campaign organiser. A student says he works for a contractor. Both could be partly right. You remember the accounts separately; a rumour is not evidence.",
+        "hours": 1,
+        "sets": [
+          "network_rumour"
+        ],
+        "excludes": [
+          "network_rumour"
+        ]
+      },
+      {
+        "id": "help",
+        "label": "Help Nuru close up for C90.",
+        "result": "You wash cups while Nuru counts the day’s takings. She pays C90 and mentions that the warehouse needs reliable sorters. Small help can become a connection, too.",
+        "hours": 2,
+        "effort": 15,
+        "gain": 90,
+        "sets": [
+          "helped_nuru"
+        ],
+        "excludes": [
+          "helped_nuru"
+        ]
+      }
+    ]
+  }
+}
