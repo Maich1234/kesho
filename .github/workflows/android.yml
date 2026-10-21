@@ -65,6 +65,8 @@ jobs:
           if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/import.log; then exit 1; fi
           XDG_DATA_HOME="$RUNNER_TEMP/kesho-tests" godot --headless --script res://tests/test_life.gd 2>&1 | tee /tmp/tests.log
           if grep -E 'SCRIPT ERROR|FAIL:|Parse Error' /tmp/tests.log; then exit 1; fi
+          timeout 60s env XDG_DATA_HOME="$RUNNER_TEMP/kesho-touch" godot --headless --script res://tests/test_touch.gd 2>&1 | tee /tmp/touch-tests.log
+          if grep -E 'SCRIPT ERROR|FAIL:|Parse Error|^ERROR:' /tmp/touch-tests.log; then exit 1; fi
       - name: Export signed test APK
         run: godot --headless --export-debug Android build/Kesho-Prototype.apk
       - name: Verify APK signature

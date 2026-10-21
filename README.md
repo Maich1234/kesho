@@ -2,15 +2,17 @@
 
 **Every tomorrow has a price.** An African life simulation and political thriller about ambition, family, hidden power and the cost of success.
 
-## Current milestone: first offline playable, v0.1
+## Current milestone: first offline playable, v0.1.1
 
-A native landscape Godot prototype with an original procedural 3D district. Create a 19-year-old character, choose one of three modest family backgrounds, meet your contact, arrange accommodation, explore work and education leads, and manage three days of money, time and energy. Branching conversations, seeded uncertain outcomes, a private editable journal, automatic local saving and corrupt-save backup recovery are implemented.
+A native landscape Godot prototype with an original procedural 3D district. Create a 19-year-old character, choose one of three modest family backgrounds, meet your contact, arrange accommodation, explore work and education leads, and manage three days of money, time and energy. Branching conversations, seeded uncertain outcomes, a private editable journal, automatic local saving and corrupt-save backup recovery are implemented. v0.1.1 fixes native touch input and adds an original score, ambience, click/confirmation/footstep audio, optional haptics, motion feedback, persistent preferences and explicit unavailable-action explanations.
 
 This is a short systems prototype, **not the complete 30–50-hour game**. The blockout art is not the final semi-realistic art direction. Accounts, multiplayer, real-time AI dialogue, full careers, family switching, death/checkpoint branching, content filters, ads and purchases are not implemented. Beliefs, gender, mode and family personality are saved selections; most deeper effects are future work. Kiswahili currently covers navigation and status labels only.
 
 ## Play on Android
 
 Open **Actions → Android prototype → Run workflow**, wait for the `Kesho-Android-test-build` artifact, download and extract the ZIP, then install `Kesho-Prototype.apk`. It targets ARM64 Android devices. It is a debug-signed test APK, not a Play Store release. Android may require allowing installation from the app used to open the file. Builds are not production signed; signing keys must never be committed.
+
+Use Sound & controls on the title or Settings in the city to adjust music, effects, ambience, vibration and reduced motion. Preferences are saved independently of your story. Audio pauses when the app loses focus.
 
 Tap a destination in the bottom bar to walk there and open the conversation. Tap the street for free movement. Enable the virtual joystick in Settings if preferred. Reading and walking do not consume planning hours; choices do. Arrange accommodation before ending the day. Day three ends the prototype. Save & exit returns to the title. One active save slot: beginning a new life asks before replacing it.
 
@@ -21,6 +23,7 @@ Pinned engine: **Godot 4.5.1 standard edition, GDScript**, Compatibility rendere
 ```bash
 godot --headless --editor --import --quit
 godot --headless --script res://tests/test_life.gd
+godot --headless --script res://tests/test_touch.gd
 mkdir -p build
 godot --headless --export-debug Android build/Kesho-Prototype.apk
 ```

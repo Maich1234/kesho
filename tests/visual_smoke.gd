@@ -2,8 +2,7 @@ extends SceneTree
 var game: Node
 func _initialize() -> void: call_deferred("run")
 func capture(file: String) -> void:
-	await process_frame
-	await process_frame
+	await create_timer(.23).timeout
 	await RenderingServer.frame_post_draw
 	var img:=root.get_texture().get_image()
 	var out:=OS.get_environment("KESHO_QA_DIR")
@@ -13,6 +12,7 @@ func capture(file: String) -> void:
 func run() -> void:
 	game=load("res://scenes/main.tscn").instantiate(); root.add_child(game)
 	await capture("01-title")
+	game.show_settings(); await capture("08-settings"); game.clear_modal()
 	game.create_character(); await capture("02-character")
 	var life=root.get_node("Life"); life.save_enabled=false
 	life.fresh("Amani","Family household",1,0,"Checkpoints")
@@ -27,5 +27,5 @@ func run() -> void:
 		if is_instance_valid(game.modal): break
 	assert(is_instance_valid(game.modal),"Walking must reach courtyard and open conversation")
 	await capture("07-courtyard")
-	print("KESHO VISUAL SMOKE: captured seven screens; walking interaction reached courtyard")
-	game.queue_free(); await process_frame; quit()
+	print("KESHO VISUAL SMOKE: captured eight screens; walking interaction reached courtyard")
+	root.get_node("Sound").shutdown(); game.queue_free(); await create_timer(.15).timeout; quit()

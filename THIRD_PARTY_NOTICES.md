@@ -18,4 +18,4 @@ Title.ttf is DejaVu Serif; Body.ttf is DejaVu Sans. The unmodified font binaries
 
 ## Original assets
 
-All district geometry, avatar blockouts and the Kesho icon in this prototype are original procedural/code assets. No stock character packs, scraped images, generated raster images or third-party audio are included. Final production art is future work.
+All district geometry, avatar blockouts and the Kesho icon in this prototype are original procedural/code assets. No stock character packs, scraped images, generated raster images or third-party audio are included. The original 43.6-second score, 16-second ambience and UI/footstep cues were procedurally composed and synthesised for Kesho. Reproduction code is in `tools/generate_audio.py`. Final production art is future work.

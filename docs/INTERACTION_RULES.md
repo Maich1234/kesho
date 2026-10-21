@@ -1,0 +1,12 @@
+# Kesho interaction rules — applied in v0.1.1
+
+1. **Input is a tested contract.** A real finger event must activate the same native control as a mouse. Regression tests traverse Input and GUI routing, not signal emission or direct button callbacks.
+2. **Acknowledge before work.** Press tint and a quiet cue begin on button-down; activation gets a click and optional short vibration. Do not wait for a transition or network request before feedback.
+3. **One gesture, one action.** One primary pointer owns UI and movement. UI taps cannot fall through to the street; repeated activation on the same button is guarded. Buttons dispatch actions after signal delivery so screen replacement does not free the emitting control mid-callback.
+4. **States explain themselves.** No-save Continue has an adjacent explanation. Unavailable story actions show the missing money, hours or energy. Walking displays its destination; blocked destinations give feedback.
+5. **Keep targets comfortable and stable.** Standard buttons have 56 design-unit minimum height, story choices 60, native selectors 54. Labels wrap on long choices; scrollable forms expose overflow. Actual physical size still needs device checks; design units alone do not guarantee a 48 dp target on every screen.
+6. **Navigation preserves ownership and work.** Opening a modal pauses movement, resets a held stick and puts the modal above the HUD. Android Back returns one level. Journal edits persist when closed or backgrounded. Title overlays never accidentally unpause the city.
+7. **Motion is brief and purposeful.** Button depression takes 70 ms, release 110 ms, screen entry 160 ms. Cosmetic world motion is bounded and time-independent. Controls remain live throughout. Reduced motion bypasses those effects.
+8. **Mix sound rather than stack noise.** Music, effects and ambience use separate buses and saved levels. Conversations duck music. Six reusable effect voices bound allocation; footsteps occur only during walking. Original compressed loops avoid per-frame synthesis.
+9. **Respect the player's environment.** Mute, separate volumes, vibration and reduced motion are available from the title. Preferences survive new stories. Backgrounding pauses loops and stops transient cues.
+10. **Prove the actual failure is fixed.** Keep the original no-touch regression, run the complete finger-input walkthrough and state suite, inspect rendered screens, verify mixer output, and export/verify the APK. Physical-phone signoff remains distinct from simulation.

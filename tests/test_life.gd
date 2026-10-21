@@ -103,4 +103,6 @@ func run() -> void:
 			check(not path.is_empty(),"Connected destinations: "+a_key+" to "+b_key)
 	print("KESHO TESTS: %d checks, %d failures" % [checks,failures.size()])
 	district.queue_free(); life.queue_free(); await process_frame
+	root.get_node("Sound").shutdown()
+	await create_timer(.15).timeout
 	quit(0 if failures.is_empty() else 1)

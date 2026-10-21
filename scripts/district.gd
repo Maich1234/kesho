@@ -1,6 +1,8 @@
 extends Node3D
 ## Original procedural blockout assets; replace with licensed production art later.
 signal arrived(place: String)
+signal travel_failed
+var reduced_motion := false
 var camera: Camera3D
 var avatar: Node3D
 var marker: MeshInstance3D
@@ -186,19 +188,21 @@ func cell(pos: Vector3) -> Vector2i:
 
 func walk_to(pos: Vector3) -> void:
 	var end := cell(pos)
-	if not astar.is_in_boundsv(end) or astar.is_point_solid(end): return
+	if not astar.is_in_boundsv(end) or astar.is_point_solid(end):
+		pending=""; travel_failed.emit(); return
 	var start := cell(avatar.position)
-	if not astar.is_in_boundsv(start) or astar.is_point_solid(start): return
+	if not astar.is_in_boundsv(start) or astar.is_point_solid(start):
+		pending=""; travel_failed.emit(); return
 	route.clear()
 	for point in astar.get_id_path(start,end): route.append(Vector3(point.x,0,point.y))
 	marker.position=Vector3(end.x,.13,end.y); marker.visible=not route.is_empty()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if paused: return
+	# GUI and world share the primary emulated mouse. Never process raw touch twice.
 	var pressed := false
 	var screen := Vector2.ZERO
-	if event is InputEventScreenTouch and event.pressed: pressed=true; screen=event.position
-	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT: pressed=true; screen=event.position
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT: pressed=true; screen=event.position
 	if not pressed: return
 	var origin := camera.project_ray_origin(screen)
 	var direction := camera.project_ray_normal(screen)
@@ -211,6 +215,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	elapsed += delta
+	if is_instance_valid(marker) and marker.visible and not reduced_motion: marker.scale=Vector3.ONE*(1.0+.08*sin(elapsed*5))
 	if paused: return
 	var input := Input.get_vector("ui_left","ui_right","ui_up","ui_down") + joystick
 	if input.length()>.1:

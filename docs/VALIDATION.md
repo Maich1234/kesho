@@ -39,3 +39,16 @@ Future signed builds should use a retained test signing key stored as a CI secre
 - https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_ios.html
 - https://supabase.com/docs/guides/database/postgres/row-level-security
 - https://supabase.com/docs/guides/realtime
+
+
+## v0.1.1 — touch and feedback fix
+
+The reported title-screen bug was reproduced with `InputEventScreenTouch`: no character-creation screen opened while `pointing/emulate_mouse_from_touch=false`. Enabling it made the same finger event open the creator. Earlier direct screen-method calls did not cover this input route.
+
+The project now uses one primary emulated mouse pointer for GUI and world, with raw touch excluded from world routing to prevent double actions. GUI taps cannot also move the character. Multi-finger gestures are not a supported control scheme in this prototype. Android Back navigates screens rather than immediately terminating the app.
+
+**53 additional integration checks** send finger events through the actual input dispatcher. They cover title controls, selector opening, character creation, settings and audio-bus output/muting, saved preferences, modal z-order after language change, navigation and dialogue, a single committed story decision, journal preservation on Android Back, joystick release outside its pad, save/resume and background audio pause/resume. The master audio mixer was checked for nonzero output and silence when muted. This is automated engine validation, not a claim of a physical speaker/headphone or vibration test.
+
+Original audio assets: 43.6-second score, 16-second city ambience, seven short UI/movement cues; less than 350 KB combined. PCM generation is deterministic and reproducible with `tools/generate_audio.py`. The renderer does no procedural audio synthesis per frame.
+
+The build targets ARM64 Android, version code 2 / 0.1.1. The same local debug signing key is retained from the initial direct APK; verify certificates before presenting an update as compatible. Physical-device touch responsiveness, speaker balance, vibration, thermal behaviour and sustained frame rate still need user testing.
