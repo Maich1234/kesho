@@ -18,7 +18,8 @@ namespace Kesho.Runtime
         OfflineSave saves;
         StoryHud hud;
         Stage stage;
-        bool playing, loading, background;
+        bool playing, loading, background, creating, settingsOpen;
+        Action onBack, settingsReturn;
         float saveClock, idle;
         int lineIndex;
         string spokenNode;
@@ -34,7 +35,7 @@ namespace Kesho.Runtime
             chapter=JsonUtility.FromJson<Chapter>(Resources.Load<TextAsset>("Story/opening").text); chapter.Validate();
             saves=new OfflineSave(Path.Combine(Application.persistentDataPath,"kesho-unity-v1"),chapter);
             Sound=gameObject.AddComponent<Soundscape>();
-            var ui=new GameObject("Story interface"); ui.transform.SetParent(transform); hud=ui.AddComponent<StoryHud>();
+            var ui=new GameObject("Story interface",typeof(RectTransform)); ui.transform.SetParent(transform); hud=ui.AddComponent<StoryHud>();
             SceneManager.sceneLoaded+=SceneReady;
         }
         void Start() { stage=FindFirstObjectByType<Stage>(); Menu(); }
@@ -66,20 +67,20 @@ namespace Kesho.Runtime
         }
         void Menu()
         {
-            playing=false; InConversation=false; hud.Close(); hud.Objective("KESHO","A Place Before Dark · Unity development chapter");
+            playing=false; creating=false; settingsOpen=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); hud.Close(); hud.Objective("KESHO","A Place Before Dark · Unity development chapter");
             hud.Open("A city can change your life.","Who gets to decide how?");
             hud.Button("Begin a life",CreateCharacter,true);
-            if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read()));
+            if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read(),true));
             hud.Button("Sound & accessibility",Settings); hud.ShowAction(false);
         }
         void CreateCharacter()
         {
-            draft=new LifeState { node=chapter.start, chapter=chapter.id, rng=(long)((uint)DateTime.UtcNow.Ticks | 1u) };
+            creating=true; draft=new LifeState { node=chapter.start, chapter=chapter.id, rng=(long)((uint)DateTime.UtcNow.Ticks | 1u) };
             CharacterForm();
         }
         void CharacterForm()
         {
-            hud.Open("Your first morning","19 years old. C1,200. An interview, not a guarantee.");
+            onBack=Menu; hud.Open("Your first morning","19 years old. C1,200. An interview, not a guarantee.");
             hud.Field(draft.name,value=>draft.name=value);
             hud.Button("Background: "+draft.background,()=> { draft.background=Cycle(WorldCatalog.Backgrounds,draft.background); CharacterForm(); });
             hud.Button("Gender: "+draft.gender,()=> { draft.gender=Cycle(WorldCatalog.Genders,draft.gender); CharacterForm(); });
@@ -89,35 +90,47 @@ namespace Kesho.Runtime
             hud.Button(draft.permanent?"Permanent consequences":"Checkpoints",()=> { draft.permanent=!draft.permanent; CharacterForm(); });
             hud.Button("Arrive in Maweni",()=> {
                 if(string.IsNullOrWhiteSpace(draft.name)) draft.name="Amani";
-                if(saves.Read()!=null) { hud.Open("Start this new life?","Your current Unity save will be replaced."); hud.Button("Start new life",()=>Begin(draft),true); hud.Button("Back",CharacterForm); }
+                if(saves.Read()!=null) { onBack=CharacterForm; hud.Open("Start this new life?","Your current Unity save will be replaced."); hud.Button("Start new life",()=>Begin(draft),true); hud.Button("Back",CharacterForm); }
                 else Begin(draft);
             },true);
             hud.Button("Back",Menu);
         }
         static string Cycle(string[] values,string value) { return values[(Array.IndexOf(values,value)+1)%values.Length]; }
-        void Begin(LifeState state)
+        void Begin(LifeState state,bool resumed=false)
         {
             if(state==null) { hud.Hint("No valid save was found."); return; }
-            Engine=new StoryEngine(chapter,state); playing=true; hud.Close(); Save(false); LoadCurrent();
+            bool recovered=resumed && (saves.LastReadSource==SaveSource.Backup || saves.LastReadSource==SaveSource.InterruptedWrite);
+            Engine=new StoryEngine(chapter,state); playing=true; creating=false; settingsOpen=false; hud.Close(); bool saved=Save(false); LoadCurrent();
+            if(recovered && saved) hud.Notice("Recovered your last valid save. Please check your latest decision.");
         }
         void LoadCurrent()
         {
-            InConversation=false; Sound.StopVoice(); hud.Close();
+            InConversation=false; settingsOpen=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close();
             if(stage!=null && stage.sceneId==Engine.Current.scene) { if(markerMaterial) Destroy(markerMaterial); ConfigureStage(); return; }
             loading=true; if(markerMaterial) Destroy(markerMaterial); if(marker) Destroy(marker);
+            if(!Application.CanStreamedLevelBeLoaded(Engine.Current.scene))
+            {
+                loading=false; onBack=Menu; hud.Open("A location is missing from this build.","Your progress is kept. This APK needs to be rebuilt.");
+                hud.Button("Return to title",Menu,true); return;
+            }
             SceneManager.LoadSceneAsync(Engine.Current.scene,LoadSceneMode.Single);
         }
         public void Interact()
         {
             if(!CanExplore || stage==null || !stage.Targets.ContainsKey(Engine.Current.target)) return;
             var target=stage.Targets[Engine.Current.target]; var walker=stage.Player.GetComponent<StreetWalker>();
-            if(Vector3.Distance(stage.Player.position,target.position)>1.65f) { if(!walker.WalkTo(target.position)) hud.Hint("Find a clear route around the furniture."); return; }
+            if(Vector3.Distance(stage.Player.position,target.position)>1.65f)
+            {
+                string expectedNode=Engine.State.node;
+                if(!walker.WalkTo(target.position,()=> { if(CanExplore && Engine.State.node==expectedNode) Interact(); })) hud.Hint("Find a clear route around the furniture.");
+                return;
+            }
             walker.Stop(); InConversation=true; spokenNode=Engine.State.node; lines=Engine.VisibleLines(); lineIndex=0; ShowLine();
         }
         void ShowLine()
         {
             if(Engine.State.node!=spokenNode) return;
-            Sound.StopVoice();
+            InConversation=true; onBack=EndConversation; Sound.StopVoice();
             if(lineIndex<lines.Length)
             {
                 var line=lines[lineIndex]; hud.Open(Engine.Format(line.speaker)); hud.AddText(Engine.Format(line.text),25);
@@ -131,7 +144,7 @@ namespace Kesho.Runtime
                 if(Engine.Current.terminal)
                 {
                     hud.AddText("End of this development chapter. Your choices are saved.",22);
-                    hud.Button("View your decisions",Journal,true); hud.Button("Save & title",()=> { Save(); Menu(); });
+                    hud.Button("View your decisions",Journal,true); hud.Button("Save & title",()=> { if(Save()) Menu(); });
                 }
                 foreach(var choice in Engine.Current.choices)
                 {
@@ -142,17 +155,28 @@ namespace Kesho.Runtime
                 if(!Engine.Current.terminal) hud.Button("Think about it",EndConversation);
             }
         }
-        void EndConversation() { InConversation=false; Sound.StopVoice(); hud.Close(); }
+        void EndConversation() { InConversation=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close(); }
+        void StopWalking() { if(stage && stage.Player) stage.Player.GetComponent<StreetWalker>().Stop(); }
+        public void Back()
+        {
+            if(loading) return;
+            if(onBack!=null) onBack(); else Settings();
+        }
+        void ConfirmQuit()
+        {
+            hud.Open("Leave Kesho?"); onBack=Menu;
+            hud.Button("Keep playing",Menu,true); hud.Button("Exit",()=>Application.Quit());
+        }
         void Commit(Choice choice)
         {
-            if(loading||spokenNode!=Engine.State.node) return;
+            if(loading||spokenNode!=Engine.State.node||!Engine.Available(choice)) return;
             if(!Engine.State.permanent)
             {
                 try { saves.Write(Engine.State,"checkpoint"); }
-                catch(Exception e) when(e is IOException||e is UnauthorizedAccessException) { hud.Hint("Checkpoint could not be saved. Please free some storage."); return; }
+                catch(Exception e) when(e is IOException||e is UnauthorizedAccessException) { hud.Notice("Checkpoint could not be saved. Free some storage before continuing."); return; }
             }
             if(!Engine.Apply(spokenNode,choice.id)) return;
-            if(!Save()) { hud.Hint("Progress is in memory. Save failed; keep the app open."); }
+            if(!Save()) { hud.Notice("Progress is in memory. Save failed; keep the app open."); }
             if(choice.effect=="sleep" || choice.effect=="night_resolution") StartCoroutine(SleepTransition()); else LoadCurrent();
         }
         IEnumerator SleepTransition()
@@ -160,18 +184,21 @@ namespace Kesho.Runtime
             loading=true; InConversation=false; Sound.StopVoice(); Sound.Cue("bedding",stage.Player.position);
             hud.Open("Night","The room settles around you."); hud.AddText("[Bedding rustles. The courtyard quietens.]",20);
             bool skip=false; hud.Button("Skip transition",()=>skip=true);
-            float time=0; while(time<2.5f&&!skip) { time+=Time.unscaledDeltaTime; yield return null; }
+            float time=0; while(time<2.5f&&!skip) { if(!background) time+=Time.unscaledDeltaTime; yield return null; }
             loading=false; LoadCurrent();
         }
         void Journal()
         {
-            hud.Open("What you knew then");
+            Action returnTo=settingsOpen?(Action)Settings:InConversation?(Action)ShowLine:EndConversation;
+            onBack=returnTo; InConversation=false; Sound.StopVoice(); hud.Open("What you knew then");
             int start=Math.Max(0,Engine.State.journal.Count-8); for(int i=start;i<Engine.State.journal.Count;i++) hud.AddText(Engine.State.journal[i],18);
-            hud.Button("Close",EndConversation,true);
+            hud.Button("Close",()=>returnTo(),true);
         }
         public void Settings()
         {
             if(loading) return;
+            if(!settingsOpen) settingsReturn=InConversation?(Action)ShowLine:creating?(Action)CharacterForm:playing?(Action)EndConversation:Menu;
+            settingsOpen=true; InConversation=false; onBack=ReturnFromSettings; StopWalking();
             Sound.StopVoice(); hud.Open("Sound & comfort");
             hud.Slider("Volume",Sound.Volume,value=>Sound.SetVolume(value));
             bool reduced=PlayerPrefs.GetInt("kesho.reduce_motion",0)==1;
@@ -183,9 +210,13 @@ namespace Kesho.Runtime
                 var checkpoint=saves.Read("checkpoint");
                 if(!Engine.State.permanent && checkpoint!=null && checkpoint.lifeId==Engine.State.lifeId)
                     hud.Button("Branch from last checkpoint",()=> { Engine.RestoreCheckpoint(checkpoint); Save(); LoadCurrent(); });
-                hud.Button("Save & title",()=> { Save(); Menu(); });
+                hud.Button("Save & title",()=> { if(Save()) Menu(); });
             }
-            hud.Button("Return",()=> { if(playing) EndConversation(); else Menu(); },true);
+            hud.Button("Return",ReturnFromSettings,true);
+        }
+        void ReturnFromSettings()
+        {
+            settingsOpen=false; var callback=settingsReturn; settingsReturn=null; callback?.Invoke();
         }
         bool Save(bool capturePosition=true)
         {
@@ -193,13 +224,13 @@ namespace Kesho.Runtime
             try
             {
                 if(capturePosition && stage && stage.sceneId==Engine.Current.scene) { Engine.State.poseScene=stage.sceneId; Engine.State.posX=stage.Player.position.x; Engine.State.posZ=stage.Player.position.z; }
-                saves.Write(Engine.State); return true;
+                saves.Write(Engine.State); hud.Notice(""); return true;
             }
-            catch(Exception e) when(e is IOException || e is UnauthorizedAccessException) { Debug.LogWarning("Save failed: "+e.GetType().Name); hud.Hint("Could not save. Free storage before closing."); return false; }
+            catch(Exception e) when(e is IOException || e is UnauthorizedAccessException) { Debug.LogWarning("Save failed: "+e.GetType().Name); hud.Notice("Could not save. Free storage before closing; keep the app open."); return false; }
         }
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Escape) && !loading) Settings();
+            if(Input.GetKeyDown(KeyCode.Escape)) Back();
             hud.ShowAction(CanExplore);
             if(!playing||background||loading) return;
             if(Input.anyKeyDown || Input.touchCount>0) idle=0; else idle+=Time.unscaledDeltaTime;
@@ -207,8 +238,8 @@ namespace Kesho.Runtime
             saveClock+=Time.unscaledDeltaTime; if(saveClock>20) { saveClock=0; Save(); }
             if(marker && PlayerPrefs.GetInt("kesho.reduce_motion",0)==0) marker.transform.Rotate(Vector3.up,Time.deltaTime*25);
         }
-        void OnApplicationPause(bool pause) { background=pause; if(pause && playing) Save(); }
-        void OnApplicationFocus(bool focus) { background=!focus; }
+        void OnApplicationPause(bool pause) { background=pause; if(pause) { StopWalking(); if(playing) Save(); } }
+        void OnApplicationFocus(bool focus) { background=!focus; if(!focus) { StopWalking(); if(playing) Save(); } }
         void OnApplicationQuit() { if(playing) Save(); }
         void OnDestroy() { SceneManager.sceneLoaded-=SceneReady; if(Instance==this) Instance=null; if(markerMaterial) Destroy(markerMaterial); }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,10 +10,12 @@ namespace Kesho.Runtime
         public Stage Stage;
         readonly Queue<Vector3> route=new Queue<Vector3>();
         float phase,step;
+        Action onArrival;
         public bool Moving { get { return route.Count>0; } }
-        public void Stop() { route.Clear(); }
-        public bool WalkTo(Vector3 destination)
+        public void Stop() { route.Clear(); onArrival=null; }
+        public bool WalkTo(Vector3 destination, Action arrived=null)
         {
+            Stop();
             var start=Cell(transform.position); var end=Cell(destination);
             if(!Stage.Walkable(start)||!Stage.Walkable(end)) return false;
             var frontier=new Queue<Vector2Int>(); var parent=new Dictionary<Vector2Int,Vector2Int>(); frontier.Enqueue(start); parent[start]=start;
@@ -23,7 +26,8 @@ namespace Kesho.Runtime
                 foreach(var dir in dirs) { var next=cell+dir; if(Stage.Walkable(next)&&!parent.ContainsKey(next)) { parent[next]=cell; frontier.Enqueue(next); } }
             }
             if(!parent.ContainsKey(end)) return false;
-            var reverse=new List<Vector3>(); for(var at=end;at!=start;at=parent[at]) reverse.Add(new Vector3(at.x,0,at.y)); reverse.Reverse(); route.Clear(); foreach(var p in reverse) route.Enqueue(p); return true;
+            var reverse=new List<Vector3>(); for(var at=end;at!=start;at=parent[at]) reverse.Add(new Vector3(at.x,0,at.y)); reverse.Reverse(); route.Clear(); foreach(var p in reverse) route.Enqueue(p);
+            onArrival=arrived; return true;
         }
         public static Vector2Int Cell(Vector3 p) { return new Vector2Int(Mathf.RoundToInt(p.x),Mathf.RoundToInt(p.z)); }
         void Update()
@@ -41,6 +45,10 @@ namespace Kesho.Runtime
                 if(direction.sqrMagnitude>.001f) transform.rotation=Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(direction),Time.deltaTime*12);
                 if(Vector3.Distance(transform.position,route.Peek())<.04f) route.Dequeue();
                 step+=Time.deltaTime; if(step>.4f) { step=0; session.Sound.Cue("step",transform.position); }
+            }
+            if(route.Count==0 && onArrival!=null)
+            {
+                var callback=onArrival; onArrival=null; callback();
             }
             Animate(route.Count>0);
         }

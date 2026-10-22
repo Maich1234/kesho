@@ -10,6 +10,8 @@ The Unity opening source contains 31 connected story beats, 65 short dialogue li
 
 Implemented source includes tap-to-walk navigation, short dialogue presentation, character setup, pause/settings, private saves with backup recovery, same-life checkpoints, permanent-mode rewind prevention, seeded consequences, audio buses/voice slots and Android build tooling. Art is a blockout; the existing original music/ambience is temporary. **Natural voice performances and scene-specific foley are not recorded.** No runtime generative model is enabled.
 
+Phase 1 reliability updates are in development version **0.3.1**: contextual approach/interaction, Back navigation, duplicate-click protection, persistent save warnings and verified save recovery. The cloud build must still validate these Unity paths.
+
 The story core is executable outside Unity. Unity editor compilation, play-mode interaction, mobile rendering, performance and final audio must be validated in an activated Unity environment. No Unity APK is claimed until that build passes.
 
 ## Start in Unity

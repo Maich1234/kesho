@@ -9,7 +9,7 @@ namespace Kesho.Runtime
     {
         RectTransform safe, panel;
         Font font;
-        Text objective, hint, status;
+        Text objective, hint, status, notice;
         public bool PanelOpen { get { return panel!=null; } }
         public RectTransform Panel { get { return panel; } }
         readonly Color ink=new Color(.055f,.12f,.14f,.97f), cream=new Color(.96f,.9f,.77f), gold=new Color(.84f,.65f,.32f);
@@ -24,6 +24,7 @@ namespace Kesho.Runtime
             objective=Label("",safe,24); Position(objective.rectTransform,new Vector2(0,1),new Vector2(24,-25),new Vector2(740,62));
             status=Label("",safe,18); Position(status.rectTransform,new Vector2(0,1),new Vector2(24,-90),new Vector2(680,35));
             hint=Label("",safe,19); Position(hint.rectTransform,new Vector2(.5f,0),new Vector2(-370,95),new Vector2(740,42)); hint.alignment=TextAnchor.MiddleCenter;
+            notice=Label("",safe,19); Position(notice.rectTransform,new Vector2(.5f,1),new Vector2(-470,-132),new Vector2(940,70)); notice.color=new Color(1f,.67f,.5f); notice.alignment=TextAnchor.MiddleCenter;
             var pause=Rect("Pause",safe); Position(pause,new Vector2(1,1),new Vector2(-145,-22),new Vector2(120,58));
             pause.gameObject.AddComponent<Image>().color=ink; pause.gameObject.AddComponent<Button>().onClick.AddListener(()=>GameSession.Instance.Settings());
             var pauseText=Label("Settings",pause,20); Stretch(pauseText.rectTransform); pauseText.alignment=TextAnchor.MiddleCenter;
@@ -36,6 +37,7 @@ namespace Kesho.Runtime
         }
         public void Objective(string text,string details) { objective.text=text; status.text=details; }
         public void Hint(string text) { hint.text=text; }
+        public void Notice(string text) { notice.text=text; notice.transform.SetAsLastSibling(); }
         public void Close()
         {
             if(panel) { panel.gameObject.SetActive(false); Destroy(panel.gameObject); } panel=null;
@@ -47,6 +49,7 @@ namespace Kesho.Runtime
             var scrollRoot=Rect("Scroll",panel); Stretch(scrollRoot); scrollRoot.offsetMin=new Vector2(24,18); scrollRoot.offsetMax=new Vector2(-24,-18);
             var scroll=scrollRoot.gameObject.AddComponent<ScrollRect>(); scroll.horizontal=false;
             var view=Rect("Viewport",scrollRoot); Stretch(view); view.gameObject.AddComponent<RectMask2D>();
+            var surface=view.gameObject.AddComponent<Image>(); surface.color=Color.clear;
             var content=Rect("Content",view); content.anchorMin=new Vector2(0,1); content.anchorMax=Vector2.one; content.pivot=new Vector2(.5f,1); content.sizeDelta=Vector2.zero;
             var layout=content.gameObject.AddComponent<VerticalLayoutGroup>(); layout.spacing=12; layout.childControlWidth=true; layout.childControlHeight=true; layout.childForceExpandHeight=false;
             content.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;
@@ -67,7 +70,18 @@ namespace Kesho.Runtime
             var button=r.gameObject.AddComponent<Button>(); var colors=button.colors; colors.pressedColor=new Color(.7f,.7f,.7f); button.colors=colors;
             r.gameObject.AddComponent<LayoutElement>().minHeight=58;
             var text=Label(title,r,22); Stretch(text.rectTransform); text.alignment=TextAnchor.MiddleCenter; text.color=primary?ink:cream;
-            button.onClick.AddListener(()=> { GameSession.Instance.Sound.Cue("click",Vector3.zero); action(); }); return button;
+            button.onClick.AddListener(()=>
+            {
+                if(!button.interactable) return;
+                button.interactable=false;
+                if(GameSession.Instance) GameSession.Instance.Sound.Cue("click",Vector3.zero);
+                StartCoroutine(ReleaseButton(button)); action();
+            }); return button;
+        }
+        System.Collections.IEnumerator ReleaseButton(Button button)
+        {
+            yield return new WaitForSecondsRealtime(.2f);
+            if(button) button.interactable=true;
         }
         public void Field(string initial,Action<string> changed)
         {
@@ -93,7 +107,7 @@ namespace Kesho.Runtime
         public void ShowAction(bool value) { if(actionRoot) actionRoot.gameObject.SetActive(value); }
         Text Label(string value,Transform parent,int size)
         {
-            var r=Rect("Text",parent); var text=r.gameObject.AddComponent<Text>(); text.font=font; text.text=value; text.fontSize=size; text.color=cream; text.raycastTarget=false; return text;
+            var r=Rect("Text",parent); var text=r.gameObject.AddComponent<Text>(); text.font=font; text.text=value; text.fontSize=size; text.color=cream; text.raycastTarget=false; text.supportRichText=false; return text;
         }
         static RectTransform Rect(string name,Transform parent) { var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>(); r.SetParent(parent,false); return r; }
         static void Stretch(RectTransform r) { r.anchorMin=Vector2.zero; r.anchorMax=Vector2.one; r.offsetMin=r.offsetMax=Vector2.zero; }

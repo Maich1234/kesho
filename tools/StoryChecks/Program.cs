@@ -15,6 +15,7 @@ static class Program
     static void ExpectThrow(Action action,string name) { bool threw=false; try { action(); } catch(ArgumentException) { threw=true; } catch(InvalidOperationException) { threw=true; } Check(threw,name); }
     static void Main(string[] args)
     {
+        StorageChecks.Run();
         string path=args.Length>0?args[0]:"unity/Assets/Kesho/Resources/Story/opening.json";
         chapter=JsonSerializer.Deserialize<Chapter>(File.ReadAllText(path),new JsonSerializerOptions { IncludeFields=true }); chapter.Validate();
         Check(chapter.nodes.Length==31,"31 connected beats");

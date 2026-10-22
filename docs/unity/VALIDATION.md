@@ -2,6 +2,20 @@
 
 Status: **source and core logic delivered; Unity editor/runtime validation pending.**
 
+## Phase 1 source update — v0.3.1
+
+- Android Back now returns from settings to its caller, including the current conversation; title Back asks before exit.
+- A contextual approach walks to the target and begins the conversation on arrival. Manual movement, pause and scene changes cancel pending approaches.
+- UI buttons reject duplicate activation within 200 ms, scroll surfaces receive drag events, and player-entered names render as plain text.
+- Save failures remain visible across panel changes; leaving for the title is blocked when saving fails.
+- Writes use a checksum, disk flush and readback verification. Recovery checks primary, completed temporary write and backup. A corrupt primary cannot overwrite the last verified backup.
+- First-import asset folders are registered through the Asset Database before URP assets are created. Missing build scenes produce a recoverable screen instead of leaving a perpetual loading state.
+- Sleep transition time pauses while the application is in the background. Settings and journal time no longer count as conversation playtime.
+- **Executed:** 12 additional real-file storage checks passed; the original 2,432,811 story assertions still pass. C# syntax check found no syntax diagnostics; this is not Unity assembly compilation.
+- **Added, pending Unity:** UI duplicate-click and persistent-warning tests, partial-save/identity test.
+
+The checksummed save format is for this Unity development project. Existing Godot saves remain separate. Raw JSON saves from any locally modified early Unity source are not treated as verified saves; keep a copy before testing the new development build. No Unity release save migration is claimed.
+
 ## Executed in this workspace
 
 - .NET SDK 8.0.408 compiled the actual engine-independent C# core with warnings as errors.

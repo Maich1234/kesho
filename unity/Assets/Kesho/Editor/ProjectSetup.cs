@@ -23,35 +23,45 @@ namespace Kesho.Editor
         [MenuItem("Kesho/Configure mobile project")]
         public static void Configure()
         {
-            Directory.CreateDirectory("Assets/Kesho/Settings");
+            EnsureAssetFolder("Assets/Kesho/Settings");
             var renderer=AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/Kesho/Settings/MobileRenderer.asset");
             if(!renderer) { renderer=ScriptableObject.CreateInstance<UniversalRendererData>(); AssetDatabase.CreateAsset(renderer,"Assets/Kesho/Settings/MobileRenderer.asset"); }
             var pipeline=AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>("Assets/Kesho/Settings/MobilePipeline.asset");
             if(!pipeline)
             {
                 pipeline=ScriptableObject.CreateInstance<UniversalRenderPipelineAsset>();
-                var serialized=new SerializedObject(pipeline); var list=serialized.FindProperty("m_RendererDataList"); list.arraySize=1; list.GetArrayElementAtIndex(0).objectReferenceValue=renderer; serialized.ApplyModifiedPropertiesWithoutUndo();
+                var serialized=new SerializedObject(pipeline); var list=serialized.FindProperty("m_RendererDataList");
+                if(list==null) throw new BuildFailedException("Pinned URP renderer configuration was not found.");
+                list.arraySize=1; list.GetArrayElementAtIndex(0).objectReferenceValue=renderer; serialized.ApplyModifiedPropertiesWithoutUndo();
                 AssetDatabase.CreateAsset(pipeline,"Assets/Kesho/Settings/MobilePipeline.asset");
             }
             pipeline.renderScale=.85f; pipeline.msaaSampleCount=2; pipeline.shadowDistance=25;
             GraphicsSettings.defaultRenderPipeline=pipeline;
             QualitySettings.renderPipeline=pipeline; QualitySettings.vSyncCount=0;
             // Resources reference keeps URP/Lit available for the runtime scene blockouts.
-            Directory.CreateDirectory("Assets/Kesho/Resources/Materials");
+            EnsureAssetFolder("Assets/Kesho/Resources/Materials");
             if(!AssetDatabase.LoadAssetAtPath<Material>("Assets/Kesho/Resources/Materials/Blockout.mat"))
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Universal Render Pipeline/Lit")),"Assets/Kesho/Resources/Materials/Blockout.mat");
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.3.0";
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.3.1";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=1;
+            PlayerSettings.Android.bundleVersionCode=2;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
-            var settings=new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);
+            var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            if(playerSettings.Length==0) throw new BuildFailedException("Player settings could not be loaded.");
+            var settings=new SerializedObject(playerSettings[0]);
             var input=settings.FindProperty("activeInputHandler"); if(input!=null) { input.intValue=0; settings.ApplyModifiedPropertiesWithoutUndo(); }
             EditorBuildSettings.scenes=WorldCatalog.Scenes.Select(id=>new EditorBuildSettingsScene("Assets/Kesho/Scenes/"+id+".unity",true)).ToArray();
             AssetDatabase.SaveAssets();
+        }
+        static void EnsureAssetFolder(string path)
+        {
+            if(AssetDatabase.IsValidFolder(path)) return;
+            string parent=Path.GetDirectoryName(path).Replace('\\','/'); EnsureAssetFolder(parent);
+            AssetDatabase.CreateFolder(parent,Path.GetFileName(path));
         }
         [MenuItem("Kesho/Validate opening content")]
         public static void Validate()

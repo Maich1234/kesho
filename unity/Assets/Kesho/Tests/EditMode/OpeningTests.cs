@@ -22,6 +22,18 @@ public sealed class OpeningTests
         }
         finally { if(Directory.Exists(path)) Directory.Delete(path,true); }
     }
+    [Test] public void SaveRejectsTruncationAndKeepsLifeIdentity()
+    {
+        string path=Path.Combine(Path.GetTempPath(),"kesho-test-"+Guid.NewGuid());
+        try
+        {
+            var chapter=Chapter(); var engine=new StoryEngine(chapter); var save=new OfflineSave(path,chapter);
+            save.Write(engine.State); Assert.AreEqual(engine.State.lifeId,save.Read().lifeId);
+            File.WriteAllText(Path.Combine(path,"life.json"),"{\"node\":\"arrival\"}");
+            Assert.IsNull(save.Read(),"Partial JSON must not silently fill fresh-life defaults");
+        }
+        finally { if(Directory.Exists(path)) Directory.Delete(path,true); }
+    }
     [Test] public void PermanentLivesCannotUseCheckpoints()
     {
         var engine=new StoryEngine(Chapter()); var checkpoint=engine.State.Copy(); engine.State.permanent=true;

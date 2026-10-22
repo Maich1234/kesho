@@ -1,1 +1,1 @@
-{"name":"Kesho.PlayTests","references":["Kesho.Core","Kesho.Runtime"],"optionalUnityReferences":["TestAssemblies"]}
+{"name":"Kesho.PlayTests","references":["Kesho.Core","Kesho.Runtime","Unity.ugui"],"optionalUnityReferences":["TestAssemblies"]}
