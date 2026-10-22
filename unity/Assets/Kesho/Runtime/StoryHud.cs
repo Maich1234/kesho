@@ -1,3 +1,4 @@
+using Unity.Profiling;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,8 +8,32 @@ namespace Kesho.Runtime
 {
     public sealed class StoryHud : MonoBehaviour
     {
+        static readonly ProfilerMarker profileOpen=new ProfilerMarker("Kesho.StoryHud.Open");
         RectTransform safe,panel,contentRoot,actionRoot,mission;
         Font font; Text objective,hint,status,notice;
+        Rect previousSafe; int previousWidth,previousHeight;
+        RectTransform panelShell,poolRoot;
+        CanvasGroup panelGroup;
+        ScrollRect panelScroll;
+        Coroutine reveal;
+        float nextClick;
+        Action exploreAction;
+        readonly System.Collections.Generic.Dictionary<string,System.Collections.Generic.Queue<RectTransform>> pool=new System.Collections.Generic.Dictionary<string,System.Collections.Generic.Queue<RectTransform>>();
+        readonly System.Collections.Generic.Dictionary<RectTransform,string> activeControls=new System.Collections.Generic.Dictionary<RectTransform,string>();
+        bool Click()
+        {
+            if(Time.unscaledTime<nextClick || (panel && !panelGroup.interactable)) return false;
+            nextClick=Time.unscaledTime+.2f;
+            if(GameSession.Instance) GameSession.Instance.Sound.Cue("click",Vector3.zero);
+            return true;
+        }
+        RectTransform Control(string kind)
+        {
+            RectTransform r;
+            if(pool.TryGetValue(kind,out var items) && items.Count>0) { r=items.Dequeue(); r.SetParent(contentRoot,false); r.gameObject.SetActive(true); }
+            else r=Rect(kind,contentRoot);
+            activeControls[r]=kind; return r;
+        }
         readonly Color ink=new Color(.075f,.12f,.18f),cream=new Color(1,.965f,.86f),gold=new Color(1,.7f,.12f),teal=new Color(.03f,.39f,.4f);
         public bool PanelOpen { get { return panel!=null; } }
         public RectTransform Panel { get { return panel; } }
@@ -26,12 +51,14 @@ namespace Kesho.Runtime
             hint=Label("",safe,18); Position(hint.rectTransform,new Vector2(0,0),new Vector2(24,83),new Vector2(650,58)); hint.color=ink; hint.gameObject.AddComponent<Outline>().effectColor=cream;
             notice=Label("",safe,19); Position(notice.rectTransform,new Vector2(.5f,1),new Vector2(-420,-125),new Vector2(840,66)); notice.color=new Color(.65f,.13f,.09f); notice.alignment=TextAnchor.MiddleCenter; notice.gameObject.AddComponent<Outline>().effectColor=cream;
             var pause=Rect("Pause",safe); Position(pause,new Vector2(1,1),new Vector2(-142,-20),new Vector2(120,58)); Paper(pause,cream);
-            var button=pause.gameObject.AddComponent<Button>(); button.onClick.AddListener(()=> { if(GameSession.Instance) { GameSession.Instance.Sound.Cue("click",Vector3.zero); GameSession.Instance.Settings(); } });
+            var button=pause.gameObject.AddComponent<Button>(); button.onClick.AddListener(()=> { if(Click() && GameSession.Instance) GameSession.Instance.Settings(); });
             var text=Label("PAUSE",pause,18); Stretch(text.rectTransform); text.alignment=TextAnchor.MiddleCenter; text.fontStyle=FontStyle.Bold;
         }
         void Update()
         {
             Rect area=Screen.safeArea; if(Screen.width==0||Screen.height==0) return;
+            if(area==previousSafe && Screen.width==previousWidth && Screen.height==previousHeight) return;
+            previousSafe=area; previousWidth=Screen.width; previousHeight=Screen.height;
             safe.anchorMin=new Vector2(area.xMin/Screen.width,area.yMin/Screen.height); safe.anchorMax=new Vector2(area.xMax/Screen.width,area.yMax/Screen.height); safe.offsetMin=safe.offsetMax=Vector2.zero;
         }
         public void Objective(string text,string details) { objective.text=text; status.text=details; }
@@ -39,25 +66,59 @@ namespace Kesho.Runtime
         public void Notice(string text) { notice.text=text; notice.transform.SetAsLastSibling(); }
         public void Close()
         {
-            if(panel) { panel.gameObject.SetActive(false); Destroy(panel.gameObject); } panel=null; hint.gameObject.SetActive(true);
+            if(reveal!=null) { StopCoroutine(reveal); reveal=null; }
+            if(panelShell)
+            {
+                foreach(Transform child in contentRoot)
+                {
+                    var rect=child as RectTransform;
+                    if(activeControls.TryGetValue(rect,out var kind))
+                    {
+                        if(!pool.ContainsKey(kind)) pool[kind]=new System.Collections.Generic.Queue<RectTransform>();
+                        pool[kind].Enqueue(rect);
+                    }
+                    else { child.gameObject.SetActive(false); Destroy(child.gameObject); }
+                }
+                foreach(var item in activeControls) { item.Key.gameObject.SetActive(false); item.Key.SetParent(poolRoot,false); }
+                activeControls.Clear();
+                foreach(Transform child in panelShell) if(child.name=="Comic close-up") { child.gameObject.SetActive(false); Destroy(child.gameObject); }
+                panelShell.gameObject.SetActive(false);
+            }
+            panel=null; hint.gameObject.SetActive(true);
         }
         public void Open(string title,string subtitle="")
         {
-            Close(); hint.gameObject.SetActive(false); panel=Rect("Story panel",safe); panel.anchorMin=new Vector2(.05f,.06f); panel.anchorMax=new Vector2(.65f,.81f); panel.offsetMin=panel.offsetMax=Vector2.zero; Paper(panel,cream);
-            var scrollRoot=Rect("Scroll",panel); Stretch(scrollRoot); scrollRoot.offsetMin=new Vector2(24,20); scrollRoot.offsetMax=new Vector2(-24,-20);
-            var scroll=scrollRoot.gameObject.AddComponent<ScrollRect>(); scroll.horizontal=false; scroll.movementType=ScrollRect.MovementType.Clamped; scroll.scrollSensitivity=28;
-            var view=Rect("Viewport",scrollRoot); Stretch(view); view.gameObject.AddComponent<RectMask2D>(); view.gameObject.AddComponent<Image>().color=Color.clear;
-            var content=Rect("Content",view); content.anchorMin=new Vector2(0,1); content.anchorMax=Vector2.one; content.pivot=new Vector2(.5f,1); content.sizeDelta=Vector2.zero;
-            var layout=content.gameObject.AddComponent<VerticalLayoutGroup>(); layout.spacing=10; layout.childControlWidth=true; layout.childControlHeight=true; layout.childForceExpandHeight=false;
-            content.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;
-            scroll.viewport=view; scroll.content=content; contentRoot=content;
-            AddText(title,30,ink).fontStyle=FontStyle.Bold; if(subtitle!="") AddText(subtitle,20,teal);
-            var group=panel.gameObject.AddComponent<CanvasGroup>(); StartCoroutine(Reveal(group)); notice.transform.SetAsLastSibling();
+            using(profileOpen.Auto())
+            {
+                Close(); hint.gameObject.SetActive(false);
+                if(!panelShell)
+                {
+                    poolRoot=Rect("UI pool",safe); poolRoot.gameObject.SetActive(false);
+                    panelShell=Rect("Story panel",safe); Paper(panelShell,cream);
+                    var scrollRoot=Rect("Scroll",panelShell); Stretch(scrollRoot);
+                    panelScroll=scrollRoot.gameObject.AddComponent<ScrollRect>(); panelScroll.horizontal=false; panelScroll.movementType=ScrollRect.MovementType.Clamped; panelScroll.scrollSensitivity=28;
+                    var view=Rect("Viewport",scrollRoot); Stretch(view); view.gameObject.AddComponent<RectMask2D>(); view.gameObject.AddComponent<Image>().color=Color.clear;
+                    contentRoot=Rect("Content",view); contentRoot.anchorMin=new Vector2(0,1); contentRoot.anchorMax=Vector2.one; contentRoot.pivot=new Vector2(.5f,1); contentRoot.sizeDelta=Vector2.zero;
+                    var layout=contentRoot.gameObject.AddComponent<VerticalLayoutGroup>(); layout.spacing=10; layout.childControlWidth=true; layout.childControlHeight=true; layout.childForceExpandHeight=false;
+                    contentRoot.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;
+                    panelScroll.viewport=view; panelScroll.content=contentRoot;
+                    panelGroup=panelShell.gameObject.AddComponent<CanvasGroup>();
+                }
+                panel=panelShell; panel.gameObject.SetActive(true);
+                panel.anchorMin=new Vector2(.05f,.06f); panel.anchorMax=new Vector2(.65f,.81f); panel.offsetMin=panel.offsetMax=Vector2.zero;
+                var scrollRect=(RectTransform)panelScroll.transform; scrollRect.offsetMin=new Vector2(24,20); scrollRect.offsetMax=new Vector2(-24,-20);
+                panelScroll.StopMovement(); contentRoot.anchoredPosition=Vector2.zero;
+                AddText(title,30,ink).fontStyle=FontStyle.Bold; if(subtitle!="") AddText(subtitle,20,teal);
+                reveal=StartCoroutine(Reveal(panelGroup)); notice.transform.SetAsLastSibling();
+            }
         }
         System.Collections.IEnumerator Reveal(CanvasGroup group)
         {
-            if(PlayerPrefs.GetInt("kesho.reduce_motion",0)==1) yield break;
-            group.alpha=0; while(group && group.alpha<1) { group.alpha+=Time.unscaledDeltaTime*8; yield return null; }
+            group.alpha=1; group.interactable=true; group.blocksRaycasts=true;
+            if(Comfort.ReducedMotion) yield break;
+            group.alpha=0; group.interactable=false;
+            while(group && group.alpha<1) { group.alpha=Mathf.Min(1,group.alpha+Time.unscaledDeltaTime*8); yield return null; }
+            if(group) group.interactable=true;
         }
         public void Title()
         {
@@ -86,7 +147,7 @@ namespace Kesho.Runtime
                 var card=Rect(who,row); card.anchorMin=new Vector2(i*.5f,0); card.anchorMax=new Vector2((i+1)*.5f,1); card.offsetMin=new Vector2(5,0); card.offsetMax=new Vector2(-5,0); Paper(card,gold);
                 var portrait=Rect("Portrait",card); Stretch(portrait); portrait.offsetMin=new Vector2(3,48); portrait.offsetMax=new Vector2(-3,-3); Atlas(portrait,who);
                 var label=Label(who,card,23); Position(label.rectTransform,new Vector2(.5f,0),new Vector2(-90,44),new Vector2(180,40)); label.alignment=TextAnchor.MiddleCenter; label.fontStyle=FontStyle.Bold;
-                card.gameObject.AddComponent<Button>().onClick.AddListener(()=> { if(GameSession.Instance) GameSession.Instance.Sound.Cue("click",Vector3.zero); choose(who); });
+                card.gameObject.AddComponent<Button>().onClick.AddListener(()=> { if(Click()) choose(who); });
             }
         }
         void Atlas(RectTransform r,string who)
@@ -100,18 +161,30 @@ namespace Kesho.Runtime
         }
         public Text AddText(string text,int size=24,Color? color=null)
         {
-            var label=Label(text,contentRoot,size); label.color=color??ink; label.horizontalOverflow=HorizontalWrapMode.Wrap; label.verticalOverflow=VerticalWrapMode.Overflow;
-            label.gameObject.AddComponent<LayoutElement>().minHeight=size+10; return label;
+            var r=Control("Pooled text"); var label=r.GetComponent<Text>();
+            if(!label) { label=r.gameObject.AddComponent<Text>(); label.font=font; label.raycastTarget=false; label.supportRichText=false; r.gameObject.AddComponent<LayoutElement>(); }
+            label.text=text; label.fontSize=size; label.fontStyle=FontStyle.Normal; label.color=color??ink; label.horizontalOverflow=HorizontalWrapMode.Wrap; label.verticalOverflow=VerticalWrapMode.Overflow;
+            r.GetComponent<LayoutElement>().minHeight=size+10; return label;
         }
         public Button Button(string title,Action action,bool primary=false)
         {
-            var r=Rect(title,contentRoot); Paper(r,primary?gold:new Color(.88f,.92f,.86f));
-            var button=r.gameObject.AddComponent<Button>(); var colors=button.colors; colors.pressedColor=new Color(.72f,.8f,.8f); colors.disabledColor=new Color(.7f,.7f,.7f,.6f); button.colors=colors;
-            r.gameObject.AddComponent<LayoutElement>().minHeight=60;
-            var text=Label(title,r,21); Stretch(text.rectTransform); text.rectTransform.offsetMin=new Vector2(14,6); text.rectTransform.offsetMax=new Vector2(-14,-6); text.alignment=TextAnchor.MiddleLeft; text.fontStyle=FontStyle.Bold;
-            button.onClick.AddListener(()=> { if(!button.interactable) return; button.interactable=false; if(GameSession.Instance) GameSession.Instance.Sound.Cue("click",Vector3.zero); StartCoroutine(ReleaseButton(button)); action(); }); return button;
+            var r=Control("Pooled button"); var button=r.GetComponent<Button>();
+            if(!button)
+            {
+                Paper(r,cream); button=r.gameObject.AddComponent<Button>(); r.gameObject.AddComponent<LayoutElement>().minHeight=60;
+                var text=Label("",r,21); Stretch(text.rectTransform); text.rectTransform.offsetMin=new Vector2(14,6); text.rectTransform.offsetMax=new Vector2(-14,-6); text.alignment=TextAnchor.MiddleLeft; text.fontStyle=FontStyle.Bold;
+            }
+            r.GetComponent<Image>().color=primary?gold:new Color(.88f,.92f,.86f);
+            r.GetComponentInChildren<Text>().text=title;
+            var colors=button.colors; colors.pressedColor=new Color(.72f,.8f,.8f); colors.disabledColor=new Color(.7f,.7f,.7f,.6f); button.colors=colors;
+            button.interactable=true; button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(()=> { if(!button.interactable || !Click()) return; action(); }); return button;
         }
-        System.Collections.IEnumerator ReleaseButton(Button button) { yield return new WaitForSecondsRealtime(.2f); if(button) button.interactable=true; }
+        public void CycleButton(Func<string> label,Action changed)
+        {
+            Button control=null;
+            control=Button(label(),()=> { changed(); control.GetComponentInChildren<Text>().text=label(); });
+        }
         public void Field(string initial,Action<string> changed)
         {
             var r=Rect("Name",contentRoot); Paper(r,Color.white); r.gameObject.AddComponent<LayoutElement>().minHeight=58;
@@ -126,10 +199,14 @@ namespace Kesho.Runtime
         }
         public void ActionButton(string text,Action action)
         {
-            if(actionRoot) { actionRoot.gameObject.SetActive(false); Destroy(actionRoot.gameObject); }
-            actionRoot=Rect("Explore controls",safe); Position(actionRoot,new Vector2(1,0),new Vector2(-298,85),new Vector2(274,62)); Paper(actionRoot,gold);
-            var b=actionRoot.gameObject.AddComponent<Button>(); b.onClick.AddListener(()=> { if(GameSession.Instance) GameSession.Instance.Sound.Cue("click",Vector3.zero); action(); });
-            var label=Label(text,actionRoot,22); Stretch(label.rectTransform); label.alignment=TextAnchor.MiddleCenter; label.fontStyle=FontStyle.Bold;
+            exploreAction=action;
+            if(!actionRoot)
+            {
+                actionRoot=Rect("Explore controls",safe); Position(actionRoot,new Vector2(1,0),new Vector2(-298,85),new Vector2(274,62)); Paper(actionRoot,gold);
+                actionRoot.gameObject.AddComponent<Button>().onClick.AddListener(()=> { if(Click()) exploreAction?.Invoke(); });
+                var label=Label("",actionRoot,22); Stretch(label.rectTransform); label.alignment=TextAnchor.MiddleCenter; label.fontStyle=FontStyle.Bold;
+            }
+            actionRoot.GetComponentInChildren<Text>().text=text;
         }
         public void ShowAction(bool value) { if(actionRoot) actionRoot.gameObject.SetActive(value); }
         void Paper(RectTransform r,Color colour)

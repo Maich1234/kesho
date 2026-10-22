@@ -3,19 +3,20 @@ import json
 import math
 from pathlib import Path
 import re
-import subprocess
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[2]
 actor = (ROOT / 'unity/Assets/Kesho/Runtime/ComicActor.cs').read_text()
 stage = (ROOT / 'unity/Assets/Kesho/Runtime/Stage.cs').read_text()
 mesh = (ROOT / 'unity/Assets/Kesho/Runtime/ComicMesh.cs').read_text()
 
-# Read the actual leg dimensions; both parts use the shared radius-0.5 rounded mesh.
-sleeve = re.search(r'P\(t,"Sleeve",new Vector3\(0,(-?[\d.]+)f,0\),new Vector3\(arm\?[\d.]+f:[\d.]+f,([\d.]+)f', actor)
+# Read leg dimensions from the repaired arm/leg conditional dimensions.
+sleeve = re.search(r'P\(t,"Sleeve",new Vector3\(0,arm\?(-?[\d.]+)f:(-?[\d.]+)f,0\),new Vector3\(arm\?[\d.]+f:[\d.]+f,arm\?([\d.]+)f:([\d.]+)f', actor)
 shoe = re.search(r'P\(t,arm\?"Hand":"Shoe",new Vector3\(0,arm\?(-?[\d.]+)f:(-?[\d.]+)f,.*?new Vector3\([\d.]+f,arm\?[\d.]+f:([\d.]+)f', actor)
 assert sleeve and shoe, 'Recheck probe after actor source changes'
-leg_bottom = float(sleeve[1]) - float(sleeve[2]) / 2
+leg_bottom = float(sleeve[2]) - float(sleeve[4]) / 2
 shoe_top = float(shoe[2]) + float(shoe[3]) / 2
+assert leg_bottom <= shoe_top, 'Leg/shoe continuity regression'
 
 # Count authored character mesh parts, including each instance in the ear/eye loop.
 build = actor[actor.index('public void Build'):actor.index('Transform Joint')]
@@ -47,23 +48,54 @@ for x in [-9, 9]:
 for x in [-8, 8]:
     box(x, 5, 2.2, .7)  # Bench
 crossing = [(3, 3), (4, 3), (5, 3)]
-assert all(abs(x) <= 10 and -7 <= z <= 7 and (x, z) not in blocked for x, z in crossing)
+# Read static actor positions plus the authored queue's three positions.
+occupied = {(round(float(m[1])), round(float(m[2]))) for m in re.finditer(r'Person\("[^"]+",new Vector3\((-?[\d.]+)f?,0,(-?[\d.]+)f?\)', campus)}
+occupied.update((round(-1.6-i*.65), round(-5.4+i*.6)) for i in range(3))
+assert (4,3) in occupied and '!occupied.Contains(cell)' in stage
+assert 'CombineRigid(joint)' in actor and 'CombineRigid(hair)' in actor
+# Rigid material batches: torso 4, head 3, arms 2 each, legs 2 each, hair 1, ground shadow 1.
+# This remains an authored estimate, not Frame Debugger output.
+batched_renderers_per_actor = 4+3+2*2+2*2+1+1
+assert 'View.orthographicSize=Mathf.Lerp' in stage
+assert not re.search(r'View\.orthographicSize=(3.4|4.4|5.7)f',stage)
+# Verify every authored campus approach remains connected to spawn after reserving people.
+from collections import deque
+reachable={(0,4)}; frontier=deque(reachable)
+while frontier:
+    x,z=frontier.popleft()
+    for dx,dz in [(0,1),(1,0),(0,-1),(-1,0)]:
+        nxt=(x+dx,z+dz)
+        if abs(nxt[0])<=10 and -7<=nxt[1]<=7 and nxt not in blocked and nxt not in occupied and nxt not in reachable:
+            reachable.add(nxt); frontier.append(nxt)
+approaches={m[1]:(round(float(m[2])),round(float(m[3]))) for m in re.finditer(r'Target\("([^"]+)",new Vector3\((-?[\d.]+)f?,0,(-?[\d.]+)f?\)',campus)}
+assert approaches and all(cell in reachable for cell in approaches.values()), 'NPC reservations blocked a story destination'
+audio=(ROOT/'unity/Assets/Kesho/Runtime/Soundscape.cs').read_text()
+assert 'music.mute=ambience.mute=voice.mute=Volume==0' in audio
+assert 'ProceduralFoley.' not in audio
+
 
 result = {
-    'source_commit': subprocess.check_output(['git', 'log', '-1', '--format=%H', '--', 'unity/Assets/Kesho/Runtime/ComicActor.cs', 'unity/Assets/Kesho/Runtime/Stage.cs', 'unity/Assets/Kesho/Runtime/ComicMesh.cs'], cwd=ROOT, text=True).strip(),
+    'source_sha256': {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in [ROOT/'unity/Assets/Kesho/Runtime'/name for name in ['ComicActor.cs','Stage.cs','ComicMesh.cs','Soundscape.cs']]},
     'method': 'source arithmetic and static construction estimate; no Unity runtime or device measurements',
     'leg_local_bottom_y': round(leg_bottom, 3),
     'shoe_local_top_y': round(shoe_top, 3),
-    'gap_between_leg_and_shoe_units': round(leg_bottom-shoe_top, 3),
+    'gap_between_leg_and_shoe_units': round(max(0,leg_bottom-shoe_top), 3),
+    'leg_shoe_overlap_units': round(shoe_top-leg_bottom,3),
     'campus_default_actor_count': len(people),
-    'character_mesh_parts_by_actor': parts,
-    'estimated_default_character_mesh_renderer_count': sum(parts.values()),
+    'authored_mesh_parts_by_actor_before_rigid_batching': parts,
+    'estimated_default_character_mesh_renderer_count_before_rigid_batching': sum(parts.values()),
+    'estimated_default_character_mesh_renderer_count_after_rigid_batching': len(people)*batched_renderers_per_actor,
     'submitted_triangles_per_round_mesh_including_degenerates': triangles_per_round,
     'estimated_default_character_triangles_including_shadows_and_degenerates': sum(parts.values()) * triangles_per_round,
-    'walkable_example_through_kito_actor_cell': crossing,
-    'camera_instant_size_values': {'exploration': 9.7, 'conversation': 5.7, 'self_or_phone': 4.4, 'character_preview': 3.4},
+    'all_campus_approach_points_reachable': True,
+    'campus_approach_point_count': len(approaches),
+    'previous_crossing_route': crossing,
+    'previous_crossing_route_is_now_walkable': all((x,z) not in occupied and (x,z) not in blocked for x,z in crossing),
+    'camera_blended_target_sizes': {'exploration': 9.7, 'conversation': 5.7, 'self_or_phone': 4.4, 'character_preview': 3.4},
     'steady_idle_music_level_at_default_master_volume': round(.65 * .17, 4),
-    'music_fade_seconds_from_steady_idle_to_zero_at_rate_0_3': round(.65 * .17 / .3, 3),
+    'mute_is_immediate_at_source': True,
+    'startup_synthesized_samples': 0,
     'performance_measurements': {'fps': None, 'frame_times': None, 'draw_calls': None, 'memory': None, 'thermal': None}
 }
 print(json.dumps(result, indent=2))

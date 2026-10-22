@@ -48,12 +48,22 @@ namespace Kesho.Editor
                 portraitImporter.mipmapEnabled=false; portraitImporter.npotScale=TextureImporterNPOTScale.None;
                 portraitImporter.maxTextureSize=2048; portraitImporter.isReadable=false; portraitImporter.SaveAndReimport();
             }
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.5.1";
+            var icon=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Kesho/Branding/app-icon.png");
+            if(!icon) throw new BuildFailedException("Kesho app icon is missing.");
+            var iconImporter=(TextureImporter)AssetImporter.GetAtPath("Assets/Kesho/Branding/app-icon.png");
+            if(iconImporter.mipmapEnabled || iconImporter.textureCompression!=TextureImporterCompression.Uncompressed)
+            {
+                iconImporter.mipmapEnabled=false; iconImporter.textureCompression=TextureImporterCompression.Uncompressed; iconImporter.maxTextureSize=1024; iconImporter.SaveAndReimport();
+                icon=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Kesho/Branding/app-icon.png");
+            }
+            PlayerSettings.SetIcons(NamedBuildTarget.Unknown,new[]{icon},IconKind.Any);
+            PlayerSettings.WebGL.template="PROJECT:Kesho";
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.6.0";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=5;
+            PlayerSettings.Android.bundleVersionCode=6;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
             var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");

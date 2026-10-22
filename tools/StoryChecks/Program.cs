@@ -15,6 +15,7 @@ static class Program
     static void Main(string[] args)
     {
         StorageChecks.Run();
+        SaveQueueChecks.Run();
         string path=args.Length>0?args[0]:"unity/Assets/Kesho/Resources/Story/opening.json";
         chapter=JsonSerializer.Deserialize<Chapter>(File.ReadAllText(path),new JsonSerializerOptions { IncludeFields=true }); chapter.Validate();
         DirectorChecks.Run(chapter);

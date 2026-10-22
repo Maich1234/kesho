@@ -1,3 +1,4 @@
+using Unity.Profiling;
 using System.Collections.Generic;
 using UnityEngine;
 using Kesho.Core;
@@ -6,6 +7,8 @@ namespace Kesho.Runtime
 {
     public sealed class Stage : MonoBehaviour
     {
+        static readonly ProfilerMarker profileCombineScenery=new ProfilerMarker("Kesho.Stage.CombineScenery");
+        static readonly ProfilerMarker profileAwake=new ProfilerMarker("Kesho.Stage.Awake");
         public string sceneId="Campus";
         public readonly Dictionary<string,Transform> Targets=new Dictionary<string,Transform>();
         public readonly HashSet<Vector2Int> Blocked=new HashSet<Vector2Int>();
@@ -21,24 +24,32 @@ namespace Kesho.Runtime
         Light sun;
         Renderer windowGlass;
         Vector3 cameraPosition,cameraLook;
+        float cameraSize=9.7f;
+        readonly HashSet<Vector2Int> occupied=new HashSet<Vector2Int>();
+        ComicActor playerActor;
         readonly Color cream=new Color(.95f,.87f,.69f), teal=new Color(.06f,.43f,.43f), ink=new Color(.1f,.16f,.23f), red=new Color(.87f,.28f,.2f), gold=new Color(.97f,.65f,.12f), green=new Color(.27f,.49f,.29f);
         void Awake()
         {
-            scenery=new GameObject("Authored environment").transform; scenery.SetParent(transform,false);
-            sun=new GameObject("Daylight").AddComponent<Light>(); sun.transform.SetParent(transform); sun.type=LightType.Directional;
-            Box("Ground",new Vector3(0,-.16f,0),new Vector3(36,.3f,32),new Color(.76f,.67f,.5f));
-            if(sceneId=="Campus" || sceneId=="Arrival") Campus();
-            else if(sceneId=="Room" || sceneId=="Night") Room();
-            else if(sceneId=="Courtyard") Courtyard();
-            else LegacyLocation();
-            if(!Targets.ContainsKey("exit")) Target("exit",new Vector3(0,0,5));
-            Player=Person("Player",new Vector3(0,0,4),1,0,0); Player.rotation=Quaternion.Euler(0,180,0);
-            var walker=Player.gameObject.AddComponent<StreetWalker>(); walker.Stage=this;
-            View=new GameObject("Camera").AddComponent<Camera>(); View.transform.SetParent(transform); View.tag="MainCamera"; View.gameObject.AddComponent<AudioListener>();
-            View.orthographic=true; View.orthographicSize=9.7f; View.nearClipPlane=.1f; View.farClipPlane=100; View.backgroundColor=new Color(.69f,.83f,.87f); View.clearFlags=CameraClearFlags.SolidColor;
-            ResetCamera(); View.transform.position=cameraPosition; View.transform.LookAt(cameraLook);
-            ApplyTimeOfDay(sceneId=="Night"?DayPeriod.Night:DayPeriod.Afternoon);
-            CombineScenery();
+            using(profileAwake.Auto())
+            {
+                scenery=new GameObject("Authored environment").transform; scenery.SetParent(transform,false);
+                sun=new GameObject("Daylight").AddComponent<Light>(); sun.transform.SetParent(transform); sun.type=LightType.Directional;
+                Box("Ground",new Vector3(0,-.16f,0),new Vector3(36,.3f,32),new Color(.76f,.67f,.5f));
+                if(sceneId=="Campus" || sceneId=="Arrival") Campus();
+                else if(sceneId=="Room" || sceneId=="Night") Room();
+                else if(sceneId=="Courtyard") Courtyard();
+                else LegacyLocation();
+                if(!Targets.ContainsKey("exit")) Target("exit",new Vector3(0,0,5));
+                Player=Person("Player",new Vector3(0,0,4),1,0,0); Player.rotation=Quaternion.Euler(0,180,0);
+                playerActor=Player.GetComponent<ComicActor>();
+                foreach(var actor in GetComponentsInChildren<ComicActor>()) if(actor!=playerActor) occupied.Add(StreetWalker.Cell(actor.transform.position));
+                var walker=Player.gameObject.AddComponent<StreetWalker>(); walker.Stage=this;
+                View=new GameObject("Camera").AddComponent<Camera>(); View.transform.SetParent(transform); View.tag="MainCamera"; View.gameObject.AddComponent<AudioListener>();
+                View.orthographic=true; View.orthographicSize=9.7f; View.nearClipPlane=.1f; View.farClipPlane=100; View.backgroundColor=new Color(.69f,.83f,.87f); View.clearFlags=CameraClearFlags.SolidColor;
+                ResetCamera(); View.transform.position=cameraPosition; View.transform.LookAt(cameraLook);
+                ApplyTimeOfDay(sceneId=="Night"?DayPeriod.Night:DayPeriod.Afternoon);
+                CombineScenery();
+            }
         }
         void Campus()
         {
@@ -191,13 +202,13 @@ namespace Kesho.Runtime
             var shader=Resources.Load<Shader>("Shaders/Comic"); if(!shader) shader=Shader.Find("Universal Render Pipeline/Lit");
             var material=new Material(shader); material.SetColor("_BaseColor",c); palette[c]=material; return material;
         }
-        public bool Walkable(Vector2Int cell) { return Mathf.Abs(cell.x)<=10 && cell.y>=-7 && cell.y<=7 && !Blocked.Contains(cell); }
-        public void ApplyAppearance(LifeState state) { Player.GetComponent<ComicActor>().SetAppearance(state); }
+        public bool Walkable(Vector2Int cell) { return Mathf.Abs(cell.x)<=10 && cell.y>=-7 && cell.y<=7 && !Blocked.Contains(cell) && !occupied.Contains(cell); }
+        public void ApplyAppearance(LifeState state) { playerActor.SetAppearance(state); }
         public Vector3 HotspotPosition(string id) { return actors.TryGetValue(StoryPresentation.TargetActor(sceneId,id),out var actor)?actor.transform.position+Vector3.up*1.5f:Targets[id].position+Vector3.up*.3f; }
-        public void ResetCamera() { cameraPosition=new Vector3(10,16,19); cameraLook=new Vector3(0,0,-1); if(View) View.orthographicSize=9.7f; }
+        public void ResetCamera() { cameraPosition=new Vector3(10,16,19); cameraLook=new Vector3(0,0,-1); cameraSize=9.7f; }
         public void Preview(bool enabled)
         {
-            if(enabled) { cameraPosition=Player.position+new Vector3(3,3,6); cameraLook=Player.position+new Vector3(-1.5f,1.4f,0); View.orthographicSize=3.4f; Player.rotation=Quaternion.Euler(0,20,0); }
+            if(enabled) { cameraPosition=Player.position+new Vector3(3,3,6); cameraLook=Player.position+new Vector3(-1.5f,1.4f,0); cameraSize=3.4f; Player.rotation=Quaternion.Euler(0,20,0); }
             else ResetCamera();
         }
         public void Conversation(string target,bool enabled)
@@ -206,7 +217,7 @@ namespace Kesho.Runtime
             if(enabled && Targets.ContainsKey(target))
             {
                 var p=Targets[target].position;
-                cameraLook=(p+Player.position)*.5f+new Vector3(0,.8f,0); cameraPosition=cameraLook+new Vector3(5,6,10); View.orthographicSize=5.7f;
+                cameraLook=(p+Player.position)*.5f+new Vector3(0,.8f,0); cameraPosition=cameraLook+new Vector3(5,6,10); cameraSize=5.7f;
                 Face(Player,p);
             }
             else ResetCamera();
@@ -225,20 +236,20 @@ namespace Kesho.Runtime
                 actor.Talking=true; SpeakingActorId=cue.actor;
                 var p=actor.transform.position;
                 cameraLook=(p+Player.position)*.5f+Vector3.up*1.1f;
-                cameraPosition=cameraLook+new Vector3(5,6,10); View.orthographicSize=5.7f;
+                cameraPosition=cameraLook+new Vector3(5,6,10); cameraSize=5.7f;
                 Face(Player,p); Face(actor.transform,Player.position);
                 return p+Vector3.up*1.5f;
             }
             if(cue.kind==SpeakerKind.Player || cue.kind==SpeakerKind.Phone || cue.kind==SpeakerKind.Offscreen)
             {
-                cameraLook=Player.position+Vector3.up*1.2f; cameraPosition=cameraLook+new Vector3(4,4,7); View.orthographicSize=4.4f;
+                cameraLook=Player.position+Vector3.up*1.2f; cameraPosition=cameraLook+new Vector3(4,4,7); cameraSize=4.4f;
                 if(cue.kind==SpeakerKind.Player) { Player.GetComponent<ComicActor>().Talking=true; SpeakingActorId="player"; }
             }
             return Player.position+Vector3.up*1.5f;
         }
         static void Face(Transform actor,Vector3 point)
         {
-            point.y=actor.position.y; if((point-actor.position).sqrMagnitude>.001f) actor.LookAt(point);
+            var comic=actor.GetComponent<ComicActor>(); if(comic) comic.FaceTowards(point);
         }
         public void ApplyTimeOfDay(DayPeriod period)
         {
@@ -253,22 +264,40 @@ namespace Kesho.Runtime
             if(windowGlass) windowGlass.sharedMaterial=Tint(sky);
             // Comic.shader uses a stylised light treatment; exposure keeps night/day legible and distinct.
             Shader.SetGlobalFloat("_KeshoExposure",night?.55f:evening?.85f:1f);
+            Shader.SetGlobalColor("_KeshoLightTint",sun.color);
+            Shader.SetGlobalColor("_KeshoAmbientTint",RenderSettings.ambientLight);
+            Shader.SetGlobalFloat("_KeshoKeyStrength",sun.intensity/1.1f);
+        }
+        public void RestPose(bool enabled)
+        {
+            bool wasResting=playerActor.Resting; playerActor.SetResting(enabled);
+            var shadow=Player.Find("Grounding shadow"); if(shadow) shadow.gameObject.SetActive(!enabled);
+            if(enabled && (sceneId=="Room" || sceneId=="Night"))
+            {
+                Player.position=new Vector3(-4,1.25f,-1); Player.rotation=Quaternion.Euler(-90,0,0);
+                cameraLook=new Vector3(-4,1,-2); cameraPosition=cameraLook+new Vector3(4,5,7); cameraSize=4.4f;
+            }
+            else if(wasResting) { var p=Player.position; p.y=0; Player.position=p; Player.rotation=Quaternion.Euler(0,180,0); }
         }
         void LateUpdate()
         {
             if(!View) return;
-            float t=PlayerPrefs.GetInt("kesho.reduce_motion",0)==1?1:1-Mathf.Exp(-Time.unscaledDeltaTime*5);
+            float t=Comfort.ReducedMotion?1:1-Mathf.Exp(-Time.unscaledDeltaTime*5);
+            View.orthographicSize=Mathf.Lerp(View.orthographicSize,cameraSize,t);
             View.transform.position=Vector3.Lerp(View.transform.position,cameraPosition,t);
             View.transform.rotation=Quaternion.Slerp(View.transform.rotation,Quaternion.LookRotation(cameraLook-View.transform.position),t);
             foreach(var sign in signs) sign.transform.rotation=View.transform.rotation;
         }
         void CombineScenery()
         {
-            // One mesh per shared colour rather than one draw for every architectural detail.
-            var groups=new Dictionary<Material,List<CombineInstance>>(); var parts=scenery.GetComponentsInChildren<MeshFilter>();
-            foreach(var part in parts) { var mat=part.GetComponent<Renderer>().sharedMaterial; if(!groups.ContainsKey(mat)) groups[mat]=new List<CombineInstance>(); groups[mat].Add(new CombineInstance { mesh=part.sharedMesh,transform=scenery.worldToLocalMatrix*part.transform.localToWorldMatrix }); }
-            foreach(var pair in groups) { var mesh=new Mesh { name="Campus colour batch",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32 }; mesh.CombineMeshes(pair.Value.ToArray()); combinedMeshes.Add(mesh); ComicMesh.Part(scenery,"Scenery batch",Vector3.zero,Vector3.one,pair.Key,mesh); }
-            foreach(var part in parts) { part.gameObject.SetActive(false); Destroy(part.gameObject); }
+            using(profileCombineScenery.Auto())
+            {
+                // One mesh per shared colour rather than one draw for every architectural detail.
+                var groups=new Dictionary<Material,List<CombineInstance>>(); var parts=scenery.GetComponentsInChildren<MeshFilter>();
+                foreach(var part in parts) { var mat=part.GetComponent<Renderer>().sharedMaterial; if(!groups.ContainsKey(mat)) groups[mat]=new List<CombineInstance>(); groups[mat].Add(new CombineInstance { mesh=part.sharedMesh,transform=scenery.worldToLocalMatrix*part.transform.localToWorldMatrix }); }
+                foreach(var pair in groups) { var mesh=new Mesh { name="Campus colour batch",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32 }; mesh.CombineMeshes(pair.Value.ToArray()); combinedMeshes.Add(mesh); ComicMesh.Part(scenery,"Scenery batch",Vector3.zero,Vector3.one,pair.Key,mesh); }
+                foreach(var part in parts) { part.gameObject.SetActive(false); Destroy(part.gameObject); }
+            }
         }
         void OnDestroy() { foreach(var material in palette.Values) Destroy(material); foreach(var mesh in combinedMeshes) Destroy(mesh); }
     }

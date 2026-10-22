@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#122b2c"><title>Kesho</title><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="favicon.png"><style>html,body{margin:0;height:100%;background:#122b2c;color:#f6edda;font:16px system-ui}main{height:100%;display:grid;place-items:center}canvas{width:100%;height:100%;display:block}#loading{position:absolute;text-align:center}progress{accent-color:#e6b961}#error{position:absolute;max-width:32rem;padding:24px}</style></head>
+<body><main><canvas id="game" tabindex="0" aria-label="Kesho game"></canvas><div id="loading"><img src="favicon.svg" width="96" height="96" alt="Kesho"><p>Entering Kesho…</p><progress id="progress" max="1" value="0" aria-label="Loading game"></progress></div><p id="error" role="alert" hidden></p></main>
+<script src="Build/{{{ LOADER_FILENAME }}}"></script><script>
+const loading=document.getElementById('loading');
+createUnityInstance(document.getElementById('game'),{
+ dataUrl:'Build/{{{ DATA_FILENAME }}}',frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',codeUrl:'Build/{{{ CODE_FILENAME }}}',streamingAssetsUrl:'StreamingAssets',companyName:{{{ JSON.stringify(COMPANY_NAME) }}},productName:{{{ JSON.stringify(PRODUCT_NAME) }}},productVersion:{{{ JSON.stringify(PRODUCT_VERSION) }}}
+},p=>document.getElementById('progress').value=p).then(()=>loading.hidden=true).catch(()=>{loading.hidden=true;const error=document.getElementById('error');error.hidden=false;error.textContent='Kesho could not load. Check your connection and reload.';});
+</script></body></html>

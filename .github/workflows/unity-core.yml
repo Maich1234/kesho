@@ -1,9 +1,9 @@
 name: Unity story core
 on:
   push:
-    paths: ['unity/**', 'tools/StoryChecks/**', 'tools/check_unity_results.py', 'tools/tests/**', '.github/workflows/unity-core.yml']
+    paths: ['unity/**', 'tools/StoryChecks/**', 'tools/check_unity_results.py', 'tools/tests/**', 'tools/review/**', 'tools/assets/**', '.github/workflows/unity-core.yml']
   pull_request:
-    paths: ['unity/**', 'tools/StoryChecks/**', 'tools/check_unity_results.py', 'tools/tests/**', '.github/workflows/unity-core.yml']
+    paths: ['unity/**', 'tools/StoryChecks/**', 'tools/check_unity_results.py', 'tools/tests/**', 'tools/review/**', 'tools/assets/**', '.github/workflows/unity-core.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,5 +18,7 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Compile and explore all opening paths
         run: dotnet run --project tools/StoryChecks/StoryChecks.csproj --configuration Release -- unity/Assets/Kesho/Resources/Story/opening.json
-      - name: Check Unity result gates
-        run: python3 -m unittest discover -s tools/tests -p 'test_unity_results.py'
+      - name: Check build gates and brand assets
+        run: python3 -m unittest discover -s tools/tests
+      - name: Check presentation source invariants
+        run: python3 tools/review/presentation_probe.py

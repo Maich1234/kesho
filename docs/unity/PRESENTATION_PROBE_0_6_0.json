@@ -1,0 +1,62 @@
+{
+  "source_sha256": {
+    "unity/Assets/Kesho/Runtime/ComicActor.cs": "e630d1239c8e90508d56de53a5ff575c705c11e00f3478f8ff42713acd4fae92",
+    "unity/Assets/Kesho/Runtime/Stage.cs": "f4acac844adf8b25a78e1367727207c961355e2d61f4c08adcbd6e29a4759c4b",
+    "unity/Assets/Kesho/Runtime/ComicMesh.cs": "ddfeeb146a2db7dc51c5961b04e4db6121eed73d9714c1bb0dedfb5951d1225b",
+    "unity/Assets/Kesho/Runtime/Soundscape.cs": "ea427d615072e3b525f770ed64f0138d1916969193d823237b7b5a10a57bbc1b"
+  },
+  "method": "source arithmetic and static construction estimate; no Unity runtime or device measurements",
+  "leg_local_bottom_y": -0.85,
+  "shoe_local_top_y": -0.725,
+  "gap_between_leg_and_shoe_units": 0,
+  "leg_shoe_overlap_units": 0.125,
+  "campus_default_actor_count": 9,
+  "authored_mesh_parts_by_actor_before_rigid_batching": {
+    "Queued student 0": 27,
+    "Queued student 1": 28,
+    "Queued student 2": 34,
+    "Admissions clerk": 34,
+    "Kiosk owner": 28,
+    "Student support officer": 28,
+    "Rehema": 34,
+    "Kito": 36,
+    "Player": 27
+  },
+  "estimated_default_character_mesh_renderer_count_before_rigid_batching": 276,
+  "estimated_default_character_mesh_renderer_count_after_rigid_batching": 153,
+  "submitted_triangles_per_round_mesh_including_degenerates": 192,
+  "estimated_default_character_triangles_including_shadows_and_degenerates": 52992,
+  "all_campus_approach_points_reachable": true,
+  "campus_approach_point_count": 8,
+  "previous_crossing_route": [
+    [
+      3,
+      3
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      5,
+      3
+    ]
+  ],
+  "previous_crossing_route_is_now_walkable": false,
+  "camera_blended_target_sizes": {
+    "exploration": 9.7,
+    "conversation": 5.7,
+    "self_or_phone": 4.4,
+    "character_preview": 3.4
+  },
+  "steady_idle_music_level_at_default_master_volume": 0.1105,
+  "mute_is_immediate_at_source": true,
+  "startup_synthesized_samples": 0,
+  "performance_measurements": {
+    "fps": null,
+    "frame_times": null,
+    "draw_calls": null,
+    "memory": null,
+    "thermal": null
+  }
+}

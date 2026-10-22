@@ -1,4 +1,11 @@
-# Current validation — 0.5.1 opening repairs
+# Current validation — 0.6.0 presentation repairs
+
+- **Passed locally:** 1,553,552 story assertions over 60,984 opening routes; 3,932 director checks; 154 speaker/time/presentation checks; 12 real-file recovery checks; 8 ordered-autosave concurrency checks; 7 Python asset/report-gate tests; presentation geometry/navigation source probes; C# syntax scan without Unity references.
+- **Added, not run here:** five PlayMode regressions plus two EditMode JSON/worker/failure checks. PlayMode coverage includes pooled callback replacement/invisible taps, stable customisation controls, immediate mute and actor occupancy/batching/camera blending. Existing interaction/overlay tests now wait for visible panels and deliberate input intervals.
+- **Not verified:** activated Unity compilation, shader compilation/rendering, EditMode/PlayMode execution, IL2CPP APK, browser export, real audio output, phone frame times/memory/thermal behaviour. No device smoothness sign-off or APK build is claimed.
+- [0.6.0 repairs and acceptance loop](RELEASE_0_6_0.md), [recorded source probe](PRESENTATION_PROBE_0_6_0.json).
+
+## Previous 0.5.1 opening repairs
 
 - **Executed:** 3,932 director assertions, including negative disclosure and legacy director-schema migration; 152 speaker/location/time presentation checks; retained 1,553,552 authored-story assertions over 60,984 paths and 12 real-file recovery checks.
 - **Executed:** 3 Python test methods for Unity result gates; C# syntax scan without Unity/NUnit references has no syntax diagnostics.

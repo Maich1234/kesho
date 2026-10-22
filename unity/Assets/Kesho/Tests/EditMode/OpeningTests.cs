@@ -86,4 +86,31 @@ public sealed class OpeningTests
         Assert.IsTrue(restored.State.director.Find("kito").facts.Contains("fixer_offer/pay"));
         Assert.AreEqual(20,restored.State.director.Find("kito").obligation);
     }
+    [Test] public void BackgroundAutosaveKeepsSnapshotAndDrainsBeforeNewerDecision()
+    {
+        string directory=Path.Combine(Path.GetTempPath(),"kesho-queue-"+Guid.NewGuid());
+        var chapter=Chapter(); var saves=new OfflineSave(directory,chapter);
+        try
+        {
+            var state=new LifeState { chapter=chapter.id,node=chapter.start,cash=1200 };
+            Assert.IsTrue(saves.Autosave(state)); state.cash=1111; saves.Flush();
+            Assert.AreEqual(1200,saves.Read().cash,"Queued payload is immutable despite later game state mutation");
+            saves.Autosave(state); state.cash=900; saves.Write(state);
+            Assert.AreEqual(900,saves.Read().cash,"Older autosave cannot overtake the critical save");
+            Assert.IsFalse(saves.TryFailure(out _));
+        }
+        finally { saves.Flush(); if(Directory.Exists(directory)) Directory.Delete(directory,true); }
+    }
+    [Test] public void BackgroundStorageFailureIsObservableWithoutTouchingHudOnWorker()
+    {
+        string path=Path.Combine(Path.GetTempPath(),"kesho-blocked-"+Guid.NewGuid()); File.WriteAllText(path,"not a directory");
+        var chapter=Chapter(); var saves=new OfflineSave(path,chapter);
+        try
+        {
+            saves.Autosave(new LifeState { chapter=chapter.id,node=chapter.start }); saves.Flush();
+            Assert.IsTrue(saves.TryFailure(out var error)); Assert.IsInstanceOf<IOException>(error);
+            Assert.IsFalse(saves.TryFailure(out _));
+        }
+        finally { saves.Flush(); File.Delete(path); }
+    }
 }

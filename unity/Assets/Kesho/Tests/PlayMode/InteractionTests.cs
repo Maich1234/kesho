@@ -7,6 +7,9 @@ using Kesho.Runtime;
 
 public sealed class InteractionTests
 {
+    int previousMotion;
+    [SetUp] public void Setup() { previousMotion=PlayerPrefs.GetInt("kesho.reduce_motion",0); PlayerPrefs.SetInt("kesho.reduce_motion",0); Comfort.Refresh(); }
+    [TearDown] public void Cleanup() { PlayerPrefs.SetInt("kesho.reduce_motion",previousMotion); Comfort.Refresh(); }
     [UnityTest] public IEnumerator DuplicateButtonEventsCommitOnlyOnce()
     {
         var root=new GameObject("HUD test",typeof(RectTransform)); var hud=root.AddComponent<StoryHud>();
@@ -14,6 +17,8 @@ public sealed class InteractionTests
         {
             hud.Open("Touch guard"); int calls=0;
             var button=hud.Button("Commit",()=>calls++);
+            button.onClick.Invoke(); Assert.AreEqual(0,calls,"Invisible panels cannot commit");
+            yield return new WaitForSecondsRealtime(.25f);
             button.onClick.Invoke(); button.onClick.Invoke();
             Assert.AreEqual(1,calls,"Duplicate pointer events must not commit twice");
             yield return new WaitForSecondsRealtime(.25f);

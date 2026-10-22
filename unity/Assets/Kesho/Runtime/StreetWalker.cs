@@ -8,8 +8,10 @@ namespace Kesho.Runtime
     public sealed class StreetWalker : MonoBehaviour
     {
         public Stage Stage;
+        public const float StepDistance=1.2f;
         readonly Queue<Vector3> route=new Queue<Vector3>();
         float step;
+        public float TravelledDistance { get; private set; }
         Action onArrival;
         public bool Moving { get { return route.Count>0; } }
         public void Stop() { route.Clear(); onArrival=null; }
@@ -36,15 +38,17 @@ namespace Kesho.Runtime
             if(Input.GetMouseButtonDown(0) && !(EventSystem.current && EventSystem.current.IsPointerOverGameObject()) && !(Input.touchCount>0 && EventSystem.current && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))
             {
                 Ray ray=Stage.View.ScreenPointToRay(Input.mousePosition); var ground=new Plane(Vector3.up,Vector3.zero); float distance;
-                if(!session.TryInspectScreen(Input.mousePosition) && ground.Raycast(ray,out distance)) { var point=ray.GetPoint(distance); if(!session.TryInspect(point)) WalkTo(point); }
+                if(!session.TryInspectScreen(Input.mousePosition) && ground.Raycast(ray,out distance)) { var point=ray.GetPoint(distance); if(!session.TryInspect(point) && !WalkTo(point)) session.MovementBlocked(); }
             }
             if(route.Count>0)
             {
                 Vector3 direction=route.Peek()-transform.position;
+                var previous=transform.position;
                 transform.position=Vector3.MoveTowards(transform.position,route.Peek(),Time.deltaTime*3.5f);
                 if(direction.sqrMagnitude>.001f) transform.rotation=Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(direction),Time.deltaTime*12);
                 if(Vector3.Distance(transform.position,route.Peek())<.04f) route.Dequeue();
-                step+=Time.deltaTime; if(step>.4f) { step=0; session.Sound.Cue("step",transform.position); }
+                float travelled=Vector3.Distance(previous,transform.position); TravelledDistance+=travelled;
+                step+=travelled; if(step>=StepDistance) { step%=StepDistance; session.Sound.Cue("step",transform.position); }
             }
             if(route.Count==0 && onArrival!=null)
             {

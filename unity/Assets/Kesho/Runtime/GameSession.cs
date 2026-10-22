@@ -30,7 +30,7 @@ namespace Kesho.Runtime
         static void Boot() { if(Instance==null) new GameObject("Kesho session").AddComponent<GameSession>(); }
         void Awake()
         {
-            if(Instance!=null) { Destroy(gameObject); return; } Instance=this; DontDestroyOnLoad(gameObject);
+            if(Instance!=null) { Destroy(gameObject); return; } Instance=this; DontDestroyOnLoad(gameObject); Comfort.Refresh();
             Application.targetFrameRate=30; Screen.orientation=ScreenOrientation.LandscapeLeft;
             chapter=JsonUtility.FromJson<Chapter>(Resources.Load<TextAsset>("Story/opening").text); chapter.Validate();
             saves=new OfflineSave(Path.Combine(Application.persistentDataPath,"kesho-unity-v2"),chapter);
@@ -43,15 +43,15 @@ namespace Kesho.Runtime
         {
             stage=FindFirstObjectByType<Stage>(); if(stage==null) return;
             loading=false;
-            if(playing) ConfigureStage();
+            if(playing) { hud.Close(); ConfigureStage(); }
         }
         void ConfigureStage()
         {
-            stage.Conversation("",false); stage.Preview(false); stage.ApplyAppearance(Engine.State);
+            stage.RestPose(false); stage.Conversation("",false); stage.Preview(false); stage.ApplyAppearance(Engine.State);
             stage.ApplyTimeOfDay(StoryPresentation.TimeFor(Engine.Current));
             if(StoryPresentation.SameLayout(stage.sceneId,Engine.State.poseScene) && stage.Walkable(new Vector2Int(Mathf.RoundToInt(Engine.State.posX),Mathf.RoundToInt(Engine.State.posZ)))) stage.Player.position=new Vector3(Engine.State.posX,0,Engine.State.posZ);
-            if(marker) Destroy(marker);
-            marker=ComicMesh.Part(null,"Current story destination",Vector3.zero,Vector3.one,stage.Tint(new Color(1,.7f,.12f)),ComicMesh.Cylinder).gameObject;
+            if(marker && marker.transform.parent!=stage.transform) { Destroy(marker); marker=null; }
+            if(!marker) marker=ComicMesh.Part(stage.transform,"Current story destination",Vector3.zero,Vector3.one,stage.Tint(new Color(1,.7f,.12f)),ComicMesh.Cylinder).gameObject;
             marker.transform.localScale=new Vector3(.8f,.025f,.8f);
 
             RefreshObjective();
@@ -67,7 +67,7 @@ namespace Kesho.Runtime
         }
         void Menu()
         {
-            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.5.1"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
+            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.6.0"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
             hud.Title(); hud.AddText("Maweni College. Your first day. A stranger offers a shortcut.",22);
             hud.Button("Begin a life",CreateCharacter,true);
             if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read(),true));
@@ -102,13 +102,13 @@ namespace Kesho.Runtime
             if(stage) { stage.ApplyAppearance(draft); stage.Preview(true); }
             hud.AddText(draft.character=="Nia"?"Nia notices the details. What she does with them is up to you.":draft.character=="Amani"?"Amani carries his family’s hopes. You decide how he carries the pressure.":"Choose your name, appearance and family connection.",20);
             hud.Field(draft.name,value=>draft.name=value);
-            hud.Button("Background: "+draft.background,()=> { draft.background=Cycle(WorldCatalog.Backgrounds,draft.background); CharacterForm(); });
-            hud.Button("Gender: "+draft.gender,()=> { draft.gender=Cycle(WorldCatalog.Genders,draft.gender); CharacterForm(); });
-            hud.Button("Beliefs: "+draft.belief,()=> { draft.belief=Cycle(WorldCatalog.Beliefs,draft.belief); CharacterForm(); });
-            hud.Button("Skin tone: "+(draft.skin+1)+" / 4",()=> { draft.skin=(draft.skin+1)%4; if(stage) stage.ApplyAppearance(draft); CharacterForm(); });
-            hud.Button("Hair: "+WorldCatalog.Hairstyles[draft.hair],()=> { draft.hair=(draft.hair+1)%WorldCatalog.Hairstyles.Length; CharacterForm(); });
-            hud.Button("Outfit: "+(draft.outfit+1)+" / 4",()=> { draft.outfit=(draft.outfit+1)%4; if(stage) stage.ApplyAppearance(draft); CharacterForm(); });
-            hud.Button(draft.permanent?"Permanent consequences":"Checkpoints",()=> { draft.permanent=!draft.permanent; CharacterForm(); });
+            hud.CycleButton(()=>"Background: "+draft.background,()=>draft.background=Cycle(WorldCatalog.Backgrounds,draft.background));
+            hud.CycleButton(()=>"Gender: "+draft.gender,()=>draft.gender=Cycle(WorldCatalog.Genders,draft.gender));
+            hud.CycleButton(()=>"Beliefs: "+draft.belief,()=>draft.belief=Cycle(WorldCatalog.Beliefs,draft.belief));
+            hud.CycleButton(()=>"Skin tone: "+(draft.skin+1)+" / 4",()=> { draft.skin=(draft.skin+1)%4; if(stage) stage.ApplyAppearance(draft); });
+            hud.CycleButton(()=>"Hair: "+WorldCatalog.Hairstyles[draft.hair],()=> { draft.hair=(draft.hair+1)%WorldCatalog.Hairstyles.Length; if(stage) stage.ApplyAppearance(draft); });
+            hud.CycleButton(()=>"Outfit: "+(draft.outfit+1)+" / 4",()=> { draft.outfit=(draft.outfit+1)%4; if(stage) stage.ApplyAppearance(draft); });
+            hud.CycleButton(()=>draft.permanent?"Permanent consequences":"Checkpoints",()=>draft.permanent=!draft.permanent);
             hud.Button("Enter Maweni College",()=> {
                 if(string.IsNullOrWhiteSpace(draft.name)) draft.name="Amani";
                 if(saves.Read()!=null) ConfirmNewLife();
@@ -141,7 +141,13 @@ namespace Kesho.Runtime
             {
                 loading=false; MissingLocation(); return;
             }
-            SceneManager.LoadSceneAsync(Engine.Current.scene,LoadSceneMode.Single);
+            hud.Open("Travelling…","Preparing the next location.");
+            StartCoroutine(LoadLocation(Engine.Current.scene));
+        }
+        IEnumerator LoadLocation(string scene)
+        {
+            yield return null;
+            yield return SceneManager.LoadSceneAsync(scene,LoadSceneMode.Single);
         }
         void MissingLocation()
         {
@@ -279,6 +285,7 @@ namespace Kesho.Runtime
         }
         void TrackView(Action render) { currentView=render; settingsOpen=false; }
         void EndConversation() { TrackView(EndConversation); if(stage) stage.Conversation("",false); InConversation=false; directorConversation=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close(); }
+        public void MovementBlocked() { hud.Hint("That path is blocked. Tap a clear space nearby."); }
         void StopWalking() { if(stage && stage.Player) stage.Player.GetComponent<StreetWalker>().Stop(); }
         public void Back()
         {
@@ -306,7 +313,7 @@ namespace Kesho.Runtime
         }
         IEnumerator SleepTransition()
         {
-            loading=true; InConversation=false; Sound.StopVoice(); Sound.Cue("bedding",stage.Player.position);
+            loading=true; InConversation=false; stage.StopSpeaking(); stage.RestPose(true); Sound.StopVoice(); Sound.Cue("bedding",stage.Player.position);
             hud.Responses("The city settles. Tomorrow waits.");
             bool skip=false; hud.Button("Skip transition",()=>skip=true);
             float time=0; while(time<2.5f&&!skip) { if(!background) time+=Time.unscaledDeltaTime; yield return null; }
@@ -335,7 +342,7 @@ namespace Kesho.Runtime
             Sound.StopVoice(); hud.Open("Sound & comfort");
             hud.Slider("Volume",Sound.Volume,value=>Sound.SetVolume(value));
             bool reduced=PlayerPrefs.GetInt("kesho.reduce_motion",0)==1;
-            hud.Button(reduced?"Reduced motion: on":"Reduced motion: off",()=> { PlayerPrefs.SetInt("kesho.reduce_motion",reduced?0:1); PlayerPrefs.Save(); ShowSettings(returnTo); });
+            hud.Button(reduced?"Reduced motion: on":"Reduced motion: off",()=> { PlayerPrefs.SetInt("kesho.reduce_motion",reduced?0:1); PlayerPrefs.Save(); Comfort.Refresh(); ShowSettings(returnTo); });
             hud.AddText("Subtitles remain visible. Story choices never have a countdown.",18);
             if(playing)
             {
@@ -369,12 +376,19 @@ namespace Kesho.Runtime
             if(!playing||background||loading) return;
             if(Input.anyKeyDown || Input.touchCount>0) idle=0; else idle+=Time.unscaledDeltaTime;
             if(idle<60&&(CanExplore||InConversation)) Engine.State.activeSeconds+=Time.unscaledDeltaTime;
-            saveClock+=Time.unscaledDeltaTime; if(saveClock>20) { saveClock=0; Save(); }
-            if(marker && PlayerPrefs.GetInt("kesho.reduce_motion",0)==0) marker.transform.Rotate(Vector3.up,Time.deltaTime*25);
+            if(saves.TryFailure(out var saveError)) { Debug.LogWarning("Autosave failed: "+saveError.GetType().Name); hud.Notice("Autosave failed. Keep the app open and free storage before saving again."); }
+            saveClock+=Time.unscaledDeltaTime;
+            if(saveClock>20)
+            {
+                saveClock=0; CapturePosition();
+                try { saves.Autosave(Engine.State); }
+                catch(Exception e) when(e is IOException || e is UnauthorizedAccessException) { Debug.LogWarning("Autosave failed: "+e.GetType().Name); hud.Notice("Autosave failed. Keep the app open and free storage before saving again."); }
+            }
+            if(marker && !Comfort.ReducedMotion) marker.transform.Rotate(Vector3.up,Time.deltaTime*25);
         }
         void OnApplicationPause(bool pause) { background=pause; if(pause) { StopWalking(); if(playing) Save(); } }
         void OnApplicationFocus(bool focus) { background=!focus; if(!focus) { StopWalking(); if(playing) Save(); } }
         void OnApplicationQuit() { if(playing) Save(); }
-        void OnDestroy() { SceneManager.sceneLoaded-=SceneReady; if(Instance==this) Instance=null; }
+        void OnDestroy() { if(saves!=null) saves.Flush(); SceneManager.sceneLoaded-=SceneReady; if(Instance==this) Instance=null; }
     }
 }

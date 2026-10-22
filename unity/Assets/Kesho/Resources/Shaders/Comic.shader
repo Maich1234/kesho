@@ -15,7 +15,8 @@ Shader "Kesho/Comic"
             CBUFFER_START(UnityPerMaterial)
             half4 _BaseColor;
             CBUFFER_END
-            float _KeshoExposure;
+            float _KeshoExposure, _KeshoKeyStrength;
+            half4 _KeshoLightTint, _KeshoAmbientTint;
             struct A { float4 p:POSITION; float3 n:NORMAL; };
             struct V { float4 p:SV_POSITION; float3 n:TEXCOORD0; float3 world:TEXCOORD1; };
             V Vert(A a) { V o; o.world=TransformObjectToWorld(a.p.xyz); o.p=TransformWorldToHClip(o.world); o.n=TransformObjectToWorldNormal(a.n); return o; }
@@ -24,7 +25,8 @@ Shader "Kesho/Comic"
                 Light light=GetMainLight(); half d=dot(normalize(i.n),light.direction);
                 half band=d>.48?1.0:(d>-.12?.84:.64);
                 half edge=saturate(dot(normalize(i.n),normalize(GetWorldSpaceViewDir(i.world))));
-                half3 colour=_BaseColor.rgb*band;
+                half3 lighting=lerp(_KeshoAmbientTint.rgb,_KeshoLightTint.rgb,saturate((d*.5+.5)*_KeshoKeyStrength));
+                half3 colour=_BaseColor.rgb*band*lerp(half3(1,1,1),lighting,.45);
                 colour=lerp(colour*.72,colour,smoothstep(.0,.16,edge));
                 return half4(colour*max(.1,_KeshoExposure),1);
             }
