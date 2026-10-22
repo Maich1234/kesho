@@ -9,7 +9,7 @@ namespace Kesho.Runtime
     {
         public Stage Stage;
         readonly Queue<Vector3> route=new Queue<Vector3>();
-        float phase,step;
+        float step;
         Action onArrival;
         public bool Moving { get { return route.Count>0; } }
         public void Stop() { route.Clear(); onArrival=null; }
@@ -32,11 +32,11 @@ namespace Kesho.Runtime
         public static Vector2Int Cell(Vector3 p) { return new Vector2Int(Mathf.RoundToInt(p.x),Mathf.RoundToInt(p.z)); }
         void Update()
         {
-            var session=GameSession.Instance; if(session==null||!session.CanExplore) { Animate(false); return; }
+            var session=GameSession.Instance; if(session==null||!session.CanExplore) { return; }
             if(Input.GetMouseButtonDown(0) && !(EventSystem.current && EventSystem.current.IsPointerOverGameObject()) && !(Input.touchCount>0 && EventSystem.current && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))
             {
                 Ray ray=Stage.View.ScreenPointToRay(Input.mousePosition); var ground=new Plane(Vector3.up,Vector3.zero); float distance;
-                if(ground.Raycast(ray,out distance)) WalkTo(ray.GetPoint(distance));
+                if(!session.TryInspectScreen(Input.mousePosition) && ground.Raycast(ray,out distance)) { var point=ray.GetPoint(distance); if(!session.TryInspect(point)) WalkTo(point); }
             }
             if(route.Count>0)
             {
@@ -50,12 +50,7 @@ namespace Kesho.Runtime
             {
                 var callback=onArrival; onArrival=null; callback();
             }
-            Animate(route.Count>0);
-        }
-        void Animate(bool moving)
-        {
-            phase+=Time.deltaTime*10; float angle=moving?Mathf.Sin(phase)*24:0;
-            transform.Find("Left leg").localRotation=Quaternion.Euler(angle,0,0); transform.Find("Right leg").localRotation=Quaternion.Euler(-angle,0,0);
+
         }
     }
 }

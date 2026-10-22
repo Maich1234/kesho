@@ -37,7 +37,7 @@ namespace Kesho.Core
             next.decisions.Add(command);
             next.journal.Add("Day " + next.day + ": " + c.label);
             if (c.effect == "sleep") next.day++;
-            if (c.effect == "night_resolution") ResolveNight(next);
+            if (c.effect == "night_resolution") { ResolveNight(next); next.day++; }
             next.node = c.next; next.Validate(Chapter); State = next;
             return true;
         }
@@ -49,7 +49,7 @@ namespace Kesho.Core
         }
         public string Format(string text)
         {
-            string contact = State.background == "Family household" ? "Sifa" : State.background == "Independent parent" ? "Kito" : "Leila";
+            string contact = State.background == "Family household" ? "Sifa" : State.background == "Independent parent" ? "Leila" : "Musa";
             return (text ?? "").Replace("{name}", State.name).Replace("{contact}", contact);
         }
         public Line[] VisibleLines()

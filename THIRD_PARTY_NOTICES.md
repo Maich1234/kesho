@@ -19,3 +19,9 @@ Title.ttf is DejaVu Serif; Body.ttf is DejaVu Sans. The unmodified font binaries
 ## Original assets
 
 All district geometry, avatar blockouts and the Kesho icon in this prototype are original procedural/code assets. No stock character packs, scraped images, generated raster images or third-party audio are included. The original 43.6-second score, 16-second ambience and UI/footstep cues were procedurally composed and synthesised for Kesho. Reproduction code is in `tools/generate_audio.py`. Final production art is future work.
+
+## Kesho college opening artwork (0.4.0)
+
+`unity/Assets/Kesho/Resources/Art/cast.png` is an original image generated with the built-in image-generation tool for this project on 22 October 2026. It depicts Amani, Nia, Rehema and Kito. No Shujaaz characters, logo or pages are included. Generation prompt and usage are recorded in `docs/unity/ART_PRODUCTION.md`.
+
+The explicit meshes, comic shader and synthesized paper/bedding/campus sounds are original project code. They do not embed third-party recordings.

@@ -1,3 +1,18 @@
+# Current validation — 0.4.0 college opening
+
+- **Executed:** actual engine-independent C# compiled with warnings treated as errors; 1,553,552 assertions over 60,984 complete paths, all 29 authored beats and all three family backgrounds. Large counts arise from exhaustive branching, not independent product features.
+- **Executed:** 12 real-file checksum/backup/interrupted-write checks. Appearance identity and all five hairstyles round-trip through .NET JSON; malformed values rejected.
+- **Executed:** 59 lines respect the short-line budget; all reachable states have dialogue and an affordable continuation; all completions secure a college path, payment/deferment status and a bed. Duplicate input, deterministic consequence replay and permanent/cross-life rewind restrictions covered.
+- **Source checks:** no C# syntax diagnostics, no runtime primitive creation calls, stable Unity asset metadata, 1254×1254 original portrait atlas. Syntax checking without Unity references does not validate Unity APIs or compilation.
+- **Added, not run here:** Unity campus hotspot routes, mesh/portrait/shader presence, collider-free scene construction, all hairstyle replacements, Unity JsonUtility save tests and existing interaction tests.
+- **Pending:** activated Unity import/compilation, shader rendering, PlayMode suite, IL2CPP build, phone visuals/touch/audio/performance and reinstall/save testing. No claim that an APK has been built in this workspace.
+
+See [phone acceptance steps](COLLEGE_OPENING.md). Natural voices, real crowd recordings, full-lifetime content, Supabase and multiplayer are not present.
+
+---
+
+## Historical 0.3.1 validation (superseded story graph)
+
 # Unity implementation validation
 
 Status: **source and core logic delivered; Unity editor/runtime validation pending.**

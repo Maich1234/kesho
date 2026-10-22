@@ -8,17 +8,17 @@ using Kesho.Runtime;
 public sealed class OpeningTests
 {
     Chapter Chapter() { return JsonUtility.FromJson<Chapter>(Resources.Load<TextAsset>("Story/opening").text); }
-    [Test] public void UnityDeserializerLoadsTheAuthoredGraph() { var c=Chapter(); c.Validate(); Assert.AreEqual(31,c.nodes.Length); }
+    [Test] public void UnityDeserializerLoadsTheAuthoredGraph() { var c=Chapter(); c.Validate(); Assert.AreEqual("college_gate",c.start); }
     [Test] public void SaveRecoversBackupAndKeepsRandomState()
     {
         string path=Path.Combine(Path.GetTempPath(),"kesho-test-"+Guid.NewGuid());
         try
         {
             var chapter=Chapter(); var engine=new StoryEngine(chapter); var save=new OfflineSave(path,chapter);
-            save.Write(engine.State); engine.Apply("arrival","warm"); save.Write(engine.State);
-            Assert.AreEqual("family",save.Read().node);
+            save.Write(engine.State); engine.Apply("college_gate","mentor"); save.Write(engine.State);
+            Assert.AreEqual("mentor",save.Read().node);
             File.WriteAllText(Path.Combine(path,"life.json"),"broken");
-            Assert.AreEqual("arrival",save.Read().node);
+            Assert.AreEqual("college_gate",save.Read().node);
         }
         finally { if(Directory.Exists(path)) Directory.Delete(path,true); }
     }

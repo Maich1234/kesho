@@ -1,66 +1,60 @@
-voice_id,scene,speaker,line,condition,status
-ch01_arrival_01,Arrival,{contact},{name}? Here. Before someone charges you for standing still.,,recording_required
-ch01_arrival_02,Arrival,{contact},"Your family called twice. I said you arrived. The second time, I made it sound convincing.",,recording_required
-ch01_recognised_01,Arrival,{contact},Your photograph. And that bag: nobody returning to this city carries it with both hands.,,recording_required
-ch01_recognised_02,Arrival,{contact},Come. You need a room before you need a plan.,,recording_required
-ch01_family_01,Arrival,{contact},They think the sponsorship is settled. Is it?,,recording_required
-ch01_family_02,Arrival,You,It is an interview. Nobody promised me a place.,,recording_required
-ch01_bed_offer_01,Courtyard,Sifa,Three nights. C150. After that we discuss the word temporary.,,recording_required
-ch01_bed_offer_02,Courtyard,Sifa,Help with supper and we can call it C100. I do not charge family for advice. Yet.,,recording_required
-ch01_supper_01,Courtyard,Sifa,Pass those cups. The office asked my neighbour for a processing fee. The notice said applications were free.,,recording_required
-ch01_supper_02,Courtyard,Sifa,She paid. Then they asked her daughter to sign for money she never received.,,recording_required
-ch01_waiver_01,Courtyard,Sifa,The Opportunity Fund. Blue shutters. A man outside knew her name before she introduced herself.,,recording_required
-ch01_waiver_02,Courtyard,Sifa,Keep your receipts. And eat. Suspicion is not supper.,,recording_required
-ch01_room_arrival_01,Room,Family,Have you eaten?,,recording_required
-ch01_room_arrival_02,Room,You,Yes.,,recording_required
-ch01_room_arrival_03,Room,Family,Good. Tell us the rest when you can breathe.,,recording_required
-ch01_first_sleep_01,Room,You,The lock catches on the second turn. Someone laughs in the courtyard. A bus pulls away.,,recording_required
-ch01_morning_01,Courtyard,{contact},Interview at ten. There is work at Dispatch if the queue defeats you.,,recording_required
-ch01_morning_02,Courtyard,{contact},Take the signed application. Leave the original certificate here. Copies can travel. Originals stay safe.,,recording_required
-ch01_work_intro_01,Dispatch,Tendo,One parcel. Campus reception. C180 after they sign. You keep a copy.,,recording_required
-ch01_work_intro_02,Dispatch,Tendo,"If somebody changes the destination, call me. Being polite does not make them your employer.",,recording_required
-ch01_deliver_01,Campus,Receptionist,"For Rehema? Put it here. Wait, let me sign your copy.",,recording_required
-ch01_deliver_02,Campus,Receptionist,You look like the scholarship queue has already tired you out.,,recording_required
-ch01_campus_tip_01,Campus,Rehema,They nominate candidates. We confirm admissions separately. A stamp is not a place.,,recording_required
-ch01_campus_tip_02,Campus,Rehema,"If they offer you a grant, ask who receives the money and whose signature acknowledges it.",,recording_required
-ch01_notice_01,Office,Notice,Applications are free. Submit copies only. No representative may guarantee an award.,,recording_required
-ch01_notice_02,Office,Clerk,You there. Name? We have been expecting you.,,recording_required
-ch01_interview_01,Office,Maro,Strong results. Modest household. You fit the programme.,,recording_required
-ch01_interview_02,Office,Maro,There is a small verification charge. C200. Pay today and I can put your file in the first batch.,,recording_required
-ch01_fee_response_01,Office,Maro,The application is free. Verification takes work.,,recording_required
-ch01_fee_response_02,Office,Maro,"Look, I can waive it. Deliver a sealed envelope to Dispatch. Sign this acknowledgement and we help each other.",,recording_required
-ch01_conditions_01,Office,You,"The form says C8,000 has been received. The payment column is already completed.",,recording_required
-ch01_conditions_02,Office,Maro,An accounting step. Your actual support follows later. You can trust the programme.,,recording_required
-ch01_copy_request_01,Office,Maro,Copies are issued after approval.,,recording_required
-ch01_copy_request_02,Office,Clerk,"Maro, the chairman is calling.",,recording_required
-ch01_copy_request_03,Office,Maro,Stay here. Do not lose your place over paperwork.,,recording_required
-ch01_reference_01,Office,You,Two entries use the same account. One carries Sifa's neighbour's surname.,,recording_required
-ch01_reference_02,Office,You,A reference number is evidence of an entry. It does not yet explain where the money went.,,recording_required
-ch01_paid_fee_01,Office,Maro,Your file will move. Here is your receipt.,,recording_required
-ch01_paid_fee_02,Office,You,The receipt is for C50. You paid C200.,,recording_required
-ch01_ordinary_01,Office,Maro,Then wait for the next batch. I cannot promise when.,,recording_required
-ch01_ordinary_02,Office,Clerk,Take the submission slip. The tracking number is at the bottom.,,recording_required
-ch01_deal_01,Dispatch,Tendo,That envelope is not for Dispatch. The man renting the back office uses our address.,,recording_required
-ch01_deal_02,Dispatch,Tendo,"You can still take it back. Once he has your signature, he has a story about you.",,recording_required
-ch01_return_envelope_01,Office,Maro,You signed. Returning paper does not erase a signature.,,recording_required
-ch01_return_envelope_02,Office,Clerk,I will mark the envelope returned. Keep this copy.,,recording_required
-ch01_back_office_01,Dispatch,Recipient,You are early. Good. C300 for transport.,,recording_required
-ch01_back_office_02,Dispatch,Recipient,"When somebody asks, you received your support. All of it.",,recording_required
-ch01_work_after_01,Dispatch,Tendo,No permanent job today. Come tomorrow with your identification. I can put you on the casual list.,,recording_required
-ch01_work_after_02,Dispatch,Tendo,A list is not a promise. But at least you can read this one.,,recording_required
-ch01_consult_01,Campus,Rehema,Nobody can promise you admission through a back office.,,recording_required
-ch01_consult_02,Campus,Rehema,Keep what you have. Do not accuse people using a rumour. We can verify references together.,,recording_required
-ch01_consult_03,Campus,Rehema,Returning the envelope matters. Keep that return record.,return_record,recording_required
-ch01_trust_rehema_01,Campus,Rehema,Let me check the reference with the bursary office. Do not post it tonight.,,recording_required
-ch01_trust_rehema_02,Campus,Rehema,Your name belongs to you. Keep it that way.,,recording_required
-ch01_admission_01,Campus,Rehema,There is an ordinary application and a hardship assessment. Neither needs Maro.,,recording_required
-ch01_admission_02,Campus,Rehema,Bring the household documents. We can begin even while the other matter is unresolved.,,recording_required
-ch01_supper_return_01,Courtyard,Sifa,You have the face of someone who found a shortcut with a queue on it.,,recording_required
-ch01_supper_return_02,Courtyard,Sifa,Sit. Start with what you know. Leave what you suspect until after tea.,,recording_required
-ch01_second_sleep_01,Room,You,"You fold the receipt into your notebook. Outside, the last conversation in the courtyard fades.",,recording_required
-ch01_knock_01,Night,Visitor,Maro needs the copy you took. We can settle this quietly.,collector_visits,recording_required
-ch01_knock_02,Night,Phone,Unknown number: Tell them the money arrived. We will call again.,collector_calls,recording_required
-ch01_knock_03,Night,Neighbour,Sifa said you asked about the fund. My daughter signed that form too.,witness_visits,recording_required
-ch01_knock_04,Night,{contact},A man asked whether you were staying here. I did not answer. What happened today?,contact_warns,recording_required
-ch01_cliffhanger_01,Night,You,The application is still open. So is the question of who has been using your name.,,recording_required
-ch01_cliffhanger_02,Night,You,"Tomorrow, you have someone to speak to. And something worth keeping.",,recording_required
+voice_id,speaker,scene,line,condition,recording_status
+college_college_gate_01,Kito,Campus,First day? Karibu. That queue has its own graduation ceremony.,,not recorded
+college_college_gate_02,Kito,Campus,I can sort your registration. Three hundred. You keep your afternoon.,,not recorded
+college_college_gate_03,Rehema,Campus,Freshers! Read the board before anyone reads your wallet.,,not recorded
+college_fee_notice_01,Noticeboard,Campus,REGISTRATION: C600. Pay only at the admissions desk. Assistance is free. Keep your stamped receipt.,,not recorded
+college_fee_notice_02,{name},Campus,No shortcut fee. And a student support desk upstairs.,,not recorded
+college_mentor_01,Rehema,Campus,I am Rehema. Second year. Professional queue survivor.,,not recorded
+college_mentor_02,Rehema,Campus,He knows people. That does not make him admissions. Ask for a receipt you can verify.,,not recorded
+college_fixer_offer_01,Kito,Campus,Three hundred gets your name inside. Fees are separate. Sawa?,,not recorded
+college_fixer_offer_02,Kito,Campus,You can ask questions. Just do not confuse questions with progress.,,not recorded
+college_proof_01,Kito,Campus,My contact handles the lists. I handle the running around.,,not recorded
+college_proof_02,{name},Campus,Then your contact can confirm it at the desk.,,not recorded
+college_verify_01,Student support,Campus,No one outside admissions can guarantee your place. Did someone give you a payment reference?,,not recorded
+college_verify_02,Student support,Campus,We can record a concern privately. You choose whether to give a name.,,not recorded
+college_concern_01,Student support,Campus,This is your reference. A complaint does not decide your admission.,,not recorded
+college_concern_02,{name},Campus,I photograph the reference and put the original with my letter.,,not recorded
+college_accompanied_01,Rehema,Campus,We go together. No speeches. Just the letter and the facts.,,not recorded
+college_accompanied_02,Rehema,Campus,"And afterwards, chai. This campus runs on paperwork and tea.",,not recorded
+college_shortcut_receipt_01,Kito,Campus,Show this at the desk. My number is on the back.,,not recorded
+college_shortcut_receipt_02,{name},Campus,A handwritten name. No college stamp. Kito is already greeting the next arrival.,,not recorded
+college_slip_check_01,Student support,Campus,This is not a college receipt. Keep it. You can still register through the normal process.,,not recorded
+college_slip_check_02,Student support,Campus,We cannot promise your money back. We can help you record what happened.,,not recorded
+college_mentor_slip_01,Rehema,Campus,A name on paper is not admission. Pole. Keep the slip; do not pay him again.,,not recorded
+college_mentor_slip_02,Rehema,Campus,We can still get you through today.,,not recorded
+college_queue_01,Student in queue,Campus,I left home before the rooster. Somehow the rooster is probably registered already.,,not recorded
+college_queue_02,Admissions clerk,Campus,"Next, please. Admission letter and identification.",,not recorded
+college_documents_01,Admissions clerk,Campus,Your offer is valid. Registration is six hundred. Accommodation is separate.,,not recorded
+college_documents_02,Admissions clerk,Campus,That handwritten slip does not pay the college fee. Keep it if you want to raise a concern.,accepted_deal,not recorded
+college_documents_03,Admissions clerk,Campus,You can ask student support about a payment arrangement before deciding.,,not recorded
+college_fee_confirm_01,Noticeboard,Campus,REGISTRATION C600. Stamped receipts issued at the desk. Payment support: ask before paying.,,not recorded
+college_aid_form_01,Student support,Campus,A provisional place lets you attend orientation while the bursary team reviews your request.,,not recorded
+college_aid_form_02,Student support,Campus,There is also a paid library shift. Neither is a promise of sponsorship.,,not recorded
+college_registered_01,Admissions clerk,Campus,Registered. Keep this copy. Orientation starts tomorrow.,,not recorded
+college_registered_02,{name},Campus,"A stamp. A student number. Something real, at last.",,not recorded
+college_provisional_01,Student support,Campus,Here is your provisional letter. Attend orientation. Bring the requested documents within the week.,,not recorded
+college_provisional_02,{name},Campus,Not settled. But the door is open.,,not recorded
+college_copies_01,Kiosk owner,Campus,"One copy for the file, one photo for the phone. Paper disappears faster than lunch.",,not recorded
+college_copies_02,{name},Campus,I put the copy in a different pocket.,,not recorded
+college_after_registration_01,Rehema,Campus,You made it through registration. Have you sorted a bed?,,not recorded
+college_after_registration_02,Rehema,Campus,Your contact sent directions to Karibu Court. I can also point you to student housing.,,not recorded
+college_family_call_01,{contact},Campus,"{name}, have you eaten? No, tea is not a meal.",,not recorded
+college_family_call_02,{contact},Campus,"Come to Karibu Court. We will work out tonight, then tomorrow.",,not recorded
+college_housing_referral_01,Student support,Campus,The emergency bed list is full tonight. I can take your name and give you verified nearby contacts.,,not recorded
+college_housing_referral_02,Student support,Campus,Do not pay a deposit before viewing a room.,,not recorded
+college_courtyard_arrival_01,Sifa,Courtyard,"College face. I know it. Half hope, half hunger.",,not recorded
+college_courtyard_arrival_02,Sifa,Courtyard,The small room is two-fifty tonight. Or take the spare mattress while we find a longer plan.,,not recorded
+college_view_room_01,{name},Room,"A working lock, a desk and a bed. Small, but dry.",,not recorded
+college_view_room_02,Sifa,Room,You have seen it. Your choice.,,not recorded
+college_settle_room_01,{name},Room,I put the admission papers on the desk. Tomorrow already feels close.,,not recorded
+college_settle_shared_01,Sifa,Room,You can use this room tonight. My cousin arrives tomorrow. We will need a plan by then.,,not recorded
+college_settle_shared_02,{name},Room,A borrowed bed. One night to breathe.,,not recorded
+college_evening_phone_01,Rehema,Room,"Orientation at eight. Carry the letter, not just confidence.",mentor_met,not recorded
+college_evening_phone_02,{contact},Room,"Tomorrow we make a plan. Tonight, eat something.",unless mentor_met,not recorded
+college_evening_phone_03,Phone,Room,Library shift application received. Interview time to follow.,shift_applied,not recorded
+college_first_sleep_01,{name},Room,"Shoes off. Papers safe. Somewhere outside, a radio finally goes quiet.",,not recorded
+college_morning_message_01,Kito,Night,We need to talk. My contact has another fee. I will find you after orientation.,collector_visits,not recorded
+college_morning_message_02,Kito,Night,"You still have my number. Keep yesterday between us, sawa?",collector_calls,not recorded
+college_morning_message_03,Rehema,Night,Someone else has the same slip. They want to speak to you. Your choice.,witness_visits,not recorded
+college_morning_message_04,{contact},Night,A neighbour says that fixer has been around for weeks. Keep your papers close.,contact_warns,not recorded
+college_opening_end_01,{name},Room,A college place. A place to sleep. And a city already asking what I will trade for tomorrow.,,not recorded

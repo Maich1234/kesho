@@ -1,1306 +1,163 @@
 {
-  "id": "a_place_before_dark",
-  "start": "arrival",
+  "id": "college_first_day",
+  "start": "college_gate",
   "nodes": [
     {
-      "id": "arrival",
-      "scene": "Arrival",
-      "target": "contact",
-      "objective": "Find the person waiting for you.",
-      "lines": [
-        {
-          "speaker": "{contact}",
-          "text": "{name}? Here. Before someone charges you for standing still.",
-          "voice": "ch01_arrival_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "{contact}",
-          "text": "Your family called twice. I said you arrived. The second time, I made it sound convincing.",
-          "voice": "ch01_arrival_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "warm",
-          "label": "Good to see you.",
-          "next": "family",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "guarded",
-          "label": "How did you recognise me?",
-          "next": "recognised",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "bus_square",
-      "terminal": false
-    },
-    {
-      "id": "recognised",
-      "scene": "Arrival",
-      "target": "contact",
-      "objective": "Talk to your contact.",
-      "lines": [
-        {
-          "speaker": "{contact}",
-          "text": "Your photograph. And that bag: nobody returning to this city carries it with both hands.",
-          "voice": "ch01_recognised_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "{contact}",
-          "text": "Come. You need a room before you need a plan.",
-          "voice": "ch01_recognised_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "follow",
-          "label": "Lead the way.",
-          "next": "family",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "bus_square",
-      "terminal": false
-    },
-    {
-      "id": "family",
-      "scene": "Arrival",
-      "target": "contact",
-      "objective": "Decide what to tell home.",
-      "lines": [
-        {
-          "speaker": "{contact}",
-          "text": "They think the sponsorship is settled. Is it?",
-          "voice": "ch01_family_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "You",
-          "text": "It is an interview. Nobody promised me a place.",
-          "voice": "ch01_family_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "truth",
-          "label": "Tell them it is only an interview.",
-          "next": "bed_offer",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "honest_call"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "delay",
-          "label": "Let me settle in first.",
-          "next": "bed_offer",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "delayed_call"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "bus_square",
-      "terminal": false
-    },
-    {
-      "id": "bed_offer",
-      "scene": "Courtyard",
-      "target": "landlord",
-      "objective": "Arrange somewhere to sleep.",
-      "lines": [
-        {
-          "speaker": "Sifa",
-          "text": "Three nights. C150. After that we discuss the word temporary.",
-          "voice": "ch01_bed_offer_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Sifa",
-          "text": "Help with supper and we can call it C100. I do not charge family for advice. Yet.",
-          "voice": "ch01_bed_offer_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "help",
-          "label": "Help with supper · C100",
-          "next": "supper",
-          "cost": 100,
-          "reward": 0,
-          "flags": [
-            "shelter"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "pay",
-          "label": "Pay for the room · C150",
-          "next": "room_arrival",
-          "cost": 150,
-          "reward": 0,
-          "flags": [
-            "shelter"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "courtyard",
-      "terminal": false
-    },
-    {
-      "id": "supper",
-      "scene": "Courtyard",
-      "target": "supper",
-      "objective": "Help Sifa lay the table.",
-      "lines": [
-        {
-          "speaker": "Sifa",
-          "text": "Pass those cups. The office asked my neighbour for a processing fee. The notice said applications were free.",
-          "voice": "ch01_supper_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Sifa",
-          "text": "She paid. Then they asked her daughter to sign for money she never received.",
-          "voice": "ch01_supper_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "ask",
-          "label": "Which office?",
-          "next": "waiver",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "fee_warning"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "listen",
-          "label": "I will check before signing.",
-          "next": "room_arrival",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "fee_warning"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "cups",
-      "terminal": false
-    },
-    {
-      "id": "waiver",
-      "scene": "Courtyard",
-      "target": "supper",
-      "objective": "Listen before deciding whom to trust.",
-      "lines": [
-        {
-          "speaker": "Sifa",
-          "text": "The Opportunity Fund. Blue shutters. A man outside knew her name before she introduced herself.",
-          "voice": "ch01_waiver_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Sifa",
-          "text": "Keep your receipts. And eat. Suspicion is not supper.",
-          "voice": "ch01_waiver_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "thanks",
-          "label": "Thank you, Sifa.",
-          "next": "room_arrival",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "office_description"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "cups",
-      "terminal": false
-    },
-    {
-      "id": "room_arrival",
-      "scene": "Room",
-      "target": "phone",
-      "objective": "Call home, or put the phone down.",
-      "lines": [
-        {
-          "speaker": "Family",
-          "text": "Have you eaten?",
-          "voice": "ch01_room_arrival_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "You",
-          "text": "Yes.",
-          "voice": "ch01_room_arrival_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Family",
-          "text": "Good. Tell us the rest when you can breathe.",
-          "voice": "ch01_room_arrival_03",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "share",
-          "label": "Tell them you are worried.",
-          "next": "first_sleep",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "family_confided"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "reassure",
-          "label": "Say the room is comfortable.",
-          "next": "first_sleep",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "family_reassured"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "phone",
-      "terminal": false
-    },
-    {
-      "id": "first_sleep",
-      "scene": "Room",
-      "target": "bed",
-      "objective": "Rest before the interview.",
-      "lines": [
-        {
-          "speaker": "You",
-          "text": "The lock catches on the second turn. Someone laughs in the courtyard. A bus pulls away.",
-          "voice": "ch01_first_sleep_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "sleep",
-          "label": "Sleep until morning.",
-          "next": "morning",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "sleep",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "sleep",
-      "terminal": false
-    },
-    {
-      "id": "morning",
-      "scene": "Courtyard",
-      "target": "contact",
-      "objective": "Meet your contact before leaving.",
-      "lines": [
-        {
-          "speaker": "{contact}",
-          "text": "Interview at ten. There is work at Dispatch if the queue defeats you.",
-          "voice": "ch01_morning_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "{contact}",
-          "text": "Take the signed application. Leave the original certificate here. Copies can travel. Originals stay safe.",
-          "voice": "ch01_morning_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "office",
-          "label": "Go to the fund office.",
-          "next": "notice",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "application"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "work",
-          "label": "Earn something first.",
-          "next": "work_intro",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "application"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "courtyard",
-      "terminal": false
-    },
-    {
-      "id": "work_intro",
-      "scene": "Dispatch",
-      "target": "foreman",
-      "objective": "Ask Tendo about documented work.",
-      "lines": [
-        {
-          "speaker": "Tendo",
-          "text": "One parcel. Campus reception. C180 after they sign. You keep a copy.",
-          "voice": "ch01_work_intro_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Tendo",
-          "text": "If somebody changes the destination, call me. Being polite does not make them your employer.",
-          "voice": "ch01_work_intro_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "accept",
-          "label": "Take the parcel.",
-          "next": "deliver",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "carrying_parcel"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "leave",
-          "label": "I need to make my interview.",
-          "next": "notice",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "dispatch",
-      "terminal": false
-    },
-    {
-      "id": "deliver",
+      "id": "college_gate",
       "scene": "Campus",
-      "target": "parcel",
-      "objective": "Take the parcel to reception.",
+      "target": "contact",
+      "objective": "Registration day. Find your way in.",
       "lines": [
         {
-          "speaker": "Receptionist",
-          "text": "For Rehema? Put it here. Wait, let me sign your copy.",
-          "voice": "ch01_deliver_01",
+          "speaker": "Kito",
+          "text": "First day? Karibu. That queue has its own graduation ceremony.",
+          "voice": "college_college_gate_01",
           "whenFlag": "",
           "unlessFlag": ""
         },
         {
-          "speaker": "Receptionist",
-          "text": "You look like the scholarship queue has already tired you out.",
-          "voice": "ch01_deliver_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "ask",
-          "label": "Is the fund connected to this campus?",
-          "next": "campus_tip",
-          "cost": 0,
-          "reward": 180,
-          "flags": [
-            "delivery_paid"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "leave",
-          "label": "Thanks. I have an appointment.",
-          "next": "notice",
-          "cost": 0,
-          "reward": 180,
-          "flags": [
-            "delivery_paid"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "campus_tip",
-      "scene": "Campus",
-      "target": "rehema",
-      "objective": "Ask Rehema how sponsorship works.",
-      "lines": [
-        {
-          "speaker": "Rehema",
-          "text": "They nominate candidates. We confirm admissions separately. A stamp is not a place.",
-          "voice": "ch01_campus_tip_01",
+          "speaker": "Kito",
+          "text": "I can sort your registration. Three hundred. You keep your afternoon.",
+          "voice": "college_college_gate_02",
           "whenFlag": "",
           "unlessFlag": ""
         },
         {
           "speaker": "Rehema",
-          "text": "If they offer you a grant, ask who receives the money and whose signature acknowledges it.",
-          "voice": "ch01_campus_tip_02",
+          "text": "Freshers! Read the board before anyone reads your wallet.",
+          "voice": "college_college_gate_03",
           "whenFlag": "",
           "unlessFlag": ""
         }
       ],
       "choices": [
         {
-          "id": "remember",
-          "label": "I will ask.",
-          "next": "notice",
+          "id": "notice",
+          "label": "Read the fee notice",
+          "next": "fee_notice",
           "cost": 0,
           "reward": 0,
-          "flags": [
-            "campus_verified"
-          ],
+          "flags": [],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "mentor",
+          "label": "Ask the student mentor",
+          "next": "mentor",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 1,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "offer",
+          "label": "Hear Kito out",
+          "next": "fixer_offer",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
         }
       ],
       "sound": "campus",
+      "comic": true,
       "terminal": false
     },
     {
-      "id": "notice",
-      "scene": "Office",
+      "id": "fee_notice",
+      "scene": "Campus",
       "target": "notice",
-      "objective": "Read the notice outside the fund office.",
+      "objective": "Read the official fee notice.",
       "lines": [
         {
-          "speaker": "Notice",
-          "text": "Applications are free. Submit copies only. No representative may guarantee an award.",
-          "voice": "ch01_notice_01",
+          "speaker": "Noticeboard",
+          "text": "REGISTRATION: C600. Pay only at the admissions desk. Assistance is free. Keep your stamped receipt.",
+          "voice": "college_fee_notice_01",
           "whenFlag": "",
           "unlessFlag": ""
         },
         {
-          "speaker": "Clerk",
-          "text": "You there. Name? We have been expecting you.",
-          "voice": "ch01_notice_02",
+          "speaker": "{name}",
+          "text": "No shortcut fee. And a student support desk upstairs.",
+          "voice": "college_fee_notice_02",
           "whenFlag": "",
           "unlessFlag": ""
         }
       ],
       "choices": [
         {
-          "id": "enter",
-          "label": "Introduce yourself.",
-          "next": "interview",
+          "id": "queue",
+          "label": "Join the official queue",
+          "next": "queue",
           "cost": 0,
           "reward": 0,
           "flags": [
             "read_notice"
           ],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "office",
-      "terminal": false
-    },
-    {
-      "id": "interview",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "Find out what the opportunity actually offers.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "Strong results. Modest household. You fit the programme.",
-          "voice": "ch01_interview_01",
-          "whenFlag": "",
-          "unlessFlag": ""
+          "blockFlag": "",
+          "effect": ""
         },
         {
-          "speaker": "Maro",
-          "text": "There is a small verification charge. C200. Pay today and I can put your file in the first batch.",
-          "voice": "ch01_interview_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "question",
-          "label": "The notice says applications are free.",
-          "next": "fee_response",
+          "id": "verify",
+          "label": "Ask Rehema about Kito",
+          "next": "mentor",
           "cost": 0,
           "reward": 0,
           "flags": [
-            "questioned_fee"
+            "read_notice"
           ],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
         },
         {
-          "id": "details",
-          "label": "May I see the grant conditions?",
-          "next": "conditions",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "pay",
-          "label": "Pay C200.",
-          "next": "paid_fee",
-          "cost": 200,
-          "reward": 0,
-          "flags": [
-            "paid_fee"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "office",
-      "terminal": false
-    },
-    {
-      "id": "fee_response",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "Listen to the explanation.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "The application is free. Verification takes work.",
-          "voice": "ch01_fee_response_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Maro",
-          "text": "Look, I can waive it. Deliver a sealed envelope to Dispatch. Sign this acknowledgement and we help each other.",
-          "voice": "ch01_fee_response_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "read",
-          "label": "Read the acknowledgement.",
-          "next": "conditions",
-          "cost": 0,
-          "reward": 0,
-          "flags": [],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "decline",
-          "label": "I will use the ordinary process.",
-          "next": "ordinary",
+          "id": "confront",
+          "label": "Ask Kito about the extra fee",
+          "next": "fixer_offer",
           "cost": 0,
           "reward": 0,
           "flags": [
-            "refused_deal"
+            "read_notice"
           ],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "accept",
-          "label": "Accept the arrangement.",
-          "next": "deal",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "accepted_deal"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "conditions",
-      "scene": "Office",
-      "target": "ledger",
-      "objective": "Inspect the acknowledgement before signing.",
-      "lines": [
-        {
-          "speaker": "You",
-          "text": "The form says C8,000 has been received. The payment column is already completed.",
-          "voice": "ch01_conditions_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Maro",
-          "text": "An accounting step. Your actual support follows later. You can trust the programme.",
-          "voice": "ch01_conditions_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "copy",
-          "label": "Ask for a copy first.",
-          "next": "copy_request",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "saw_false_receipt"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "refuse",
-          "label": "I will not sign for money I did not receive.",
-          "next": "ordinary",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "refused_deal",
-            "saw_false_receipt"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "sign",
-          "label": "Sign and take the envelope.",
-          "next": "deal",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "accepted_deal",
-            "saw_false_receipt"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "copy_request",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "Watch how Maro responds.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "Copies are issued after approval.",
-          "voice": "ch01_copy_request_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Clerk",
-          "text": "Maro, the chairman is calling.",
-          "voice": "ch01_copy_request_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Maro",
-          "text": "Stay here. Do not lose your place over paperwork.",
-          "voice": "ch01_copy_request_03",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "note",
-          "label": "Write down the reference number.",
-          "next": "reference",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "copied_ledger"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "wait",
-          "label": "Leave the paper untouched.",
-          "next": "ordinary",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "refused_deal"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "office",
-      "terminal": false
-    },
-    {
-      "id": "reference",
-      "scene": "Office",
-      "target": "ledger",
-      "objective": "Keep only what you actually observed.",
-      "lines": [
-        {
-          "speaker": "You",
-          "text": "Two entries use the same account. One carries Sifa's neighbour's surname.",
-          "voice": "ch01_reference_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "You",
-          "text": "A reference number is evidence of an entry. It does not yet explain where the money went.",
-          "voice": "ch01_reference_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "leave",
-          "label": "Leave before Maro returns.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "ledger_reference"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "paid_fee",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "Ask for proof of payment.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "Your file will move. Here is your receipt.",
-          "voice": "ch01_paid_fee_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "You",
-          "text": "The receipt is for C50. You paid C200.",
-          "voice": "ch01_paid_fee_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "challenge",
-          "label": "Ask him to correct it.",
-          "next": "fee_response",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "receipt_mismatch"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "keep",
-          "label": "Keep the receipt and seek advice.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "receipt_mismatch"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "ordinary",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "Keep a route open without signing.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "Then wait for the next batch. I cannot promise when.",
-          "voice": "ch01_ordinary_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Clerk",
-          "text": "Take the submission slip. The tracking number is at the bottom.",
-          "voice": "ch01_ordinary_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "submit",
-          "label": "Submit through the ordinary queue.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "ordinary_application"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "work",
-          "label": "Keep the papers and look for work.",
-          "next": "work_after",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "deferred_application"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "office",
-      "terminal": false
-    },
-    {
-      "id": "deal",
-      "scene": "Dispatch",
-      "target": "foreman",
-      "objective": "Deliver the envelope to the named recipient.",
-      "lines": [
-        {
-          "speaker": "Tendo",
-          "text": "That envelope is not for Dispatch. The man renting the back office uses our address.",
-          "voice": "ch01_deal_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Tendo",
-          "text": "You can still take it back. Once he has your signature, he has a story about you.",
-          "voice": "ch01_deal_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "return",
-          "label": "Return the envelope unopened.",
-          "next": "return_envelope",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "returned_envelope"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "deliver",
-          "label": "Hand it to the back office.",
-          "next": "back_office",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "delivered_envelope"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "dispatch",
-      "terminal": false
-    },
-    {
-      "id": "return_envelope",
-      "scene": "Office",
-      "target": "clerk",
-      "objective": "End the arrangement clearly.",
-      "lines": [
-        {
-          "speaker": "Maro",
-          "text": "You signed. Returning paper does not erase a signature.",
-          "voice": "ch01_return_envelope_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Clerk",
-          "text": "I will mark the envelope returned. Keep this copy.",
-          "voice": "ch01_return_envelope_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "keep",
-          "label": "Keep the return record.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "return_record"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "paper",
-      "terminal": false
-    },
-    {
-      "id": "back_office",
-      "scene": "Dispatch",
-      "target": "parcel",
-      "objective": "Wait for the recipient.",
-      "lines": [
-        {
-          "speaker": "Recipient",
-          "text": "You are early. Good. C300 for transport.",
-          "voice": "ch01_back_office_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Recipient",
-          "text": "When somebody asks, you received your support. All of it.",
-          "voice": "ch01_back_office_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "money",
-          "label": "Take the C300.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 300,
-          "flags": [
-            "transport_payment"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "refuse",
-          "label": "Refuse the money.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "refused_payment"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "dispatch",
-      "terminal": false
-    },
-    {
-      "id": "work_after",
-      "scene": "Dispatch",
-      "target": "foreman",
-      "objective": "Ask Tendo for an honest opening.",
-      "lines": [
-        {
-          "speaker": "Tendo",
-          "text": "No permanent job today. Come tomorrow with your identification. I can put you on the casual list.",
-          "voice": "ch01_work_after_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Tendo",
-          "text": "A list is not a promise. But at least you can read this one.",
-          "voice": "ch01_work_after_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "list",
-          "label": "Leave your name.",
-          "next": "consult",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "work_lead"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "dispatch",
-      "terminal": false
-    },
-    {
-      "id": "consult",
-      "scene": "Campus",
-      "target": "rehema",
-      "objective": "Get independent advice from Rehema.",
-      "lines": [
-        {
-          "speaker": "Rehema",
-          "text": "Nobody can promise you admission through a back office.",
-          "voice": "ch01_consult_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Rehema",
-          "text": "Keep what you have. Do not accuse people using a rumour. We can verify references together.",
-          "voice": "ch01_consult_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Rehema",
-          "text": "Returning the envelope matters. Keep that return record.",
-          "voice": "ch01_consult_03",
-          "whenFlag": "return_record",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "share",
-          "label": "Show her your papers.",
-          "next": "trust_rehema",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "rehema_knows"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "private",
-          "label": "Ask about ordinary admission only.",
-          "next": "admission",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "kept_private"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
         }
       ],
       "sound": "campus",
+      "comic": false,
       "terminal": false
     },
     {
-      "id": "trust_rehema",
+      "id": "mentor",
       "scene": "Campus",
       "target": "rehema",
-      "objective": "Decide whether to seek corroboration.",
+      "objective": "Speak to Rehema, the student mentor.",
       "lines": [
         {
           "speaker": "Rehema",
-          "text": "Let me check the reference with the bursary office. Do not post it tonight.",
-          "voice": "ch01_trust_rehema_01",
+          "text": "I am Rehema. Second year. Professional queue survivor.",
+          "voice": "college_mentor_01",
           "whenFlag": "",
           "unlessFlag": ""
         },
         {
           "speaker": "Rehema",
-          "text": "Your name belongs to you. Keep it that way.",
-          "voice": "ch01_trust_rehema_02",
+          "text": "He knows people. That does not make him admissions. Ask for a receipt you can verify.",
+          "voice": "college_mentor_02",
           "whenFlag": "",
           "unlessFlag": ""
         }
@@ -1308,154 +165,1290 @@
       "choices": [
         {
           "id": "verify",
-          "label": "Let her verify the reference.",
-          "next": "admission",
+          "label": "Check his story at student support",
+          "next": "verify",
           "cost": 0,
           "reward": 0,
           "flags": [
-            "verification_requested"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "hold",
-          "label": "Ask her to wait.",
-          "next": "admission",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "verification_held"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "campus",
-      "terminal": false
-    },
-    {
-      "id": "admission",
-      "scene": "Campus",
-      "target": "rehema",
-      "objective": "Choose a next step you can control.",
-      "lines": [
-        {
-          "speaker": "Rehema",
-          "text": "There is an ordinary application and a hardship assessment. Neither needs Maro.",
-          "voice": "ch01_admission_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Rehema",
-          "text": "Bring the household documents. We can begin even while the other matter is unresolved.",
-          "voice": "ch01_admission_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "study",
-          "label": "Prepare a hardship application.",
-          "next": "supper_return",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "education_path"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "earn",
-          "label": "Work first, then apply.",
-          "next": "supper_return",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "work_path"
-          ],
-          "trust": 0,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        }
-      ],
-      "sound": "campus",
-      "terminal": false
-    },
-    {
-      "id": "supper_return",
-      "scene": "Courtyard",
-      "target": "supper",
-      "objective": "Return to the household.",
-      "lines": [
-        {
-          "speaker": "Sifa",
-          "text": "You have the face of someone who found a shortcut with a queue on it.",
-          "voice": "ch01_supper_return_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "Sifa",
-          "text": "Sit. Start with what you know. Leave what you suspect until after tea.",
-          "voice": "ch01_supper_return_02",
-          "whenFlag": "",
-          "unlessFlag": ""
-        }
-      ],
-      "choices": [
-        {
-          "id": "confide",
-          "label": "Tell her what happened.",
-          "next": "second_sleep",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "sifa_knows"
+            "mentor_met"
           ],
           "trust": 1,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
         },
         {
-          "id": "protect",
-          "label": "Tell her only about admission.",
-          "next": "second_sleep",
+          "id": "queue",
+          "label": "Use the official queue",
+          "next": "queue",
           "cost": 0,
           "reward": 0,
           "flags": [
-            "sifa_unaware"
+            "mentor_met"
           ],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "offer",
+          "label": "Speak to Kito anyway",
+          "next": "fixer_offer",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "mentor_met"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
         }
       ],
-      "sound": "cups",
+      "sound": "campus",
+      "comic": false,
       "terminal": false
     },
     {
-      "id": "second_sleep",
-      "scene": "Room",
-      "target": "bed",
-      "objective": "Put the papers away and rest.",
+      "id": "fixer_offer",
+      "scene": "Campus",
+      "target": "contact",
+      "objective": "Decide what to do with Kito’s offer.",
       "lines": [
         {
-          "speaker": "You",
-          "text": "You fold the receipt into your notebook. Outside, the last conversation in the courtyard fades.",
-          "voice": "ch01_second_sleep_01",
+          "speaker": "Kito",
+          "text": "Three hundred gets your name inside. Fees are separate. Sawa?",
+          "voice": "college_fixer_offer_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Kito",
+          "text": "You can ask questions. Just do not confuse questions with progress.",
+          "voice": "college_fixer_offer_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay C300 for the shortcut",
+          "next": "shortcut_receipt",
+          "cost": 300,
+          "reward": 0,
+          "flags": [
+            "accepted_deal"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "receipt",
+          "label": "Ask for proof before paying",
+          "next": "proof",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "decline",
+          "label": "Keep your money. Join the queue",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": true,
+      "terminal": false
+    },
+    {
+      "id": "proof",
+      "scene": "Campus",
+      "target": "contact",
+      "objective": "Ask who authorised the shortcut.",
+      "lines": [
+        {
+          "speaker": "Kito",
+          "text": "My contact handles the lists. I handle the running around.",
+          "voice": "college_proof_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "Then your contact can confirm it at the desk.",
+          "voice": "college_proof_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "verify",
+          "label": "Go to student support",
+          "next": "verify",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "pay",
+          "label": "Take the risk: pay C300",
+          "next": "shortcut_receipt",
+          "cost": 300,
+          "reward": 0,
+          "flags": [
+            "accepted_deal"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "queue",
+          "label": "Walk away to the queue",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "verify",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Check the admissions process at support.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "No one outside admissions can guarantee your place. Did someone give you a payment reference?",
+          "voice": "college_verify_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Student support",
+          "text": "We can record a concern privately. You choose whether to give a name.",
+          "voice": "college_verify_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "record",
+          "label": "Record what you were offered",
+          "next": "concern",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "copied_ledger",
+            "concern_recorded"
+          ],
+          "trust": 1,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "information",
+          "label": "Take the information and register",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "verified_process"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "mentor",
+          "label": "Ask Rehema to accompany you",
+          "next": "accompanied",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "mentor_met"
+          ],
+          "trust": 1,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "concern",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Keep a record of your concern.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "This is your reference. A complaint does not decide your admission.",
+          "voice": "college_concern_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "I photograph the reference and put the original with my letter.",
+          "voice": "college_concern_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "register",
+          "label": "Take your papers to admissions",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "verified_process"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "accompanied",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Meet Rehema beside the queue.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "We go together. No speeches. Just the letter and the facts.",
+          "voice": "college_accompanied_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "And afterwards, chai. This campus runs on paperwork and tea.",
+          "voice": "college_accompanied_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "register",
+          "label": "Walk to admissions together",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "supported_by_rehema"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "shortcut_receipt",
+      "scene": "Campus",
+      "target": "contact",
+      "objective": "Inspect the slip Kito hands you.",
+      "lines": [
+        {
+          "speaker": "Kito",
+          "text": "Show this at the desk. My number is on the back.",
+          "voice": "college_shortcut_receipt_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "A handwritten name. No college stamp. Kito is already greeting the next arrival.",
+          "voice": "college_shortcut_receipt_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "verify",
+          "label": "Have support check the slip",
+          "next": "slip_check",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "kept_slip"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "desk",
+          "label": "Try the admissions desk",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "kept_slip"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "mentor",
+          "label": "Show Rehema",
+          "next": "mentor_slip",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "kept_slip"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": true,
+      "terminal": false
+    },
+    {
+      "id": "slip_check",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Check the handwritten slip.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "This is not a college receipt. Keep it. You can still register through the normal process.",
+          "voice": "college_slip_check_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Student support",
+          "text": "We cannot promise your money back. We can help you record what happened.",
+          "voice": "college_slip_check_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "report",
+          "label": "Record the payment and name",
+          "next": "concern",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "copied_ledger",
+            "concern_recorded"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "register",
+          "label": "Focus on registering today",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "verified_process"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "mentor_slip",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Show Rehema what you paid for.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "A name on paper is not admission. Pole. Keep the slip; do not pay him again.",
+          "voice": "college_mentor_slip_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "We can still get you through today.",
+          "voice": "college_mentor_slip_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "report",
+          "label": "Ask support to record it",
+          "next": "slip_check",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "mentor_met"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "queue",
+          "label": "Let Rehema come to the desk",
+          "next": "queue",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "supported_by_rehema",
+            "mentor_met"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "queue",
+      "scene": "Campus",
+      "target": "clerk",
+      "objective": "Join the registration queue.",
+      "lines": [
+        {
+          "speaker": "Student in queue",
+          "text": "I left home before the rooster. Somehow the rooster is probably registered already.",
+          "voice": "college_queue_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Admissions clerk",
+          "text": "Next, please. Admission letter and identification.",
+          "voice": "college_queue_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "documents",
+          "label": "Hand over your documents",
+          "next": "documents",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "documents_presented"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "cost",
+          "label": "Ask about payment support first",
+          "next": "aid_form",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "documents",
+      "scene": "Campus",
+      "target": "clerk",
+      "objective": "Confirm your admission and fees.",
+      "lines": [
+        {
+          "speaker": "Admissions clerk",
+          "text": "Your offer is valid. Registration is six hundred. Accommodation is separate.",
+          "voice": "college_documents_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Admissions clerk",
+          "text": "That handwritten slip does not pay the college fee. Keep it if you want to raise a concern.",
+          "voice": "college_documents_02",
+          "whenFlag": "accepted_deal",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Admissions clerk",
+          "text": "You can ask student support about a payment arrangement before deciding.",
+          "voice": "college_documents_03",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay the official C600 fee",
+          "next": "registered",
+          "cost": 600,
+          "reward": 0,
+          "flags": [
+            "education_path",
+            "fees_paid"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "aid",
+          "label": "Request a payment arrangement",
+          "next": "aid_form",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "check",
+          "label": "Check the official fee notice first",
+          "next": "fee_confirm",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "fee_confirm",
+      "scene": "Campus",
+      "target": "notice",
+      "objective": "Check the amount before paying.",
+      "lines": [
+        {
+          "speaker": "Noticeboard",
+          "text": "REGISTRATION C600. Stamped receipts issued at the desk. Payment support: ask before paying.",
+          "voice": "college_fee_confirm_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Return and pay C600",
+          "next": "registered",
+          "cost": 600,
+          "reward": 0,
+          "flags": [
+            "education_path",
+            "fees_paid",
+            "read_notice"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "aid",
+          "label": "Ask about the payment arrangement",
+          "next": "aid_form",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "read_notice"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "aid_form",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Discuss a manageable payment plan.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "A provisional place lets you attend orientation while the bursary team reviews your request.",
+          "voice": "college_aid_form_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Student support",
+          "text": "There is also a paid library shift. Neither is a promise of sponsorship.",
+          "voice": "college_aid_form_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "bursary",
+          "label": "Submit a bursary request",
+          "next": "provisional",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "education_path",
+            "bursary_pending",
+            "fees_deferred"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "work",
+          "label": "Apply for the library shift",
+          "next": "provisional",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "education_path",
+            "work_path",
+            "shift_applied",
+            "fees_deferred"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "pay",
+          "label": "Return to admissions and pay C600",
+          "next": "registered",
+          "cost": 600,
+          "reward": 0,
+          "flags": [
+            "education_path",
+            "fees_paid"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "registered",
+      "scene": "Campus",
+      "target": "clerk",
+      "objective": "Collect your stamped admission receipt.",
+      "lines": [
+        {
+          "speaker": "Admissions clerk",
+          "text": "Registered. Keep this copy. Orientation starts tomorrow.",
+          "voice": "college_registered_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "A stamp. A student number. Something real, at last.",
+          "voice": "college_registered_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "mentor",
+          "label": "Find Rehema before leaving",
+          "next": "after_registration",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "copies",
+          "label": "Make a copy of your receipt",
+          "next": "copies",
+          "cost": 20,
+          "reward": 0,
+          "flags": [
+            "document_copy"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": true,
+      "terminal": false
+    },
+    {
+      "id": "provisional",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Collect your provisional entry letter.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "Here is your provisional letter. Attend orientation. Bring the requested documents within the week.",
+          "voice": "college_provisional_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "Not settled. But the door is open.",
+          "voice": "college_provisional_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "mentor",
+          "label": "Find Rehema before leaving",
+          "next": "after_registration",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "copies",
+          "label": "Copy the provisional letter",
+          "next": "copies",
+          "cost": 20,
+          "reward": 0,
+          "flags": [
+            "document_copy"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": true,
+      "terminal": false
+    },
+    {
+      "id": "copies",
+      "scene": "Campus",
+      "target": "parcel",
+      "objective": "Make a backup at the campus kiosk.",
+      "lines": [
+        {
+          "speaker": "Kiosk owner",
+          "text": "One copy for the file, one photo for the phone. Paper disappears faster than lunch.",
+          "voice": "college_copies_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "I put the copy in a different pocket.",
+          "voice": "college_copies_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "continue",
+          "label": "Find Rehema",
+          "next": "after_registration",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "after_registration",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Work out where you will sleep.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "You made it through registration. Have you sorted a bed?",
+          "voice": "college_after_registration_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "Your contact sent directions to Karibu Court. I can also point you to student housing.",
+          "voice": "college_after_registration_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "family",
+          "label": "Call your family contact",
+          "next": "family_call",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "housing",
+          "label": "Ask about student housing",
+          "next": "housing_referral",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "housing_referral"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "family_call",
+      "scene": "Campus",
+      "target": "phone",
+      "objective": "Call your contact before leaving campus.",
+      "lines": [
+        {
+          "speaker": "{contact}",
+          "text": "{name}, have you eaten? No, tea is not a meal.",
+          "voice": "college_family_call_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "Come to Karibu Court. We will work out tonight, then tomorrow.",
+          "voice": "college_family_call_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "go",
+          "label": "Travel to Karibu Court",
+          "next": "courtyard_arrival",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "housing_referral",
+      "scene": "Campus",
+      "target": "ledger",
+      "objective": "Check the student housing options.",
+      "lines": [
+        {
+          "speaker": "Student support",
+          "text": "The emergency bed list is full tonight. I can take your name and give you verified nearby contacts.",
+          "voice": "college_housing_referral_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Student support",
+          "text": "Do not pay a deposit before viewing a room.",
+          "voice": "college_housing_referral_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "go",
+          "label": "Keep the list. Visit your contact",
+          "next": "courtyard_arrival",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "housing_waitlist"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "campus",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "courtyard_arrival",
+      "scene": "Courtyard",
+      "target": "landlord",
+      "objective": "Meet Sifa at Karibu Court.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "College face. I know it. Half hope, half hunger.",
+          "voice": "college_courtyard_arrival_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "The small room is two-fifty tonight. Or take the spare mattress while we find a longer plan.",
+          "voice": "college_courtyard_arrival_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "room",
+          "label": "View the C250 room",
+          "next": "view_room",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "family",
+          "label": "Accept the spare mattress tonight",
+          "next": "settle_shared",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "shared_room"
+          ],
+          "trust": 1,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "courtyard",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "view_room",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Inspect the room before paying.",
+      "lines": [
+        {
+          "speaker": "{name}",
+          "text": "A working lock, a desk and a bed. Small, but dry.",
+          "voice": "college_view_room_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "You have seen it. Your choice.",
+          "voice": "college_view_room_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Take the room for C250",
+          "next": "settle_room",
+          "cost": 250,
+          "reward": 0,
+          "flags": [
+            "rented_room"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "shared",
+          "label": "Save the money. Take the mattress",
+          "next": "settle_shared",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "shared_room"
+          ],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "room",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "settle_room",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Put down your bag and settle in.",
+      "lines": [
+        {
+          "speaker": "{name}",
+          "text": "I put the admission papers on the desk. Tomorrow already feels close.",
+          "voice": "college_settle_room_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "phone",
+          "label": "Check your messages",
+          "next": "evening_phone",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "room",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "settle_shared",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Settle into the borrowed room.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "You can use this room tonight. My cousin arrives tomorrow. We will need a plan by then.",
+          "voice": "college_settle_shared_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{name}",
+          "text": "A borrowed bed. One night to breathe.",
+          "voice": "college_settle_shared_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "phone",
+          "label": "Check your messages",
+          "next": "evening_phone",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "room",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "evening_phone",
+      "scene": "Room",
+      "target": "phone",
+      "objective": "Check the message on your phone.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "Orientation at eight. Carry the letter, not just confidence.",
+          "voice": "college_evening_phone_01",
+          "whenFlag": "mentor_met",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "Tomorrow we make a plan. Tonight, eat something.",
+          "voice": "college_evening_phone_02",
+          "whenFlag": "",
+          "unlessFlag": "mentor_met"
+        },
+        {
+          "speaker": "Phone",
+          "text": "Library shift application received. Interview time to follow.",
+          "voice": "college_evening_phone_03",
+          "whenFlag": "shift_applied",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "reply",
+          "label": "Reply, then get some sleep",
+          "next": "first_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 1,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        },
+        {
+          "id": "rest",
+          "label": "Put the phone away for tonight",
+          "next": "first_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "requireFlag": "",
+          "blockFlag": "",
+          "effect": ""
+        }
+      ],
+      "sound": "room",
+      "comic": false,
+      "terminal": false
+    },
+    {
+      "id": "first_sleep",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Rest before orientation.",
+      "lines": [
+        {
+          "speaker": "{name}",
+          "text": "Shoes off. Papers safe. Somewhere outside, a radio finally goes quiet.",
+          "voice": "college_first_sleep_01",
           "whenFlag": "",
           "unlessFlag": ""
         }
@@ -1463,111 +1456,93 @@
       "choices": [
         {
           "id": "rest",
-          "label": "Turn out the light.",
-          "next": "knock",
+          "label": "Sleep until morning",
+          "next": "morning_message",
           "cost": 0,
           "reward": 0,
           "flags": [],
           "trust": 0,
-          "effect": "night_resolution",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": "night_resolution"
         }
       ],
-      "sound": "sleep",
+      "sound": "room",
+      "comic": false,
       "terminal": false
     },
     {
-      "id": "knock",
+      "id": "morning_message",
       "scene": "Night",
-      "target": "door",
-      "objective": "Someone is at the door.",
+      "target": "phone",
+      "objective": "Read the message waiting in the morning.",
       "lines": [
         {
-          "speaker": "Visitor",
-          "text": "Maro needs the copy you took. We can settle this quietly.",
-          "voice": "ch01_knock_01",
+          "speaker": "Kito",
+          "text": "We need to talk. My contact has another fee. I will find you after orientation.",
+          "voice": "college_morning_message_01",
           "whenFlag": "collector_visits",
           "unlessFlag": ""
         },
         {
-          "speaker": "Phone",
-          "text": "Unknown number: Tell them the money arrived. We will call again.",
-          "voice": "ch01_knock_02",
+          "speaker": "Kito",
+          "text": "You still have my number. Keep yesterday between us, sawa?",
+          "voice": "college_morning_message_02",
           "whenFlag": "collector_calls",
           "unlessFlag": ""
         },
         {
-          "speaker": "Neighbour",
-          "text": "Sifa said you asked about the fund. My daughter signed that form too.",
-          "voice": "ch01_knock_03",
+          "speaker": "Rehema",
+          "text": "Someone else has the same slip. They want to speak to you. Your choice.",
+          "voice": "college_morning_message_03",
           "whenFlag": "witness_visits",
           "unlessFlag": ""
         },
         {
           "speaker": "{contact}",
-          "text": "A man asked whether you were staying here. I did not answer. What happened today?",
-          "voice": "ch01_knock_04",
+          "text": "A neighbour says that fixer has been around for weeks. Keep your papers close.",
+          "voice": "college_morning_message_04",
           "whenFlag": "contact_warns",
           "unlessFlag": ""
         }
       ],
       "choices": [
         {
-          "id": "together",
-          "label": "Wake your contact.",
-          "next": "cliffhanger",
+          "id": "face",
+          "label": "Keep the message. Get ready for orientation",
+          "next": "opening_end",
           "cost": 0,
           "reward": 0,
           "flags": [
-            "asked_for_support"
-          ],
-          "trust": 1,
-          "effect": "",
-          "requireFlag": "",
-          "blockFlag": ""
-        },
-        {
-          "id": "record",
-          "label": "Keep the message and stay inside.",
-          "next": "cliffhanger",
-          "cost": 0,
-          "reward": 0,
-          "flags": [
-            "preserved_contact"
+            "saved_message"
           ],
           "trust": 0,
-          "effect": "",
           "requireFlag": "",
-          "blockFlag": ""
+          "blockFlag": "",
+          "effect": ""
         }
       ],
-      "sound": "knock",
+      "sound": "room",
+      "comic": true,
       "terminal": false
     },
     {
-      "id": "cliffhanger",
-      "scene": "Night",
-      "target": "phone",
-      "objective": "Your first night has changed tomorrow.",
+      "id": "opening_end",
+      "scene": "Room",
+      "target": "door",
+      "objective": "Your place is only the beginning.",
       "lines": [
         {
-          "speaker": "You",
-          "text": "The application is still open. So is the question of who has been using your name.",
-          "voice": "ch01_cliffhanger_01",
-          "whenFlag": "",
-          "unlessFlag": ""
-        },
-        {
-          "speaker": "You",
-          "text": "Tomorrow, you have someone to speak to. And something worth keeping.",
-          "voice": "ch01_cliffhanger_02",
+          "speaker": "{name}",
+          "text": "A college place. A place to sleep. And a city already asking what I will trade for tomorrow.",
+          "voice": "college_opening_end_01",
           "whenFlag": "",
           "unlessFlag": ""
         }
       ],
       "choices": [],
-      "sound": "night",
+      "sound": "room",
+      "comic": true,
       "terminal": true
     }
   ]

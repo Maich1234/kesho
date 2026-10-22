@@ -1,3 +1,5 @@
+> **0.4.0:** VOICE_LINES.csv now lists 59 college-opening lines. Runtime-generated paper/bedding rustles and campus air/birds are original synthesis placeholders. They are not natural recordings. The existing score/click/step clips remain. Voice performances, real crowds and location-specific recorded foley still require production and device listening.
+
 # Audio production contract
 
 Natural speech and believable domestic sound are required for the approved slice. The checked-in source has playback hooks, subtitles, voice IDs and a recording sheet. **It does not contain recorded dialogue or realistic sleep/chat foley.** Existing original synthesized score, air bed and click/footstep cues are temporary development assets carried forward with their original authorship.

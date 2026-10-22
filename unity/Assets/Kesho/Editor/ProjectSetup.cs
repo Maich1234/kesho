@@ -42,19 +42,25 @@ namespace Kesho.Editor
             EnsureAssetFolder("Assets/Kesho/Resources/Materials");
             if(!AssetDatabase.LoadAssetAtPath<Material>("Assets/Kesho/Resources/Materials/Blockout.mat"))
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Universal Render Pipeline/Lit")),"Assets/Kesho/Resources/Materials/Blockout.mat");
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.3.1";
+            var portraitImporter=AssetImporter.GetAtPath("Assets/Kesho/Resources/Art/cast.png") as TextureImporter;
+            if(portraitImporter!=null && (portraitImporter.mipmapEnabled || portraitImporter.npotScale!=TextureImporterNPOTScale.None))
+            {
+                portraitImporter.mipmapEnabled=false; portraitImporter.npotScale=TextureImporterNPOTScale.None;
+                portraitImporter.maxTextureSize=2048; portraitImporter.isReadable=false; portraitImporter.SaveAndReimport();
+            }
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.4.0";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=2;
+            PlayerSettings.Android.bundleVersionCode=3;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
             var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
             if(playerSettings.Length==0) throw new BuildFailedException("Player settings could not be loaded.");
             var settings=new SerializedObject(playerSettings[0]);
             var input=settings.FindProperty("activeInputHandler"); if(input!=null) { input.intValue=0; settings.ApplyModifiedPropertiesWithoutUndo(); }
-            EditorBuildSettings.scenes=WorldCatalog.Scenes.Select(id=>new EditorBuildSettingsScene("Assets/Kesho/Scenes/"+id+".unity",true)).ToArray();
+            EditorBuildSettings.scenes=new[]{"Campus","Arrival","Courtyard","Room","Office","Dispatch","Night"}.Select(id=>new EditorBuildSettingsScene("Assets/Kesho/Scenes/"+id+".unity",true)).ToArray();
             AssetDatabase.SaveAssets();
         }
         static void EnsureAssetFolder(string path)

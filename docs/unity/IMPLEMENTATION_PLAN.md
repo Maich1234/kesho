@@ -1,3 +1,5 @@
+> **0.4.0 approved update:** The user approved the college-registration rebuild on 22 October 2026. The active opening starts at Maweni College with a suspicious shortcut. Fictional city names remain, with mainly Kenyan visual references. Mixed live 3D/comic conversations, original cast/custom character and initial hairstyle selection are in scope. See [current delivery](COLLEGE_OPENING.md); older bus-arrival references below are historical. The full 24-hour lifetime goal is unchanged.
+
 # Approved Unity implementation plan
 
 Approved by the user on 22 October 2026. Supersedes the Godot gameplay rewrite. Build a tense, relationship-led life story; no unrelated arcade activities or repetitive work added to inflate playtime.

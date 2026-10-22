@@ -6,20 +6,18 @@ A story-led African life simulation about family, opportunity and the hidden pri
 
 ## Current delivery
 
-The Unity opening source contains 31 connected story beats, 65 short dialogue lines and seven scene blockouts: Arrival, Courtyard, Room, Office, Dispatch, Campus and Night. It follows a sponsorship opportunity, a false acknowledgement and a consequential night encounter. Decisions change information, relationships, evidence and later contact. There are work and ordinary application routes alongside accepting or investigating the deal.
+Version **0.4.0** rebuilds the opening around **Maweni College registration**: 29 connected beats, 59 short lines, an unofficial fixer, official registration, payment support, housing and a next-morning consequence. It adds an authored campus environment, original comic portraits, cel-style 3D characters, five hairstyles, illustrated dialogue panels and physical inspections. See the [college-opening delivery and limits](docs/unity/COLLEGE_OPENING.md).
 
-Implemented source includes tap-to-walk navigation, short dialogue presentation, character setup, pause/settings, private saves with backup recovery, same-life checkpoints, permanent-mode rewind prevention, seeded consequences, audio buses/voice slots and Android build tooling. Art is a blockout; the existing original music/ambience is temporary. **Natural voice performances and scene-specific foley are not recorded.** No runtime generative model is enabled.
+Tap-to-walk, private verified saves, checkpoints, permanent-mode rewind prevention and seeded consequences remain. Runtime primitive creation has been removed to address the reported missing-collider error. Rewritten-story saves are kept separately from earlier development lives. Music and interaction cues are included; new foley/ambient synthesis is temporary. **Natural voice performances and real crowd recordings are not recorded.** No runtime generative model is enabled.
 
-Phase 1 reliability updates are in development version **0.3.1**: contextual approach/interaction, Back navigation, duplicate-click protection, persistent save warnings and verified save recovery. The cloud build must still validate these Unity paths.
-
-The story core is executable outside Unity. Unity editor compilation, play-mode interaction, mobile rendering, performance and final audio must be validated in an activated Unity environment. No Unity APK is claimed until that build passes.
+The engine-independent suite passes **60,984 complete branch paths** across all backgrounds plus real-file save recovery checks. Unity editor compilation, shader/scene rendering, mobile performance and final audio must still be validated in the cloud/editor and on a phone. No new APK is claimed until that build passes.
 
 ## Start in Unity
 
 1. Install **Unity 6000.3.26f1**, Android Build Support, SDK/NDK and OpenJDK through Unity Hub; activate an eligible license.
 2. Add the `unity` directory as the project. Allow package import and compilation.
 3. Run **Kesho → Configure mobile project**, then **Kesho → Validate opening content**.
-4. Open `Assets/Kesho/Scenes/Arrival.unity` and enter Play mode.
+4. Open `Assets/Kesho/Scenes/Campus.unity` and enter Play mode.
 5. Run EditMode tests. Use **Kesho → Build Android development APK** only after tests and scene QA pass.
 
 The initial import configures URP and mobile build settings. Those generated settings should be reviewed and committed from the editor. The Android Unity package ID is separate from the legacy Godot app; old saves are not silently migrated.

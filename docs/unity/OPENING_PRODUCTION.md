@@ -1,3 +1,5 @@
+> Superseded opening direction: the active 0.4.0 campus production scope and asset limits are in [COLLEGE_OPENING.md](COLLEGE_OPENING.md). The earlier sponsorship/bus-arrival specification below is retained for history.
+
 # A Place Before Dark — Unity opening
 
 This chapter is the college-entry transition at the beginning of the lifetime. Production must lead into campus life and then adult life; the fund-office cliffhanger is not the full game ending. The complete ordinary path targets 24 hours across all life stages, as specified in the [implementation plan](IMPLEMENTATION_PLAN.md).

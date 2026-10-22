@@ -1,0 +1,9 @@
+<linker>
+  <!-- uGUI and explicit mesh components are referenced directly in code. Keep legacy
+       collider types as a safety net for imported art that may use primitive creation. -->
+  <assembly fullname="UnityEngine.PhysicsModule">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+  </assembly>
+</linker>
