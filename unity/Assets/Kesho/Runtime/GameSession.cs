@@ -67,7 +67,7 @@ namespace Kesho.Runtime
         }
         void Menu()
         {
-            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.6.0"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
+            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.6.1"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
             hud.Title(); hud.AddText("Maweni College. Your first day. A stranger offers a shortcut.",22);
             hud.Button("Begin a life",CreateCharacter,true);
             if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read(),true));

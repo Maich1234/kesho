@@ -23,7 +23,7 @@ class BrandingAssets(unittest.TestCase):
             length,offset=struct.unpack('<II',entry[8:]); self.assertGreater(length,0);self.assertLessEqual(offset+length,len(data))
         self.assertEqual(set(sizes),{(16,16),(32,32),(48,48)})
     def test_template_uses_same_original_mark_and_existing_icons(self):
-        self.assertEqual((BRAND/'kesho.svg').read_bytes(),(WEB/'favicon.svg').read_bytes())
+        self.assertEqual((ROOT/'icon.svg').read_bytes(),(WEB/'favicon.svg').read_bytes())
         html=(WEB/'index.html').read_text()
         for link in re.findall(r'href="(favicon\.[^"]+)"',html):self.assertTrue((WEB/link).is_file())
         self.assertIn('createUnityInstance',html)
@@ -36,5 +36,24 @@ class BrandingAssets(unittest.TestCase):
             self.assertTrue(Path(str(path)+'.meta').is_file())
         for path in BRAND.rglob('*'):
             if path.is_file() and path.suffix!='.meta': self.assertTrue(Path(str(path)+'.meta').is_file())
+
+class UnityImporterContracts(unittest.TestCase):
+    def test_required_png_metadata_has_supported_importer_schema_and_shape(self):
+        for path in [BRAND/'app-icon.png',ROOT/'unity/Assets/Kesho/Resources/Art/cast.png']:
+            meta=Path(str(path)+'.meta').read_text()
+            self.assertIn('TextureImporter:',meta,str(path))
+            version=re.search(r'^  serializedVersion: (\d+)$',meta,re.M)
+            self.assertIsNotNone(version); self.assertGreaterEqual(int(version[1]),10)
+            self.assertRegex(meta,r'(?m)^  textureType: 0$')
+            self.assertRegex(meta,r'(?m)^  textureShape: 1$')
+    def test_all_runtime_audio_has_supported_importer_schema(self):
+        files=list((ROOT/'unity/Assets/Kesho/Resources/Sound').glob('*.ogg'))
+        self.assertEqual(len(files),7)
+        for path in files:
+            meta=Path(str(path)+'.meta').read_text()
+            self.assertIn('AudioImporter:',meta,str(path))
+            version=re.search(r'^  serializedVersion: (\d+)$',meta,re.M)
+            self.assertIsNotNone(version); self.assertGreaterEqual(int(version[1]),6)
+            self.assertIn('  defaultSettings:',meta)
 
 if __name__=='__main__':unittest.main()

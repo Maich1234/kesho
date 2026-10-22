@@ -1,4 +1,14 @@
-# Current validation — 0.6.0 presentation repairs
+# Current validation — 0.6.1 asset import repair
+
+The uploaded Android build #2 checked out `473d6bfc6141ebb2d17b4d47ca0c24bc250e6fec`. It compiled scripts, reported unsupported version-1 TextureImporter/AudioImporter metadata, threw `BuildFailedException: Kesho app icon is missing`, and ended with failed PlayMode tests. The detailed failed-test names/assertions are not present in the supplied log; the test XML is needed to establish those failures. This is **not** a successful Unity build or acceptance result.
+
+- Corrected icon/portrait and all seven audio importer metadata files; preserve asset GUIDs and source media. Keep the SVG master outside Unity import.
+- Configure now synchronously repairs/imports required textures/audio before loading them or changing render settings, including when an old render pipeline was cached.
+- Added nine EditMode asset-import cases and a PlayMode test-run callback that prints failed names/messages/stacks. These Unity checks have not been executed here.
+- Local checks: nine Python asset/build-gate tests passed; all 25 Unity C# sources parsed with zero syntax errors. Engine-independent story/save checks remain passing. These do not replace Unity import/render/build testing.
+- [Diagnosis, changes and next build](BUILD_FIX_0_6_1.md). Runtime version 0.6.1 / Android version code 7.
+
+## Previous 0.6.0 presentation repairs
 
 - **Passed locally:** 1,553,552 story assertions over 60,984 opening routes; 3,932 director checks; 154 speaker/time/presentation checks; 12 real-file recovery checks; 8 ordered-autosave concurrency checks; 7 Python asset/report-gate tests; presentation geometry/navigation source probes; C# syntax scan without Unity references.
 - **Added, not run here:** five PlayMode regressions plus two EditMode JSON/worker/failure checks. PlayMode coverage includes pooled callback replacement/invisible taps, stable customisation controls, immediate mute and actor occupancy/batching/camera blending. Existing interaction/overlay tests now wait for visible panels and deliberate input intervals.

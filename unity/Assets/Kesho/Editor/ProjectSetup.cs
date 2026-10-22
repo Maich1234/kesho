@@ -18,11 +18,26 @@ namespace Kesho.Editor
         static void FirstImport()
         {
             if(EditorApplication.isCompiling || EditorApplication.isUpdating) { EditorApplication.delayCall+=FirstImport; return; }
-            if(GraphicsSettings.defaultRenderPipeline==null) Configure();
+            // SessionState survives domain reloads, but not a fresh cloud editor process.
+            // An existing cached pipeline does not prove the rest of setup previously succeeded.
+            if(!SessionState.GetBool("kesho.configured.0.6.1",false))
+            {
+                Configure(); SessionState.SetBool("kesho.configured.0.6.1",true);
+            }
         }
         [MenuItem("Kesho/Configure mobile project")]
         public static void Configure()
         {
+            // Normalize and synchronously reimport before loading textures or mutating the pipeline.
+            // A file existing on disk is not proof that its cached importer produced a Texture2D.
+            var icon=ImportTexture("Assets/Kesho/Branding/app-icon.png",1024);
+            ImportTexture("Assets/Kesho/Resources/Art/cast.png",2048);
+            foreach(string id in new[]{"music","ambience","click","step","paper","bedding","campus"})
+            {
+                string path="Assets/Kesho/Resources/Sound/"+id+".ogg";
+                AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
+                if(!AssetDatabase.LoadAssetAtPath<AudioClip>(path)) throw new BuildFailedException("Failed to import required audio: "+path);
+            }
             EnsureAssetFolder("Assets/Kesho/Settings");
             var renderer=AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/Kesho/Settings/MobileRenderer.asset");
             if(!renderer) { renderer=ScriptableObject.CreateInstance<UniversalRendererData>(); AssetDatabase.CreateAsset(renderer,"Assets/Kesho/Settings/MobileRenderer.asset"); }
@@ -42,28 +57,14 @@ namespace Kesho.Editor
             EnsureAssetFolder("Assets/Kesho/Resources/Materials");
             if(!AssetDatabase.LoadAssetAtPath<Material>("Assets/Kesho/Resources/Materials/Blockout.mat"))
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Universal Render Pipeline/Lit")),"Assets/Kesho/Resources/Materials/Blockout.mat");
-            var portraitImporter=AssetImporter.GetAtPath("Assets/Kesho/Resources/Art/cast.png") as TextureImporter;
-            if(portraitImporter!=null && (portraitImporter.mipmapEnabled || portraitImporter.npotScale!=TextureImporterNPOTScale.None))
-            {
-                portraitImporter.mipmapEnabled=false; portraitImporter.npotScale=TextureImporterNPOTScale.None;
-                portraitImporter.maxTextureSize=2048; portraitImporter.isReadable=false; portraitImporter.SaveAndReimport();
-            }
-            var icon=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Kesho/Branding/app-icon.png");
-            if(!icon) throw new BuildFailedException("Kesho app icon is missing.");
-            var iconImporter=(TextureImporter)AssetImporter.GetAtPath("Assets/Kesho/Branding/app-icon.png");
-            if(iconImporter.mipmapEnabled || iconImporter.textureCompression!=TextureImporterCompression.Uncompressed)
-            {
-                iconImporter.mipmapEnabled=false; iconImporter.textureCompression=TextureImporterCompression.Uncompressed; iconImporter.maxTextureSize=1024; iconImporter.SaveAndReimport();
-                icon=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Kesho/Branding/app-icon.png");
-            }
             PlayerSettings.SetIcons(NamedBuildTarget.Unknown,new[]{icon},IconKind.Any);
             PlayerSettings.WebGL.template="PROJECT:Kesho";
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.6.0";
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.6.1";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=6;
+            PlayerSettings.Android.bundleVersionCode=7;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
             var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
@@ -73,6 +74,21 @@ namespace Kesho.Editor
             EditorBuildSettings.scenes=new[]{"Campus","Arrival","Courtyard","Room","Office","Dispatch","Night"}.Select(id=>new EditorBuildSettingsScene("Assets/Kesho/Scenes/"+id+".unity",true)).ToArray();
             AssetDatabase.SaveAssets();
             Validate();
+        }
+        static Texture2D ImportTexture(string path,int size)
+        {
+            if(!File.Exists(Path.Combine(Application.dataPath,"..",path)))
+                throw new BuildFailedException("Required texture file is missing from checkout: "+path);
+            AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
+            var importer=AssetImporter.GetAtPath(path) as TextureImporter;
+            if(importer==null) throw new BuildFailedException("Required texture has no TextureImporter: "+path);
+            importer.textureType=TextureImporterType.Default; importer.textureShape=TextureImporterShape.Texture2D;
+            importer.mipmapEnabled=false; importer.npotScale=TextureImporterNPOTScale.None;
+            importer.textureCompression=TextureImporterCompression.Uncompressed; importer.maxTextureSize=size;
+            importer.isReadable=false; importer.alphaIsTransparency=true; importer.SaveAndReimport();
+            var texture=AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if(!texture) throw new BuildFailedException("Required texture exists but failed Texture2D import: "+path);
+            return texture;
         }
         static void EnsureAssetFolder(string path)
         {
