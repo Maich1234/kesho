@@ -1,4 +1,11 @@
-# Current validation — 0.4.0 college opening
+# Current validation — 0.5.0 Life Director
+
+- **Executed:** 3,929 director assertions, including all seven event families and their options, scoped NPC memory, eligibility/ranking, saved selection, deterministic appointment outcomes, atomic costs, duplicate rejection, JSON round-trip, legacy core-state upgrade and journal retention.
+- **Executed:** 64 director-enabled opening routes reach the college outcome with two moments per route, affordable continuations and serialization between moments.
+- **Added, not executed:** Unity `JsonUtility` director/save and legacy missing-field migration tests. Full Unity compilation, cloud build and target-phone testing remain pending.
+- Corrected report-after-payment precedence, bounded journal retention and checkpoint position capture. See [Life Director design and phone acceptance](LIFE_DIRECTOR.md). The research catalogue is not a training corpus; no neural model or remote generative dialogue is enabled.
+
+## Retained 0.4.0 opening validation
 
 - **Executed:** actual engine-independent C# compiled with warnings treated as errors; 1,553,552 assertions over 60,984 complete paths, all 29 authored beats and all three family backgrounds. Large counts arise from exhaustive branching, not independent product features.
 - **Executed:** 12 real-file checksum/backup/interrupted-write checks. Appearance identity and all five hairstyles round-trip through .NET JSON; malformed values rejected.

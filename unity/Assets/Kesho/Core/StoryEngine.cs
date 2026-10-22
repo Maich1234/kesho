@@ -17,7 +17,7 @@ namespace Kesho.Core
         }
         public bool Available(Choice choice)
         {
-            return !State.dead && Current.choices.Contains(choice) && State.cash >= choice.cost && State.Has(choice.requireFlag) && (string.IsNullOrEmpty(choice.blockFlag) || !State.Has(choice.blockFlag));
+            return !State.dead && State.director.pendingEvent=="" && Current.choices.Contains(choice) && State.cash >= choice.cost && State.Has(choice.requireFlag) && (string.IsNullOrEmpty(choice.blockFlag) || !State.Has(choice.blockFlag));
         }
         public string UnavailableReason(Choice c)
         {
@@ -35,11 +35,25 @@ namespace Kesho.Core
             next.trust = Math.Max(-100, Math.Min(100, next.trust + c.trust));
             foreach (string flag in c.flags ?? new string[0]) if (!next.flags.Contains(flag)) next.flags.Add(flag);
             next.decisions.Add(command);
-            next.journal.Add("Day " + next.day + ": " + c.label);
+            next.AddJournal("Day " + next.day + ": " + c.label);
+            LifeDirector.Observe(next,Current,c);
             if (c.effect == "sleep") next.day++;
             if (c.effect == "night_resolution") { ResolveNight(next); next.day++; }
             next.node = c.next; next.Validate(Chapter); State = next;
             return true;
+        }
+        public DirectorEvent PendingMoment { get { return LifeDirector.Find(State.director.pendingEvent); } }
+        public bool PrepareMoment()
+        {
+            var next=State.Copy();
+            if(!LifeDirector.Prepare(next)) return false;
+            next.Validate(Chapter); State=next; return true;
+        }
+        public bool ResolveMoment(string occurrence,string choiceId,out string result)
+        {
+            var next=State.Copy();
+            if(!LifeDirector.Resolve(next,occurrence,choiceId,out result)) return false;
+            next.Validate(Chapter); State=next; return true;
         }
         public void RestoreCheckpoint(LifeState checkpoint)
         {
@@ -59,13 +73,14 @@ namespace Kesho.Core
         static void ResolveNight(LifeState s)
         {
             // One committed draw per decision; save the generator state. No reload-to-reroll.
-            uint x = (uint)s.rng; x ^= x << 13; x ^= x >> 17; x ^= x << 5; s.rng = x;
-            if (s.Has("accepted_deal"))
+            uint x = LifeDirector.Draw(s);
+            // A report remains consequential even if the player initially paid the fixer.
+            if (s.Has("copied_ledger")) { s.flags.Add("witness_visits"); s.pressure = Math.Min(100, s.pressure + 15); }
+            else if (s.Has("accepted_deal"))
             {
                 s.pressure = Math.Min(100, s.pressure + 25);
                 s.flags.Add((x % 100) < 60 ? "collector_visits" : "collector_calls");
             }
-            else if (s.Has("copied_ledger")) { s.flags.Add("witness_visits"); s.pressure = Math.Min(100, s.pressure + 15); }
             else { s.flags.Add("contact_warns"); s.pressure = Math.Min(100, s.pressure + 8); }
         }
     }

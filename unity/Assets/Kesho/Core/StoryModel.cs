@@ -62,11 +62,18 @@ namespace Kesho.Core
         public List<string> flags = new List<string>();
         public List<string> decisions = new List<string>();
         public List<string> journal = new List<string>();
+        public DirectorState director = new DirectorState();
+        public void AddJournal(string entry)
+        {
+            if(journal.Count>=1000) journal.RemoveAt(0);
+            journal.Add(entry);
+        }
         public bool Has(string flag) { return string.IsNullOrEmpty(flag) || flags.Contains(flag); }
         public LifeState Copy()
         {
             var copy = (LifeState)MemberwiseClone();
             copy.flags = new List<string>(flags); copy.decisions = new List<string>(decisions); copy.journal = new List<string>(journal);
+            copy.director = director == null ? new DirectorState() : director.Copy();
             return copy;
         }
         public void Validate(Chapter chapterData)
@@ -75,6 +82,8 @@ namespace Kesho.Core
             if (version != 1 || chapter != chapterData.id || chapterData.Find(node) == null || age < 18 || cash < 0 || day < 1 || day > 100000 || hair < 0 || hair > 4 || !WorldCatalog.Characters.Contains(character) || skin < 0 || skin > 3 || outfit < 0 || outfit > 3 || trust < -100 || trust > 100 || pressure < 0 || pressure > 100 || rng < 1 || rng > uint.MaxValue || activeSeconds < 0 || double.IsNaN(activeSeconds) || double.IsInfinity(activeSeconds)) throw new ArgumentException("Invalid save state");
             if (flags == null || decisions == null || journal == null || flags.Count > 1000 || decisions.Count > 10000 || journal.Count > 1000 || flags.Any(f => f == null) || decisions.Any(d => d == null) || journal.Any(j => j == null)) throw new ArgumentException("Invalid save history");
             if (name == null || name.Length > 32 || !WorldCatalog.Backgrounds.Contains(background) || !WorldCatalog.Genders.Contains(gender) || !WorldCatalog.Beliefs.Contains(belief)) throw new ArgumentException("Invalid character");
+            // Missing director is a legacy 0.4.0 save; Copy upgrades it without changing the existing life.
+            if(director!=null) director.Validate(this);
         }
     }
     public static class WorldCatalog

@@ -18,7 +18,7 @@ namespace Kesho.Runtime
         OfflineSave saves;
         StoryHud hud;
         Stage stage;
-        bool playing, loading, background, creating, settingsOpen;
+        bool playing, loading, background, creating, settingsOpen, directorConversation;
         Action onBack, settingsReturn;
         float saveClock, idle;
         int lineIndex;
@@ -66,7 +66,7 @@ namespace Kesho.Runtime
         }
         void Menu()
         {
-            playing=false; creating=false; settingsOpen=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.4.0"); if(stage) stage.Preview(false);
+            playing=false; creating=false; settingsOpen=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.5.0"); if(stage) stage.Preview(false);
             hud.Title(); hud.AddText("Maweni College. Your first day. A stranger offers a shortcut.",22);
             hud.Button("Begin a life",CreateCharacter,true);
             if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read(),true));
@@ -123,7 +123,9 @@ namespace Kesho.Runtime
         }
         void LoadCurrent()
         {
-            InConversation=false; settingsOpen=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close();
+            InConversation=false; directorConversation=false; settingsOpen=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close();
+            // Reserve a context-selected moment on entering the beat, so optional hotspots cannot bypass it.
+            if(Engine.PrepareMoment()) Save(false);
             if(stage!=null && stage.sceneId==Engine.Current.scene) { ConfigureStage(); return; }
             loading=true; if(marker) Destroy(marker);
             if(!Application.CanStreamedLevelBeLoaded(Engine.Current.scene))
@@ -143,7 +145,11 @@ namespace Kesho.Runtime
                 if(!walker.WalkTo(target.position,()=> { if(CanExplore && Engine.State.node==expectedNode) Interact(); })) hud.Hint("Find a clear route around the furniture.");
                 return;
             }
-            walker.Stop(); stage.Conversation(Engine.Current.target,true); InConversation=true; spokenNode=Engine.State.node; lines=Engine.VisibleLines(); lineIndex=0; ShowLine();
+            walker.Stop(); stage.Conversation(Engine.Current.target,true); InConversation=true; spokenNode=Engine.State.node;
+            directorConversation=Engine.PrepareMoment();
+            // Persist the selected event and seed before showing any options.
+            if(directorConversation && !Save()) { EndConversation(); return; }
+            lines=Engine.VisibleLines(); lineIndex=0; ShowLine();
         }
         public bool TryInspectScreen(Vector2 screen)
         {
@@ -193,6 +199,7 @@ namespace Kesho.Runtime
         void ShowLine()
         {
             if(Engine.State.node!=spokenNode) return;
+            if(directorConversation && Engine.PendingMoment!=null) { ShowDirectorMoment(); return; }
             InConversation=true; onBack=EndConversation; Sound.StopVoice();
             if(lineIndex<lines.Length)
             {
@@ -218,7 +225,40 @@ namespace Kesho.Runtime
                 if(!Engine.Current.terminal) hud.Button("Think about it",EndConversation);
             }
         }
-        void EndConversation() { if(stage) stage.Conversation("",false); InConversation=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close(); }
+        void ShowDirectorMoment()
+        {
+            var moment=Engine.PendingMoment;
+            if(moment==null) { directorConversation=false; ShowLine(); return; }
+            InConversation=true; onBack=EndConversation; Sound.StopVoice();
+            // These moments occur in person with Rehema or as messages on the player's phone.
+            stage.Conversation(Engine.Current.target,Engine.Current.target=="rehema");
+            hud.Dialogue(Engine.Format(moment.speaker),Engine.Format(LifeDirector.Text(moment,Engine.State)),false);
+            string occurrence=Engine.State.director.pendingOccurrence;
+            foreach(var option in moment.choices)
+            {
+                var selected=option;
+                var button=hud.Button(option.label+(Engine.State.cash<option.cost?" · Need C"+option.cost:""),()=>ResolveDirectorMoment(occurrence,selected.id),true);
+                button.interactable=Engine.State.cash>=option.cost;
+            }
+            hud.Button("Think about it",EndConversation);
+        }
+        void ResolveDirectorMoment(string occurrence,string choiceId)
+        {
+            if(loading || Engine.State.node!=spokenNode || Engine.PendingMoment==null) return;
+            if(!Engine.State.permanent)
+            {
+                try { saves.Write(Engine.State,"checkpoint"); }
+                catch(Exception e) when(e is IOException||e is UnauthorizedAccessException) { hud.Notice("Checkpoint could not be saved. Free some storage before continuing."); return; }
+            }
+            string result;
+            if(!Engine.ResolveMoment(occurrence,choiceId,out result)) return;
+            directorConversation=false; bool saved=Save();
+            InConversation=true; onBack=EndConversation; hud.Responses("What follows"); hud.AddText(Engine.Format(result),22);
+            if(!saved) hud.Notice("Progress is in memory. Save failed; keep the app open.");
+            hud.Button("Continue",()=> { stage.Conversation(Engine.Current.target,true); lineIndex=0; ShowLine(); },true);
+            hud.Button("Back to exploring",EndConversation);
+        }
+        void EndConversation() { if(stage) stage.Conversation("",false); InConversation=false; directorConversation=false; onBack=null; StopWalking(); Sound.StopVoice(); hud.Close(); }
         void StopWalking() { if(stage && stage.Player) stage.Player.GetComponent<StreetWalker>().Stop(); }
         public void Back()
         {
@@ -272,7 +312,7 @@ namespace Kesho.Runtime
                 hud.Button("Your decisions",Journal);
                 var checkpoint=saves.Read("checkpoint");
                 if(!Engine.State.permanent && checkpoint!=null && checkpoint.lifeId==Engine.State.lifeId)
-                    hud.Button("Branch from last checkpoint",()=> { Engine.RestoreCheckpoint(checkpoint); Save(); LoadCurrent(); });
+                    hud.Button("Branch from last checkpoint",()=> { Engine.RestoreCheckpoint(checkpoint); Save(false); LoadCurrent(); });
                 hud.Button("Save & title",()=> { if(Save()) Menu(); });
             }
             hud.Button("Return",ReturnFromSettings,true);

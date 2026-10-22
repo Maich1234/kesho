@@ -39,4 +39,41 @@ public sealed class OpeningTests
         var engine=new StoryEngine(Chapter()); var checkpoint=engine.State.Copy(); engine.State.permanent=true;
         Assert.Throws<InvalidOperationException>(()=>engine.RestoreCheckpoint(checkpoint));
     }
+    [Test] public void UnitySaveKeepsPendingDirectorSelectionAndPrivateMemory()
+    {
+        string path=Path.Combine(Path.GetTempPath(),"kesho-director-"+Guid.NewGuid());
+        try
+        {
+            var chapter=Chapter(); var state=new LifeState { chapter=chapter.id,node="morning_message",rng=12 };
+            state.flags.Add("concern_recorded");
+            state.director.Remember("support","slip_check/report");
+            var engine=new StoryEngine(chapter,state); Assert.IsTrue(engine.PrepareMoment());
+            var save=new OfflineSave(path,chapter); save.Write(engine.State);
+            var restored=new StoryEngine(chapter,save.Read());
+            Assert.AreEqual(engine.State.director.pendingEvent,restored.State.director.pendingEvent);
+            Assert.AreEqual(engine.State.rng,restored.State.rng);
+            Assert.IsNull(restored.State.director.Find("kito"));
+            string occurrence=restored.State.director.pendingOccurrence;
+            Assert.IsTrue(restored.ResolveMoment(occurrence,"appointment",out string result));
+            save.Write(restored.State); var after=save.Read();
+            Assert.AreEqual(1,after.director.history.Count);
+            Assert.IsTrue(after.director.Find("support").facts.Contains("support_appointment"));
+            Assert.IsFalse(restored.ResolveMoment(occurrence,"appointment",out result));
+        }
+        finally { if(Directory.Exists(path)) Directory.Delete(path,true); }
+    }
+    [Test] public void LegacyUnityJsonWithoutDirectorKeepsLifeIdentity()
+    {
+        var chapter=Chapter(); var original=new LifeState { chapter=chapter.id,node=chapter.start };
+        original.director=null;
+        string json=JsonUtility.ToJson(original);
+        // Old saves omit the entire field; construct the legacy shape from this JSON, not a fresh life.
+        int start=json.IndexOf(",\"director\":",StringComparison.Ordinal);
+        Assert.Greater(start,0);
+        json=json.Substring(0,start)+"}";
+        var engine=new StoryEngine(chapter,JsonUtility.FromJson<LifeState>(json));
+        Assert.AreEqual(original.lifeId,engine.State.lifeId);
+        Assert.AreEqual(1,engine.State.director.version);
+        Assert.AreEqual(0,engine.State.director.history.Count);
+    }
 }

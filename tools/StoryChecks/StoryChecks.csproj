@@ -4,5 +4,6 @@
     <Compile Include="../../unity/Assets/Kesho/Core/*.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StorageChecks.cs" />
+    <Compile Include="DirectorChecks.cs" />
   </ItemGroup>
 </Project>
