@@ -73,7 +73,17 @@ public sealed class OpeningTests
         json=json.Substring(0,start)+"}";
         var engine=new StoryEngine(chapter,JsonUtility.FromJson<LifeState>(json));
         Assert.AreEqual(original.lifeId,engine.State.lifeId);
-        Assert.AreEqual(1,engine.State.director.version);
+        Assert.AreEqual(2,engine.State.director.version);
         Assert.AreEqual(0,engine.State.director.history.Count);
+    }
+    [Test] public void VersionOneDirectorCorrectsPrivateKnowledgeWithoutErasingTheLife()
+    {
+        var chapter=Chapter(); var state=new LifeState { chapter=chapter.id,node=chapter.start };
+        state.director.version=1; state.director.Remember("kito","message_preserved"); state.director.Remember("kito","fixer_offer/pay",2,20);
+        var restored=new StoryEngine(chapter,JsonUtility.FromJson<LifeState>(JsonUtility.ToJson(state)));
+        Assert.AreEqual(state.lifeId,restored.State.lifeId); Assert.AreEqual(2,restored.State.director.version);
+        Assert.IsFalse(restored.State.director.Find("kito").facts.Contains("message_preserved"));
+        Assert.IsTrue(restored.State.director.Find("kito").facts.Contains("fixer_offer/pay"));
+        Assert.AreEqual(20,restored.State.director.Find("kito").obligation);
     }
 }

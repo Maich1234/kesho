@@ -1,5 +1,7 @@
 # Kesho Life Director — design and first integration, 0.5.0
 
+**0.5.1 maintenance:** director schema 2 corrects private message disclosure and migrates older memory. Speaker/location/time presentation and overlay restoration are repaired. See [the current release notes](RELEASE_0_5_1.md); the original design and scope below describe 0.5.0.
+
 ## Delivered model
 
 The first Life Director is an offline C# rules model integrated into the existing college opening. It is not a trained neural network or an LLM. It requires no provider key, server or network connection. Seven original event definitions support two short interactive moments per current opening path. The full lifetime, autonomous government, property system and online world remain future work.

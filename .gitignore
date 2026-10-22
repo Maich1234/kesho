@@ -22,3 +22,5 @@ unity/Builds/
 !tools/StoryChecks/StoryChecks.csproj
 tools/StoryChecks/bin/
 tools/StoryChecks/obj/
+__pycache__/
+*.pyc

@@ -32,11 +32,11 @@ static class DirectorChecks
                 Check(engine.ResolveMoment(occurrence,option.id,out result),"every option applies "+e.id+"/"+option.id);
                 Check(!string.IsNullOrEmpty(result) && engine.State.cash==state.cash-option.cost,"only defined cash effect");
                 Check(engine.State.node==state.node && engine.State.day==state.day,"side moment does not skip story or calendar");
-                Check(engine.State.director.Find(e.person).facts.Contains(option.fact),"participant remembers choice");
-                Check(engine.State.director.people.Count==1,"no knowledge broadcast");
+                Check(option.disclose?engine.State.director.Find(e.person).facts.Contains(option.fact):engine.State.director.Find(e.person)==null,"only disclosed choices enter participant memory");
+                Check(engine.State.director.people.Count==(option.disclose?1:0),"no knowledge broadcast");
                 Check(!engine.ResolveMoment(occurrence,option.id,out result),"duplicate event choice rejected");
                 var copy=RoundTrip(engine.State); copy.Validate(chapter);
-                Check(copy.director.history.Count==1 && copy.director.Find(e.person).facts.Contains(option.fact),"memory and incident survive JSON");
+                Check(copy.director.history.Count==1 && (option.disclose?copy.director.Find(e.person).facts.Contains(option.fact):copy.director.Find(e.person)==null),"private history and disclosed memory survive JSON");
                 Check(!engine.PrepareMoment(),"one director event per beat and day");
             }
         }
@@ -89,7 +89,14 @@ static class DirectorChecks
         Check(LifeDirector.Text(report,a.State)!=report.text,"support dialogue uses its own witnessed report");
 
         s=State(chapter,"college_gate"); s.director=null;
-        a=new StoryEngine(chapter,s); Check(a.State.director.version==1 && a.State.lifeId==s.lifeId,"legacy save upgrades without replacing life");
+        a=new StoryEngine(chapter,s); Check(a.State.director.version==2 && a.State.lifeId==s.lifeId,"legacy save upgrades without replacing life");
+        s=State(chapter,"morning_message"); s.flags.Add("accepted_deal"); s.director.version=1;
+        s.director.Remember("kito","message_preserved"); s.director.Remember("kito","fixer_offer/pay",2,20);
+        s.director.history.Add(new DirectorRecord { occurrence=LifeDirector.Occurrence(s),eventId="fixer_boundary",choiceId="record",outcome="steady",day=s.day });
+        s.Validate(chapter); a=new StoryEngine(chapter,RoundTrip(s));
+        Check(a.State.director.version==2 && !a.State.director.Find("kito").facts.Contains("message_preserved"),"old disclosure defect repaired on load");
+        Check(a.State.director.Find("kito").facts.Contains("fixer_offer/pay") && a.State.director.Find("kito").obligation==20 && a.State.director.history.Count==1 && a.State.lifeId==s.lifeId,"migration keeps legitimate knowledge, obligations, player history and identity");
+        Check(s.director.version==1 && s.director.Find("kito").facts.Contains("message_preserved"),"migration does not mutate checkpoint source");
         s=State(chapter,"college_gate"); for(int i=0;i<1000;i++) s.journal.Add("Past "+i);
         a=new StoryEngine(chapter,s); Check(a.Apply(s.node,"mentor") && a.State.journal.Count==1000 && a.State.journal[0]=="Past 1","full journal cannot block progression");
         s=a.State.Copy(); s.director.pendingEvent="invented"; s.director.pendingOccurrence=LifeDirector.Occurrence(s);

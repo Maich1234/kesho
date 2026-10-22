@@ -19,14 +19,21 @@ namespace Kesho.Core
     }
     [Serializable] public sealed class DirectorState
     {
-        public int version=1, accountability;
+        public int version=2, accountability;
         public string pendingEvent="", pendingOccurrence="";
         public List<PersonMemory> people=new List<PersonMemory>();
         public List<DirectorRecord> history=new List<DirectorRecord>();
         public DirectorState Copy()
         {
             var n=(DirectorState)MemberwiseClone();
-            n.people=people.Select(p=>p.Copy()).ToList(); n.history=history.Select(h=>h.Copy()).ToList(); return n;
+            n.people=people.Select(p=>p.Copy()).ToList(); n.history=history.Select(h=>h.Copy()).ToList();
+            if(n.version==1)
+            {
+                // 0.5.0 incorrectly disclosed this private action. Keep the player's incident history.
+                var kito=n.Find("kito"); if(kito!=null) kito.facts.RemoveAll(f=>f=="message_preserved");
+                n.version=2;
+            }
+            return n;
         }
         public PersonMemory Find(string id) { return people.FirstOrDefault(p=>p.id==id); }
         public void Remember(string id, string fact, int trust=0, int obligation=0)
@@ -39,7 +46,7 @@ namespace Kesho.Core
         }
         public void Validate(LifeState life)
         {
-            if(version!=1 || accountability<0 || accountability>100 || people==null || history==null || people.Count>32 || history.Count>256 || pendingEvent==null || pendingOccurrence==null)
+            if((version!=1 && version!=2) || accountability<0 || accountability>100 || people==null || history==null || people.Count>32 || history.Count>256 || pendingEvent==null || pendingOccurrence==null)
                 throw new ArgumentException("Invalid director state");
             var ids=new HashSet<string>();
             foreach(var p in people)
@@ -64,8 +71,9 @@ namespace Kesho.Core
     {
         public readonly string id, label, fact, result, setback;
         public readonly int cost, pressure, trust, obligation, setbackPercent;
-        public DirectorChoice(string id,string label,string fact,string result,int cost=0,int pressure=0,int trust=0,int obligation=0,int setbackPercent=0,string setback="")
-        { this.id=id; this.label=label; this.fact=fact; this.result=result; this.cost=cost; this.pressure=pressure; this.trust=trust; this.obligation=obligation; this.setbackPercent=setbackPercent; this.setback=setback; }
+        public readonly bool disclose;
+        public DirectorChoice(string id,string label,string fact,string result,int cost=0,int pressure=0,int trust=0,int obligation=0,int setbackPercent=0,string setback="",bool disclose=true)
+        { this.id=id; this.label=label; this.fact=fact; this.result=result; this.cost=cost; this.pressure=pressure; this.trust=trust; this.obligation=obligation; this.setbackPercent=setbackPercent; this.setback=setback; this.disclose=disclose; }
     }
     public sealed class DirectorEvent
     {
@@ -105,7 +113,7 @@ namespace Kesho.Core
             new DirectorEvent("fixer_boundary","morning_message","Kito · message","kito",
                 "You went quiet after that shortcut. Meet alone and we sort the rest, sawa?","pressure",70,"accepted_deal","concern_recorded",
                 new DirectorChoice("public","Only discuss this at the official desk","public_meeting_requested","You set a public meeting boundary. Kito knows your answer; no meeting or refund has happened.",pressure:-2,obligation:-10),
-                new DirectorChoice("record","Save the message; do not reply","message_preserved","You keep a private copy. Kito learns nothing new from your silence.")),
+                new DirectorChoice("record","Save the message; do not reply","message_preserved","You keep a private copy. Kito learns nothing new from your silence.",disclose:false)),
             new DirectorEvent("family_budget","morning_message","{contact} · message","household",
                 "First morning! No pressure to send money home. Just tell us what you need this week before you promise anybody anything.","family",20,"","accepted_deal",
                 new DirectorChoice("budget","Share a rough weekly budget","weekly_budget_shared","Your contact knows you need time to settle. You agree to talk before making money promises.",pressure:-3,trust:3),
@@ -153,7 +161,7 @@ namespace Kesho.Core
             if(c==null || s.cash<c.cost) return false;
             bool setback=c.setbackPercent>0 && Draw(s)%100<c.setbackPercent;
             s.cash-=c.cost; s.pressure=Math.Max(0,Math.Min(100,s.pressure+c.pressure));
-            s.director.Remember(e.person,c.fact,c.trust,c.obligation);
+            if(c.disclose) s.director.Remember(e.person,c.fact,c.trust,c.obligation);
             if(e.id=="report_followup" && c.id=="appointment") s.director.accountability=Math.Min(100,s.director.accountability+1);
             result=setback?c.setback:c.result;
             s.director.history.Add(new DirectorRecord { occurrence=expectedOccurrence,eventId=e.id,choiceId=c.id,outcome=setback?"setback":"steady",day=s.day });

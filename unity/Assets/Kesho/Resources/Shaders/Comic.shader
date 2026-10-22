@@ -15,6 +15,7 @@ Shader "Kesho/Comic"
             CBUFFER_START(UnityPerMaterial)
             half4 _BaseColor;
             CBUFFER_END
+            float _KeshoExposure;
             struct A { float4 p:POSITION; float3 n:NORMAL; };
             struct V { float4 p:SV_POSITION; float3 n:TEXCOORD0; float3 world:TEXCOORD1; };
             V Vert(A a) { V o; o.world=TransformObjectToWorld(a.p.xyz); o.p=TransformWorldToHClip(o.world); o.n=TransformObjectToWorldNormal(a.n); return o; }
@@ -25,7 +26,7 @@ Shader "Kesho/Comic"
                 half edge=saturate(dot(normalize(i.n),normalize(GetWorldSpaceViewDir(i.world))));
                 half3 colour=_BaseColor.rgb*band;
                 colour=lerp(colour*.72,colour,smoothstep(.0,.16,edge));
-                return half4(colour,1);
+                return half4(colour*max(.1,_KeshoExposure),1);
             }
             ENDHLSL
         }

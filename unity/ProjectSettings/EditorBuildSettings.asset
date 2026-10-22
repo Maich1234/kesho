@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Kesho/Scenes/Campus.unity
+    guid: 95f50cd77b2ea046755931728b800b28
+  - enabled: 1
     path: Assets/Kesho/Scenes/Arrival.unity
     guid: d36d7d462ce91810da5259cad2ff07cf
   - enabled: 1
@@ -20,9 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Kesho/Scenes/Dispatch.unity
     guid: 54e41a129a17344d8fbe4341b57f4263
-  - enabled: 1
-    path: Assets/Kesho/Scenes/Campus.unity
-    guid: 95f50cd77b2ea046755931728b800b28
   - enabled: 1
     path: Assets/Kesho/Scenes/Night.unity
     guid: 773e99d1c14ecc46cea0d9d5ff1cb91f

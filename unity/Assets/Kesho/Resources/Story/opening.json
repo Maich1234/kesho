@@ -70,7 +70,8 @@
       ],
       "sound": "campus",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "fee_notice",
@@ -139,7 +140,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "mentor",
@@ -208,7 +210,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "fixer_offer",
@@ -273,7 +276,8 @@
       ],
       "sound": "campus",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "proof",
@@ -338,7 +342,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "verify",
@@ -408,7 +413,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "concern",
@@ -449,7 +455,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "accompanied",
@@ -490,7 +497,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "shortcut_receipt",
@@ -559,7 +567,8 @@
       ],
       "sound": "campus",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "slip_check",
@@ -615,7 +624,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "mentor_slip",
@@ -671,7 +681,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "queue",
@@ -724,7 +735,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "documents",
@@ -797,7 +809,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "fee_confirm",
@@ -847,7 +860,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "aid_form",
@@ -922,7 +936,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "registered",
@@ -975,7 +990,8 @@
       ],
       "sound": "campus",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "provisional",
@@ -1028,7 +1044,8 @@
       ],
       "sound": "campus",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "copies",
@@ -1067,7 +1084,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "after_registration",
@@ -1120,7 +1138,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "family_call",
@@ -1159,7 +1178,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "housing_referral",
@@ -1200,7 +1220,8 @@
       ],
       "sound": "campus",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "afternoon"
     },
     {
       "id": "courtyard_arrival",
@@ -1253,7 +1274,8 @@
       ],
       "sound": "courtyard",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "evening"
     },
     {
       "id": "view_room",
@@ -1308,7 +1330,8 @@
       ],
       "sound": "room",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "evening"
     },
     {
       "id": "settle_room",
@@ -1340,7 +1363,8 @@
       ],
       "sound": "room",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "evening"
     },
     {
       "id": "settle_shared",
@@ -1379,7 +1403,8 @@
       ],
       "sound": "room",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "evening"
     },
     {
       "id": "evening_phone",
@@ -1437,7 +1462,8 @@
       ],
       "sound": "room",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "evening"
     },
     {
       "id": "first_sleep",
@@ -1469,7 +1495,8 @@
       ],
       "sound": "room",
       "comic": false,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "night"
     },
     {
       "id": "morning_message",
@@ -1524,7 +1551,8 @@
       ],
       "sound": "room",
       "comic": true,
-      "terminal": false
+      "terminal": false,
+      "timeOfDay": "morning"
     },
     {
       "id": "opening_end",
@@ -1543,7 +1571,8 @@
       "choices": [],
       "sound": "room",
       "comic": true,
-      "terminal": true
+      "terminal": true,
+      "timeOfDay": "morning"
     }
   ]
 }

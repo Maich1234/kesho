@@ -48,12 +48,12 @@ namespace Kesho.Editor
                 portraitImporter.mipmapEnabled=false; portraitImporter.npotScale=TextureImporterNPOTScale.None;
                 portraitImporter.maxTextureSize=2048; portraitImporter.isReadable=false; portraitImporter.SaveAndReimport();
             }
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.5.0";
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.5.1";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=4;
+            PlayerSettings.Android.bundleVersionCode=5;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
             var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
@@ -62,6 +62,7 @@ namespace Kesho.Editor
             var input=settings.FindProperty("activeInputHandler"); if(input!=null) { input.intValue=0; settings.ApplyModifiedPropertiesWithoutUndo(); }
             EditorBuildSettings.scenes=new[]{"Campus","Arrival","Courtyard","Room","Office","Dispatch","Night"}.Select(id=>new EditorBuildSettingsScene("Assets/Kesho/Scenes/"+id+".unity",true)).ToArray();
             AssetDatabase.SaveAssets();
+            Validate();
         }
         static void EnsureAssetFolder(string path)
         {
@@ -73,13 +74,18 @@ namespace Kesho.Editor
         public static void Validate()
         {
             var chapter=JsonUtility.FromJson<Chapter>(Resources.Load<TextAsset>("Story/opening").text); chapter.Validate();
+            if(EditorBuildSettings.scenes.Length==0 || EditorBuildSettings.scenes[0].path!="Assets/Kesho/Scenes/Campus.unity" || !EditorBuildSettings.scenes[0].enabled)
+                throw new BuildFailedException("Campus must be the enabled startup scene. Run Kesho/Configure mobile project.");
+            foreach(var scene in EditorBuildSettings.scenes)
+                if(scene.enabled && !File.Exists(Path.Combine(Application.dataPath,"..",scene.path))) throw new BuildFailedException("Missing build scene: "+scene.path);
             Debug.Log("Kesho: "+chapter.nodes.Length+" story beats validated. Voice and device QA are separate gates.");
         }
         [MenuItem("Kesho/Build Android development APK")]
         public static void Android()
         {
-            Configure(); Validate(); Directory.CreateDirectory("Builds/Android");
-            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=EditorBuildSettings.scenes.Select(s=>s.path).ToArray(), locationPathName="Builds/Android/Kesho-Unity.apk", target=BuildTarget.Android, options=BuildOptions.Development });
+            Configure();
+            string output=Path.GetFullPath(Path.Combine(Application.dataPath,"..","Builds","Android","Kesho-Unity.apk")); Directory.CreateDirectory(Path.GetDirectoryName(output));
+            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(), locationPathName=output, target=BuildTarget.Android, options=BuildOptions.Development });
             if(report.summary.result!=BuildResult.Succeeded) throw new BuildFailedException("Kesho Android export failed");
         }
     }

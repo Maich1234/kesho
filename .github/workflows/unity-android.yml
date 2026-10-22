@@ -14,14 +14,20 @@ jobs:
         shell: bash
         run: |
           test -n "$UNITY_EDITOR" && test -x "$UNITY_EDITOR"
+      - name: Configure and validate clean Unity project
+        shell: bash
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics -quit -projectPath "$GITHUB_WORKSPACE/unity" -executeMethod Kesho.Editor.ProjectSetup.Configure -logFile "$GITHUB_WORKSPACE/unity-configure.log"
       - name: Unity EditMode tests
         shell: bash
         run: |
           "$UNITY_EDITOR" -batchmode -nographics -projectPath "$GITHUB_WORKSPACE/unity" -runTests -testPlatform EditMode -testResults "$GITHUB_WORKSPACE/unity-test-results.xml" -logFile "$GITHUB_WORKSPACE/unity-tests.log"
+          python3 tools/check_unity_results.py "$GITHUB_WORKSPACE/unity-test-results.xml"
       - name: Unity scene route tests
         shell: bash
         run: |
           "$UNITY_EDITOR" -batchmode -nographics -projectPath "$GITHUB_WORKSPACE/unity" -runTests -testPlatform PlayMode -testResults "$GITHUB_WORKSPACE/unity-play-results.xml" -logFile "$GITHUB_WORKSPACE/unity-play.log"
+          python3 tools/check_unity_results.py "$GITHUB_WORKSPACE/unity-play-results.xml"
       - name: Build Android
         shell: bash
         run: |
@@ -32,6 +38,7 @@ jobs:
           name: Unity-build-evidence
           path: |
             unity/Builds/Android/*.apk
+            unity-configure.log
             unity-play-results.xml
             unity-play.log
             unity-test-results.xml

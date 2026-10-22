@@ -18,6 +18,7 @@ static class Program
         string path=args.Length>0?args[0]:"unity/Assets/Kesho/Resources/Story/opening.json";
         chapter=JsonSerializer.Deserialize<Chapter>(File.ReadAllText(path),new JsonSerializerOptions { IncludeFields=true }); chapter.Validate();
         DirectorChecks.Run(chapter);
+        PresentationChecks.Run(chapter);
         Check(chapter.start=="college_gate" && chapter.Find(chapter.start).scene=="Campus","opens at college");
         foreach(var n in chapter.nodes)
         {

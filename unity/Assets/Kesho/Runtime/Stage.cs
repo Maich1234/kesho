@@ -11,18 +11,21 @@ namespace Kesho.Runtime
         public readonly HashSet<Vector2Int> Blocked=new HashSet<Vector2Int>();
         public Transform Player { get; private set; }
         public Camera View { get; private set; }
+        public string SpeakingActorId { get; private set; } = "";
+        public DayPeriod CurrentPeriod { get; private set; }
         readonly Dictionary<Color,Material> palette=new Dictionary<Color,Material>();
         readonly Dictionary<string,ComicActor> actors=new Dictionary<string,ComicActor>();
         readonly List<Mesh> combinedMeshes=new List<Mesh>();
         readonly List<TextMesh> signs=new List<TextMesh>();
         Transform scenery;
+        Light sun;
+        Renderer windowGlass;
         Vector3 cameraPosition,cameraLook;
         readonly Color cream=new Color(.95f,.87f,.69f), teal=new Color(.06f,.43f,.43f), ink=new Color(.1f,.16f,.23f), red=new Color(.87f,.28f,.2f), gold=new Color(.97f,.65f,.12f), green=new Color(.27f,.49f,.29f);
         void Awake()
         {
             scenery=new GameObject("Authored environment").transform; scenery.SetParent(transform,false);
-            RenderSettings.ambientLight=new Color(.8f,.85f,.9f);
-            var sun=new GameObject("Afternoon sun").AddComponent<Light>(); sun.transform.SetParent(transform); sun.type=LightType.Directional; sun.transform.rotation=Quaternion.Euler(48,-32,0); sun.intensity=1.1f;
+            sun=new GameObject("Daylight").AddComponent<Light>(); sun.transform.SetParent(transform); sun.type=LightType.Directional;
             Box("Ground",new Vector3(0,-.16f,0),new Vector3(36,.3f,32),new Color(.76f,.67f,.5f));
             if(sceneId=="Campus" || sceneId=="Arrival") Campus();
             else if(sceneId=="Room" || sceneId=="Night") Room();
@@ -34,6 +37,7 @@ namespace Kesho.Runtime
             View=new GameObject("Camera").AddComponent<Camera>(); View.transform.SetParent(transform); View.tag="MainCamera"; View.gameObject.AddComponent<AudioListener>();
             View.orthographic=true; View.orthographicSize=9.7f; View.nearClipPlane=.1f; View.farClipPlane=100; View.backgroundColor=new Color(.69f,.83f,.87f); View.clearFlags=CameraClearFlags.SolidColor;
             ResetCamera(); View.transform.position=cameraPosition; View.transform.LookAt(cameraLook);
+            ApplyTimeOfDay(sceneId=="Night"?DayPeriod.Night:DayPeriod.Afternoon);
             CombineScenery();
         }
         void Campus()
@@ -55,14 +59,16 @@ namespace Kesho.Runtime
             Desk(new Vector3(1,0,-7),"Registration desk"); Sign("REGISTRATION",new Vector3(1,1.4f,-6.45f),.045f,ink);
             Box("Document tray",new Vector3(2,1.2f,-7),new Vector3(.6f,.12f,.5f),red);
             Box("Admission papers",new Vector3(1.9f,1.29f,-7),new Vector3(.4f,.025f,.4f),Color.white);
-            for(int i=0;i<3;i++) { var t=Person("Queued student "+i,new Vector3(-1.6f-i*.65f,0,-5.4f+i*.6f),i%4,i%4,i); t.rotation=Quaternion.Euler(0,160,0); }
-            Person("Admissions clerk",new Vector3(1,0,-8),2,1,2);
+            for(int i=0;i<3;i++) { var t=Person("Queued student "+i,new Vector3(-1.6f-i*.65f,0,-5.4f+i*.6f),i%4,i%4,i); t.rotation=Quaternion.Euler(0,160,0); if(i==0) actors["queued_student"]=t.GetComponent<ComicActor>(); }
+            actors["clerk"]=Person("Admissions clerk",new Vector3(1,0,-8),2,1,2).GetComponent<ComicActor>();
             Target("clerk",new Vector3(1,0,-5));
             Kiosk(new Vector3(8,0,2)); Target("parcel",new Vector3(5,0,2));
+            actors["copy_seller"]=Person("Kiosk owner",new Vector3(8,0,3.4f),3,0,4).GetComponent<ComicActor>();
             Noticeboard(new Vector3(-8,0,-2)); Target("notice",new Vector3(-7,0,-1));
             Desk(new Vector3(6,0,-6.7f),"Student support"); Sign("HELP DESK",new Vector3(6,1.4f,-6.1f),.045f,ink); Target("ledger",new Vector3(5,0,-4));
+            actors["support"]=Person("Student support officer",new Vector3(6,0,-7.7f),1,3,1).GetComponent<ComicActor>();
             var mentor=Person("Rehema",new Vector3(-4,0,1),0,2,2); mentor.rotation=Quaternion.Euler(0,25,0); actors["rehema"]=mentor.GetComponent<ComicActor>(); Target("rehema",new Vector3(-3,0,1));
-            var fixer=Person("Kito",new Vector3(4,0,3),2,3,3); fixer.rotation=Quaternion.Euler(0,-25,0); actors["contact"]=fixer.GetComponent<ComicActor>(); Target("contact",new Vector3(3,0,3));
+            var fixer=Person("Kito",new Vector3(4,0,3),2,3,3); fixer.rotation=Quaternion.Euler(0,-25,0); actors["kito"]=fixer.GetComponent<ComicActor>(); Target("contact",new Vector3(3,0,3));
             Target("phone",new Vector3(0,0,3));
             for(int i=0;i<2;i++) { Tree(new Vector3(i==0?-9:9,0,-5)); Bench(new Vector3(i==0?-8:8,0,5)); }
             Box("Road",new Vector3(0,.005f,10),new Vector3(36,.03f,5),ink);
@@ -87,7 +93,7 @@ namespace Kesho.Runtime
             Desk(new Vector3(-5,0,-3),"Supper table"); Round("Serving bowl",new Vector3(-5,1.25f,-3),new Vector3(.6f,.25f,.6f),cream);
             for(int i=0;i<3;i++) Round("Water container",new Vector3(8+i*.7f,.5f,-6),new Vector3(.6f,1,.6f),i%2==0?gold:teal);
             Tree(new Vector3(8,0,2)); Bench(new Vector3(-8,0,3));
-            var sifa=Person("Sifa",new Vector3(-4,0,-4),1,2,4); actors["landlord"]=sifa.GetComponent<ComicActor>();
+            var sifa=Person("Sifa",new Vector3(-4,0,-4),1,2,4); actors["sifa"]=sifa.GetComponent<ComicActor>();
             Target("landlord",new Vector3(-2,0,-2)); Target("supper",new Vector3(-4,0,-1)); Target("contact",new Vector3(3,0,0)); Target("phone",new Vector3(0,0,2));
             Sign("KARIBU COURT",new Vector3(0,4.2f,-8),.09f,ink);
         }
@@ -97,7 +103,7 @@ namespace Kesho.Runtime
             Box("Back wall",new Vector3(0,2,-8),new Vector3(22,4,.2f),new Color(.66f,.81f,.77f));
             Box("Side wall",new Vector3(-11,2,0),new Vector3(.2f,4,16),teal);
             Box("Window frame",new Vector3(2,2.7f,-7.8f),new Vector3(3,2,.2f),ink);
-            Box("Window glass",new Vector3(2,2.7f,-7.65f),new Vector3(2.7f,1.7f,.08f),sceneId=="Night"?new Color(.15f,.24f,.39f):new Color(.6f,.83f,.92f));
+            windowGlass=ComicMesh.Part(transform,"Window glass",new Vector3(2,2.7f,-7.65f),new Vector3(2.7f,1.7f,.08f),Tint(new Color(.6f,.83f,.92f)),ComicMesh.Cube).GetComponent<Renderer>();
             Box("Window mullion",new Vector3(2,2.7f,-7.5f),new Vector3(.1f,1.7f,.1f),cream);
             Box("Bed frame",new Vector3(-4,.35f,-2),new Vector3(2.4f,.7f,4),ink,true);
             Round("Mattress",new Vector3(-4,.8f,-2),new Vector3(2.45f,.45f,3.9f),cream);
@@ -114,7 +120,7 @@ namespace Kesho.Runtime
         void LegacyLocation()
         {
             Building("Office",new Vector3(0,0,-10),new Vector3(22,4,4),cream,1);
-            Desk(new Vector3(0,0,-4),"Service counter"); Person("Staff",new Vector3(0,0,-5.5f),1,3,0);
+            Desk(new Vector3(0,0,-4),"Service counter"); actors["clerk"]=Person("Staff",new Vector3(0,0,-5.5f),1,3,0).GetComponent<ComicActor>();
             Target("clerk",new Vector3(0,0,-2)); Target("ledger",new Vector3(3,0,-2)); Target("notice",new Vector3(-5,0,1)); Target("foreman",new Vector3(3,0,-1)); Target("parcel",new Vector3(-3,0,-1));
         }
         void Building(string name,Vector3 p,Vector3 size,Color colour,int floors)
@@ -187,7 +193,7 @@ namespace Kesho.Runtime
         }
         public bool Walkable(Vector2Int cell) { return Mathf.Abs(cell.x)<=10 && cell.y>=-7 && cell.y<=7 && !Blocked.Contains(cell); }
         public void ApplyAppearance(LifeState state) { Player.GetComponent<ComicActor>().SetAppearance(state); }
-        public Vector3 HotspotPosition(string id) { return actors.TryGetValue(id,out var actor)?actor.transform.position+Vector3.up*1.5f:Targets[id].position+Vector3.up*.3f; }
+        public Vector3 HotspotPosition(string id) { return actors.TryGetValue(StoryPresentation.TargetActor(sceneId,id),out var actor)?actor.transform.position+Vector3.up*1.5f:Targets[id].position+Vector3.up*.3f; }
         public void ResetCamera() { cameraPosition=new Vector3(10,16,19); cameraLook=new Vector3(0,0,-1); if(View) View.orthographicSize=9.7f; }
         public void Preview(bool enabled)
         {
@@ -196,15 +202,57 @@ namespace Kesho.Runtime
         }
         public void Conversation(string target,bool enabled)
         {
-            foreach(var actor in actors.Values) actor.Talking=false;
+            StopSpeaking();
             if(enabled && Targets.ContainsKey(target))
             {
                 var p=Targets[target].position;
                 cameraLook=(p+Player.position)*.5f+new Vector3(0,.8f,0); cameraPosition=cameraLook+new Vector3(5,6,10); View.orthographicSize=5.7f;
-                Player.LookAt(new Vector3(p.x,Player.position.y,p.z));
-                if(actors.TryGetValue(target,out var actor)) { actor.Talking=true; actor.transform.LookAt(new Vector3(Player.position.x,actor.transform.position.y,Player.position.z)); }
+                Face(Player,p);
             }
             else ResetCamera();
+        }
+        public void StopSpeaking()
+        {
+            SpeakingActorId="";
+            foreach(var actor in actors.Values) actor.Talking=false;
+            if(Player) Player.GetComponent<ComicActor>().Talking=false;
+        }
+        public Vector3 PresentSpeaker(SpeakerCue cue,string target)
+        {
+            Conversation(target,true);
+            if(cue.kind==SpeakerKind.InPerson && actors.TryGetValue(cue.actor,out var actor))
+            {
+                actor.Talking=true; SpeakingActorId=cue.actor;
+                var p=actor.transform.position;
+                cameraLook=(p+Player.position)*.5f+Vector3.up*1.1f;
+                cameraPosition=cameraLook+new Vector3(5,6,10); View.orthographicSize=5.7f;
+                Face(Player,p); Face(actor.transform,Player.position);
+                return p+Vector3.up*1.5f;
+            }
+            if(cue.kind==SpeakerKind.Player || cue.kind==SpeakerKind.Phone || cue.kind==SpeakerKind.Offscreen)
+            {
+                cameraLook=Player.position+Vector3.up*1.2f; cameraPosition=cameraLook+new Vector3(4,4,7); View.orthographicSize=4.4f;
+                if(cue.kind==SpeakerKind.Player) { Player.GetComponent<ComicActor>().Talking=true; SpeakingActorId="player"; }
+            }
+            return Player.position+Vector3.up*1.5f;
+        }
+        static void Face(Transform actor,Vector3 point)
+        {
+            point.y=actor.position.y; if((point-actor.position).sqrMagnitude>.001f) actor.LookAt(point);
+        }
+        public void ApplyTimeOfDay(DayPeriod period)
+        {
+            CurrentPeriod=period;
+            bool night=period==DayPeriod.Night,evening=period==DayPeriod.Evening,morning=period==DayPeriod.Morning;
+            sun.intensity=night?.18f:evening?.7f:1.1f;
+            sun.color=night?new Color(.52f,.65f,1):evening?new Color(1,.74f,.5f):morning?new Color(1,.91f,.77f):Color.white;
+            sun.transform.rotation=Quaternion.Euler(night?18:morning?25:evening?22:48,morning?-65:-32,0);
+            RenderSettings.ambientLight=night?new Color(.25f,.3f,.45f):evening?new Color(.68f,.56f,.52f):new Color(.8f,.85f,.9f);
+            var sky=night?new Color(.15f,.24f,.39f):evening?new Color(.88f,.66f,.53f):morning?new Color(.72f,.85f,.94f):new Color(.69f,.83f,.87f);
+            if(View) View.backgroundColor=sky;
+            if(windowGlass) windowGlass.sharedMaterial=Tint(sky);
+            // Comic.shader uses a stylised light treatment; exposure keeps night/day legible and distinct.
+            Shader.SetGlobalFloat("_KeshoExposure",night?.55f:evening?.85f:1f);
         }
         void LateUpdate()
         {

@@ -6,6 +6,8 @@ A story-led African life simulation about family, opportunity and the hidden pri
 
 ## Current delivery
 
+Version **0.5.1** repairs the opening's private knowledge, scene descriptions, speaker binding, settings/journal restoration, authored lighting and startup/build checks. Existing director saves migrate to schema 2 while retaining life history. See [release changes, verification limits and phone acceptance](docs/unity/RELEASE_0_5_1.md). Core/presentation checks pass; Unity compilation and phone acceptance remain pending.
+
 Version **0.5.0** integrates the first offline **Life Director** into the Maweni College opening. It adds seven original event families, two context-selected moments per opening path, separate NPC memory/trust/obligations, committed outcomes and private support follow-ups. It is a rules model, not a trained neural model or an LLM. See the [model design, implementation and phone checks](docs/unity/LIFE_DIRECTOR.md).
 
 The underlying opening retains 29 connected beats, 59 main-story lines, an unofficial fixer, official registration, payment support, housing and a next-morning consequence, with original comic portraits and the existing 3D campus. See the [college-opening delivery and limits](docs/unity/COLLEGE_OPENING.md). Reporting after paying now preserves a distinct reporting consequence.

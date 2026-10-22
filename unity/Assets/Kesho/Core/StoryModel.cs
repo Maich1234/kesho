@@ -18,6 +18,7 @@ namespace Kesho.Core
             {
                 if (string.IsNullOrEmpty(n.id) || !ids.Add(n.id)) throw new ArgumentException("Duplicate/empty node");
                 if (!WorldCatalog.Scenes.Contains(n.scene) || !WorldCatalog.Targets.Contains(n.target)) throw new ArgumentException("Unknown scene/target: " + n.id);
+                StoryPresentation.TimeFor(n);
                 if (n.lines == null || n.lines.Length == 0 || n.choices == null) throw new ArgumentException("Incomplete beat: " + n.id);
                 var choices = new HashSet<string>();
                 foreach (var c in n.choices)
@@ -35,7 +36,7 @@ namespace Kesho.Core
     }
     [Serializable] public sealed class StoryNode
     {
-        public string id, scene, target, objective, sound;
+        public string id, scene, target, objective, sound, timeOfDay;
         public Line[] lines;
         public Choice[] choices;
         public bool terminal, comic;

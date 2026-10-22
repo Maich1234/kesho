@@ -1,5 +1,7 @@
 # Kesho offline app audit — 0.5.0
 
+**Follow-up:** [0.5.1 source repairs](RELEASE_0_5_1.md) address OFF-02, OFF-08, OFF-09, OFF-11, OFF-12 and the source configuration part of OFF-13. Unity/device acceptance remains open. The findings below remain the dated 0.5.0 snapshot.
+
 Audited 22 October 2026, source commit `686408ded3fac2c8f5af6dfb157318a84744128c`. Scope: the complete active Unity offline client, Core, authored content, assets, tests, editor setup and build workflows. Legacy Godot code and undeployed Supabase SQL are not counted as delivered Unity features. This audit changes documentation only.
 
 ## Assessment

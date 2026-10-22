@@ -1,4 +1,12 @@
-# Current validation — 0.5.0 Life Director
+# Current validation — 0.5.1 opening repairs
+
+- **Executed:** 3,932 director assertions, including negative disclosure and legacy director-schema migration; 152 speaker/location/time presentation checks; retained 1,553,552 authored-story assertions over 60,984 paths and 12 real-file recovery checks.
+- **Executed:** 3 Python test methods for Unity result gates; C# syntax scan without Unity/NUnit references has no syntax diagnostics.
+- **Added, not run here:** seven GameSession/Stage PlayMode integration tests for paid results/nested overlays, inspections, speaking identities, morning lighting, same-scene checkpoints and cross-scene checkpoints. Actual Unity JSON migration tests updated/expanded.
+- **Pending:** Unity editor/API compilation, shader compilation/rendering, Unity tests, cloud APK and phone controls/saves/audio/performance. No fresh APK is claimed.
+- See [0.5.1 changes and phone acceptance](RELEASE_0_5_1.md).
+
+## Retained 0.5.0 director validation
 
 - **Executed:** 3,929 director assertions, including all seven event families and their options, scoped NPC memory, eligibility/ranking, saved selection, deterministic appointment outcomes, atomic costs, duplicate rejection, JSON round-trip, legacy core-state upgrade and journal retention.
 - **Executed:** 64 director-enabled opening routes reach the college outcome with two moments per route, affordable continuations and serialization between moments.
