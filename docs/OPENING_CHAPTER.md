@@ -1,5 +1,7 @@
 # Chapter 01 — A Place Before Dark
 
+Historical Godot v0.1 specification. Active Unity opening: [production plan](unity/OPENING_PRODUCTION.md).
+
 ## Dramatic question
 
 Can you make room for tomorrow before the city starts deciding for you?

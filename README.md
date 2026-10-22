@@ -1,58 +1,40 @@
 # Kesho
 
-**Every tomorrow has a price.** An African life simulation and political thriller about ambition, family, hidden power and the cost of success.
+A story-led African life simulation about family, opportunity and the hidden price of success.
 
-## Current milestone: first offline playable, v0.1.1
+**Active development: Unity 6.3 LTS / C# / URP, in [`unity/`](unity/).** The approved direction is a complete ordinary lifetime of at least **24 hours of meaningful active play**, with deeper branches targeting 30–50 hours. These are production targets, not delivered content claims.
 
-A native landscape Godot prototype with an original procedural 3D district. Create a 19-year-old character, choose one of three modest family backgrounds, meet your contact, arrange accommodation, explore work and education leads, and manage three days of money, time and energy. Branching conversations, seeded uncertain outcomes, a private editable journal, automatic local saving and corrupt-save backup recovery are implemented. v0.1.1 fixes native touch input and adds an original score, ambience, click/confirmation/footstep audio, optional haptics, motion feedback, persistent preferences and explicit unavailable-action explanations.
+## Current delivery
 
-This is a short systems prototype, **not the complete 30–50-hour game**. The blockout art is not the final semi-realistic art direction. Accounts, multiplayer, real-time AI dialogue, full careers, family switching, death/checkpoint branching, content filters, ads and purchases are not implemented. Beliefs, gender, mode and family personality are saved selections; most deeper effects are future work. Kiswahili currently covers navigation and status labels only.
+The Unity opening source contains 31 connected story beats, 65 short dialogue lines and seven scene blockouts: Arrival, Courtyard, Room, Office, Dispatch, Campus and Night. It follows a sponsorship opportunity, a false acknowledgement and a consequential night encounter. Decisions change information, relationships, evidence and later contact. There are work and ordinary application routes alongside accepting or investigating the deal.
 
-## Play on Android
+Implemented source includes tap-to-walk navigation, short dialogue presentation, character setup, pause/settings, private saves with backup recovery, same-life checkpoints, permanent-mode rewind prevention, seeded consequences, audio buses/voice slots and Android build tooling. Art is a blockout; the existing original music/ambience is temporary. **Natural voice performances and scene-specific foley are not recorded.** No runtime generative model is enabled.
 
-Open **Actions → Android prototype → Run workflow**, wait for the `Kesho-Android-test-build` artifact, download and extract the ZIP, then install `Kesho-Prototype.apk`. It targets ARM64 Android devices. It is a debug-signed test APK, not a Play Store release. Android may require allowing installation from the app used to open the file. Builds are not production signed; signing keys must never be committed.
+The story core is executable outside Unity. Unity editor compilation, play-mode interaction, mobile rendering, performance and final audio must be validated in an activated Unity environment. No Unity APK is claimed until that build passes.
 
-Use Sound & controls on the title or Settings in the city to adjust music, effects, ambience, vibration and reduced motion. Preferences are saved independently of your story. Audio pauses when the app loses focus.
+## Start in Unity
 
-Tap a destination in the bottom bar to walk there and open the conversation. Tap the street for free movement. Enable the virtual joystick in Settings if preferred. Reading and walking do not consume planning hours; choices do. Arrange accommodation before ending the day. Day three ends the prototype. Save & exit returns to the title. One active save slot: beginning a new life asks before replacing it.
+1. Install **Unity 6000.3.26f1**, Android Build Support, SDK/NDK and OpenJDK through Unity Hub; activate an eligible license.
+2. Add the `unity` directory as the project. Allow package import and compilation.
+3. Run **Kesho → Configure mobile project**, then **Kesho → Validate opening content**.
+4. Open `Assets/Kesho/Scenes/Arrival.unity` and enter Play mode.
+5. Run EditMode tests. Use **Kesho → Build Android development APK** only after tests and scene QA pass.
 
-## Develop
+The initial import configures URP and mobile build settings. Those generated settings should be reviewed and committed from the editor. The Android Unity package ID is separate from the legacy Godot app; old saves are not silently migrated.
 
-Pinned engine: **Godot 4.5.1 standard edition, GDScript**, Compatibility renderer. Open `project.godot`, then run the main scene. No paid assets or runtime dependencies are required. Original procedural geometry lives in `scripts/district.gd`; story content is `data/opening.json`.
-
-```bash
-godot --headless --editor --import --quit
-godot --headless --script res://tests/test_life.gd
-godot --headless --script res://tests/test_touch.gd
-mkdir -p build
-godot --headless --export-debug Android build/Kesho-Prototype.apk
+```sh
+dotnet run --project tools/StoryChecks/StoryChecks.csproj --configuration Release -- unity/Assets/Kesho/Resources/Story/opening.json
 ```
 
-For Android exports install Java 17, Android SDK Platform 35, platform-tools and build-tools 35.0.0. Set Java SDK and Android SDK paths in Godot Editor Settings and install the matching export templates. The CI workflow performs these steps without requiring a PC on the player's side. CI availability and provider quotas still apply. iOS requires a macOS/Xcode build and signing path; no iOS build is included.
+The `Unity story core` workflow runs automatically. The Unity Android workflow is manual and requires a registered `kesho-unity` runner with the pinned editor and an activated license. Do not put credentials or license files in Git.
 
-Tests deliberately write and recover local saves; use an isolated `XDG_DATA_HOME` when running them on Linux to protect your development save. Visual smoke captures can be generated with a working display:
+## Design and production
 
-```bash
-KESHO_QA_DIR=/absolute/output godot --audio-driver Dummy --script res://tests/visual_smoke.gd
-```
+- [Approved implementation plan](docs/unity/IMPLEMENTATION_PLAN.md)
+- [Opening scene and character plan](docs/unity/OPENING_PRODUCTION.md)
+- [Audio production contract](docs/unity/AUDIO.md)
+- [Voice recording sheet](docs/unity/VOICE_LINES.csv)
+- [Validation status](docs/unity/VALIDATION.md)
+- [Full-game design foundation](docs/DESIGN.md)
 
-## Structure
-
-- `scripts/life.gd`: offline state, gated transactions, seeded outcomes, durable saves.
-- `scripts/district.gd`: procedural world, pathfinding, walking and character blockouts.
-- `scripts/main.gd`: title, character setup, dialogue, HUD, journal and controls.
-- `data/opening.json`: authored scenes and outcome definitions.
-- `docs/DESIGN.md`: agreed design and phased delivery.
-- `docs/OPENING_CHAPTER.md`: opening sequence, cast and playable routes.
-- `docs/VALIDATION.md`: checks performed and remaining device validation.
-- `supabase/migrations/`: account-linked private-save foundation, not deployed or connected.
-
-## Backend boundary
-
-The current APK is offline and requests no internet permission. Supabase is planned for authentication, private save sync, friendships and opt-in summaries. Live sessions need an authoritative server. Offline money or state must never be imported into the online economy. Do not embed service-role keys in the game. The supplied SQL is a reviewable starting migration; it has not been applied to a Supabase project.
-
-## Research and representation
-
-The city, organisations and current scenes are fictional. No current scene is claimed to adapt a researched news case. Historical research from 2007–2026 and broader African reporting is a separate writing workstream; preserve allegations vs findings and combine sources into original plots. Real ethnic-group names will not be used as faction substitutes. See the design's research protocol.
-
-Original project code and narrative copyright remains with the project owner; no broad redistribution licence is granted here. Godot's MIT notice and the bundled DejaVu font licence are in `THIRD_PARTY_NOTICES.md` and `assets/fonts/LICENSE.txt`.
+Supabase remains the planned account/cloud-save/storage backend. Online play has a separate authoritative economy and is not implemented in this opening. The legacy Godot files remain at repository root for reference; their workflow is named **Legacy Godot Android prototype**. See [legacy instructions](docs/LEGACY_GODOT_README.md) only when working on that archived direction.

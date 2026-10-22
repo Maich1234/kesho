@@ -1,10 +1,6 @@
-name: Android prototype
+name: Legacy Godot Android prototype
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
 permissions:
   contents: read
 concurrency:

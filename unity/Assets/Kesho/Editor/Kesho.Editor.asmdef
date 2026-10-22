@@ -1,0 +1,1 @@
+{"name":"Kesho.Editor","references":["Kesho.Core","Kesho.Runtime","Unity.RenderPipelines.Universal.Runtime","Unity.RenderPipelines.Core.Runtime"],"includePlatforms":["Editor"]}

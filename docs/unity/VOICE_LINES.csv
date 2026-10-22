@@ -1,0 +1,66 @@
+voice_id,scene,speaker,line,condition,status
+ch01_arrival_01,Arrival,{contact},{name}? Here. Before someone charges you for standing still.,,recording_required
+ch01_arrival_02,Arrival,{contact},"Your family called twice. I said you arrived. The second time, I made it sound convincing.",,recording_required
+ch01_recognised_01,Arrival,{contact},Your photograph. And that bag: nobody returning to this city carries it with both hands.,,recording_required
+ch01_recognised_02,Arrival,{contact},Come. You need a room before you need a plan.,,recording_required
+ch01_family_01,Arrival,{contact},They think the sponsorship is settled. Is it?,,recording_required
+ch01_family_02,Arrival,You,It is an interview. Nobody promised me a place.,,recording_required
+ch01_bed_offer_01,Courtyard,Sifa,Three nights. C150. After that we discuss the word temporary.,,recording_required
+ch01_bed_offer_02,Courtyard,Sifa,Help with supper and we can call it C100. I do not charge family for advice. Yet.,,recording_required
+ch01_supper_01,Courtyard,Sifa,Pass those cups. The office asked my neighbour for a processing fee. The notice said applications were free.,,recording_required
+ch01_supper_02,Courtyard,Sifa,She paid. Then they asked her daughter to sign for money she never received.,,recording_required
+ch01_waiver_01,Courtyard,Sifa,The Opportunity Fund. Blue shutters. A man outside knew her name before she introduced herself.,,recording_required
+ch01_waiver_02,Courtyard,Sifa,Keep your receipts. And eat. Suspicion is not supper.,,recording_required
+ch01_room_arrival_01,Room,Family,Have you eaten?,,recording_required
+ch01_room_arrival_02,Room,You,Yes.,,recording_required
+ch01_room_arrival_03,Room,Family,Good. Tell us the rest when you can breathe.,,recording_required
+ch01_first_sleep_01,Room,You,The lock catches on the second turn. Someone laughs in the courtyard. A bus pulls away.,,recording_required
+ch01_morning_01,Courtyard,{contact},Interview at ten. There is work at Dispatch if the queue defeats you.,,recording_required
+ch01_morning_02,Courtyard,{contact},Take the signed application. Leave the original certificate here. Copies can travel. Originals stay safe.,,recording_required
+ch01_work_intro_01,Dispatch,Tendo,One parcel. Campus reception. C180 after they sign. You keep a copy.,,recording_required
+ch01_work_intro_02,Dispatch,Tendo,"If somebody changes the destination, call me. Being polite does not make them your employer.",,recording_required
+ch01_deliver_01,Campus,Receptionist,"For Rehema? Put it here. Wait, let me sign your copy.",,recording_required
+ch01_deliver_02,Campus,Receptionist,You look like the scholarship queue has already tired you out.,,recording_required
+ch01_campus_tip_01,Campus,Rehema,They nominate candidates. We confirm admissions separately. A stamp is not a place.,,recording_required
+ch01_campus_tip_02,Campus,Rehema,"If they offer you a grant, ask who receives the money and whose signature acknowledges it.",,recording_required
+ch01_notice_01,Office,Notice,Applications are free. Submit copies only. No representative may guarantee an award.,,recording_required
+ch01_notice_02,Office,Clerk,You there. Name? We have been expecting you.,,recording_required
+ch01_interview_01,Office,Maro,Strong results. Modest household. You fit the programme.,,recording_required
+ch01_interview_02,Office,Maro,There is a small verification charge. C200. Pay today and I can put your file in the first batch.,,recording_required
+ch01_fee_response_01,Office,Maro,The application is free. Verification takes work.,,recording_required
+ch01_fee_response_02,Office,Maro,"Look, I can waive it. Deliver a sealed envelope to Dispatch. Sign this acknowledgement and we help each other.",,recording_required
+ch01_conditions_01,Office,You,"The form says C8,000 has been received. The payment column is already completed.",,recording_required
+ch01_conditions_02,Office,Maro,An accounting step. Your actual support follows later. You can trust the programme.,,recording_required
+ch01_copy_request_01,Office,Maro,Copies are issued after approval.,,recording_required
+ch01_copy_request_02,Office,Clerk,"Maro, the chairman is calling.",,recording_required
+ch01_copy_request_03,Office,Maro,Stay here. Do not lose your place over paperwork.,,recording_required
+ch01_reference_01,Office,You,Two entries use the same account. One carries Sifa's neighbour's surname.,,recording_required
+ch01_reference_02,Office,You,A reference number is evidence of an entry. It does not yet explain where the money went.,,recording_required
+ch01_paid_fee_01,Office,Maro,Your file will move. Here is your receipt.,,recording_required
+ch01_paid_fee_02,Office,You,The receipt is for C50. You paid C200.,,recording_required
+ch01_ordinary_01,Office,Maro,Then wait for the next batch. I cannot promise when.,,recording_required
+ch01_ordinary_02,Office,Clerk,Take the submission slip. The tracking number is at the bottom.,,recording_required
+ch01_deal_01,Dispatch,Tendo,That envelope is not for Dispatch. The man renting the back office uses our address.,,recording_required
+ch01_deal_02,Dispatch,Tendo,"You can still take it back. Once he has your signature, he has a story about you.",,recording_required
+ch01_return_envelope_01,Office,Maro,You signed. Returning paper does not erase a signature.,,recording_required
+ch01_return_envelope_02,Office,Clerk,I will mark the envelope returned. Keep this copy.,,recording_required
+ch01_back_office_01,Dispatch,Recipient,You are early. Good. C300 for transport.,,recording_required
+ch01_back_office_02,Dispatch,Recipient,"When somebody asks, you received your support. All of it.",,recording_required
+ch01_work_after_01,Dispatch,Tendo,No permanent job today. Come tomorrow with your identification. I can put you on the casual list.,,recording_required
+ch01_work_after_02,Dispatch,Tendo,A list is not a promise. But at least you can read this one.,,recording_required
+ch01_consult_01,Campus,Rehema,Nobody can promise you admission through a back office.,,recording_required
+ch01_consult_02,Campus,Rehema,Keep what you have. Do not accuse people using a rumour. We can verify references together.,,recording_required
+ch01_consult_03,Campus,Rehema,Returning the envelope matters. Keep that return record.,return_record,recording_required
+ch01_trust_rehema_01,Campus,Rehema,Let me check the reference with the bursary office. Do not post it tonight.,,recording_required
+ch01_trust_rehema_02,Campus,Rehema,Your name belongs to you. Keep it that way.,,recording_required
+ch01_admission_01,Campus,Rehema,There is an ordinary application and a hardship assessment. Neither needs Maro.,,recording_required
+ch01_admission_02,Campus,Rehema,Bring the household documents. We can begin even while the other matter is unresolved.,,recording_required
+ch01_supper_return_01,Courtyard,Sifa,You have the face of someone who found a shortcut with a queue on it.,,recording_required
+ch01_supper_return_02,Courtyard,Sifa,Sit. Start with what you know. Leave what you suspect until after tea.,,recording_required
+ch01_second_sleep_01,Room,You,"You fold the receipt into your notebook. Outside, the last conversation in the courtyard fades.",,recording_required
+ch01_knock_01,Night,Visitor,Maro needs the copy you took. We can settle this quietly.,collector_visits,recording_required
+ch01_knock_02,Night,Phone,Unknown number: Tell them the money arrived. We will call again.,collector_calls,recording_required
+ch01_knock_03,Night,Neighbour,Sifa said you asked about the fund. My daughter signed that form too.,witness_visits,recording_required
+ch01_knock_04,Night,{contact},A man asked whether you were staying here. I did not answer. What happened today?,contact_warns,recording_required
+ch01_cliffhanger_01,Night,You,The application is still open. So is the question of who has been using your name.,,recording_required
+ch01_cliffhanger_02,Night,You,"Tomorrow, you have someone to speak to. And something worth keeping.",,recording_required

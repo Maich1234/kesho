@@ -1,0 +1,1574 @@
+{
+  "id": "a_place_before_dark",
+  "start": "arrival",
+  "nodes": [
+    {
+      "id": "arrival",
+      "scene": "Arrival",
+      "target": "contact",
+      "objective": "Find the person waiting for you.",
+      "lines": [
+        {
+          "speaker": "{contact}",
+          "text": "{name}? Here. Before someone charges you for standing still.",
+          "voice": "ch01_arrival_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "Your family called twice. I said you arrived. The second time, I made it sound convincing.",
+          "voice": "ch01_arrival_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "warm",
+          "label": "Good to see you.",
+          "next": "family",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "guarded",
+          "label": "How did you recognise me?",
+          "next": "recognised",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "bus_square",
+      "terminal": false
+    },
+    {
+      "id": "recognised",
+      "scene": "Arrival",
+      "target": "contact",
+      "objective": "Talk to your contact.",
+      "lines": [
+        {
+          "speaker": "{contact}",
+          "text": "Your photograph. And that bag: nobody returning to this city carries it with both hands.",
+          "voice": "ch01_recognised_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "Come. You need a room before you need a plan.",
+          "voice": "ch01_recognised_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "follow",
+          "label": "Lead the way.",
+          "next": "family",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "bus_square",
+      "terminal": false
+    },
+    {
+      "id": "family",
+      "scene": "Arrival",
+      "target": "contact",
+      "objective": "Decide what to tell home.",
+      "lines": [
+        {
+          "speaker": "{contact}",
+          "text": "They think the sponsorship is settled. Is it?",
+          "voice": "ch01_family_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "You",
+          "text": "It is an interview. Nobody promised me a place.",
+          "voice": "ch01_family_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell them it is only an interview.",
+          "next": "bed_offer",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "honest_call"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "delay",
+          "label": "Let me settle in first.",
+          "next": "bed_offer",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "delayed_call"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "bus_square",
+      "terminal": false
+    },
+    {
+      "id": "bed_offer",
+      "scene": "Courtyard",
+      "target": "landlord",
+      "objective": "Arrange somewhere to sleep.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "Three nights. C150. After that we discuss the word temporary.",
+          "voice": "ch01_bed_offer_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "Help with supper and we can call it C100. I do not charge family for advice. Yet.",
+          "voice": "ch01_bed_offer_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "help",
+          "label": "Help with supper · C100",
+          "next": "supper",
+          "cost": 100,
+          "reward": 0,
+          "flags": [
+            "shelter"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "pay",
+          "label": "Pay for the room · C150",
+          "next": "room_arrival",
+          "cost": 150,
+          "reward": 0,
+          "flags": [
+            "shelter"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "courtyard",
+      "terminal": false
+    },
+    {
+      "id": "supper",
+      "scene": "Courtyard",
+      "target": "supper",
+      "objective": "Help Sifa lay the table.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "Pass those cups. The office asked my neighbour for a processing fee. The notice said applications were free.",
+          "voice": "ch01_supper_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "She paid. Then they asked her daughter to sign for money she never received.",
+          "voice": "ch01_supper_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Which office?",
+          "next": "waiver",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "fee_warning"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "listen",
+          "label": "I will check before signing.",
+          "next": "room_arrival",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "fee_warning"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "cups",
+      "terminal": false
+    },
+    {
+      "id": "waiver",
+      "scene": "Courtyard",
+      "target": "supper",
+      "objective": "Listen before deciding whom to trust.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "The Opportunity Fund. Blue shutters. A man outside knew her name before she introduced herself.",
+          "voice": "ch01_waiver_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "Keep your receipts. And eat. Suspicion is not supper.",
+          "voice": "ch01_waiver_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "thanks",
+          "label": "Thank you, Sifa.",
+          "next": "room_arrival",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "office_description"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "cups",
+      "terminal": false
+    },
+    {
+      "id": "room_arrival",
+      "scene": "Room",
+      "target": "phone",
+      "objective": "Call home, or put the phone down.",
+      "lines": [
+        {
+          "speaker": "Family",
+          "text": "Have you eaten?",
+          "voice": "ch01_room_arrival_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "You",
+          "text": "Yes.",
+          "voice": "ch01_room_arrival_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Family",
+          "text": "Good. Tell us the rest when you can breathe.",
+          "voice": "ch01_room_arrival_03",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "share",
+          "label": "Tell them you are worried.",
+          "next": "first_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "family_confided"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "reassure",
+          "label": "Say the room is comfortable.",
+          "next": "first_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "family_reassured"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "phone",
+      "terminal": false
+    },
+    {
+      "id": "first_sleep",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Rest before the interview.",
+      "lines": [
+        {
+          "speaker": "You",
+          "text": "The lock catches on the second turn. Someone laughs in the courtyard. A bus pulls away.",
+          "voice": "ch01_first_sleep_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "sleep",
+          "label": "Sleep until morning.",
+          "next": "morning",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "sleep",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "sleep",
+      "terminal": false
+    },
+    {
+      "id": "morning",
+      "scene": "Courtyard",
+      "target": "contact",
+      "objective": "Meet your contact before leaving.",
+      "lines": [
+        {
+          "speaker": "{contact}",
+          "text": "Interview at ten. There is work at Dispatch if the queue defeats you.",
+          "voice": "ch01_morning_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "Take the signed application. Leave the original certificate here. Copies can travel. Originals stay safe.",
+          "voice": "ch01_morning_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "office",
+          "label": "Go to the fund office.",
+          "next": "notice",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "application"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "work",
+          "label": "Earn something first.",
+          "next": "work_intro",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "application"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "courtyard",
+      "terminal": false
+    },
+    {
+      "id": "work_intro",
+      "scene": "Dispatch",
+      "target": "foreman",
+      "objective": "Ask Tendo about documented work.",
+      "lines": [
+        {
+          "speaker": "Tendo",
+          "text": "One parcel. Campus reception. C180 after they sign. You keep a copy.",
+          "voice": "ch01_work_intro_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Tendo",
+          "text": "If somebody changes the destination, call me. Being polite does not make them your employer.",
+          "voice": "ch01_work_intro_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Take the parcel.",
+          "next": "deliver",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "carrying_parcel"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "leave",
+          "label": "I need to make my interview.",
+          "next": "notice",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "dispatch",
+      "terminal": false
+    },
+    {
+      "id": "deliver",
+      "scene": "Campus",
+      "target": "parcel",
+      "objective": "Take the parcel to reception.",
+      "lines": [
+        {
+          "speaker": "Receptionist",
+          "text": "For Rehema? Put it here. Wait, let me sign your copy.",
+          "voice": "ch01_deliver_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Receptionist",
+          "text": "You look like the scholarship queue has already tired you out.",
+          "voice": "ch01_deliver_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Is the fund connected to this campus?",
+          "next": "campus_tip",
+          "cost": 0,
+          "reward": 180,
+          "flags": [
+            "delivery_paid"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "leave",
+          "label": "Thanks. I have an appointment.",
+          "next": "notice",
+          "cost": 0,
+          "reward": 180,
+          "flags": [
+            "delivery_paid"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "campus_tip",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Ask Rehema how sponsorship works.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "They nominate candidates. We confirm admissions separately. A stamp is not a place.",
+          "voice": "ch01_campus_tip_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "If they offer you a grant, ask who receives the money and whose signature acknowledges it.",
+          "voice": "ch01_campus_tip_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "remember",
+          "label": "I will ask.",
+          "next": "notice",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "campus_verified"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "campus",
+      "terminal": false
+    },
+    {
+      "id": "notice",
+      "scene": "Office",
+      "target": "notice",
+      "objective": "Read the notice outside the fund office.",
+      "lines": [
+        {
+          "speaker": "Notice",
+          "text": "Applications are free. Submit copies only. No representative may guarantee an award.",
+          "voice": "ch01_notice_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Clerk",
+          "text": "You there. Name? We have been expecting you.",
+          "voice": "ch01_notice_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "enter",
+          "label": "Introduce yourself.",
+          "next": "interview",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "read_notice"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "office",
+      "terminal": false
+    },
+    {
+      "id": "interview",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "Find out what the opportunity actually offers.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "Strong results. Modest household. You fit the programme.",
+          "voice": "ch01_interview_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Maro",
+          "text": "There is a small verification charge. C200. Pay today and I can put your file in the first batch.",
+          "voice": "ch01_interview_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "question",
+          "label": "The notice says applications are free.",
+          "next": "fee_response",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "questioned_fee"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "details",
+          "label": "May I see the grant conditions?",
+          "next": "conditions",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "pay",
+          "label": "Pay C200.",
+          "next": "paid_fee",
+          "cost": 200,
+          "reward": 0,
+          "flags": [
+            "paid_fee"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "office",
+      "terminal": false
+    },
+    {
+      "id": "fee_response",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "Listen to the explanation.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "The application is free. Verification takes work.",
+          "voice": "ch01_fee_response_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Maro",
+          "text": "Look, I can waive it. Deliver a sealed envelope to Dispatch. Sign this acknowledgement and we help each other.",
+          "voice": "ch01_fee_response_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "read",
+          "label": "Read the acknowledgement.",
+          "next": "conditions",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "decline",
+          "label": "I will use the ordinary process.",
+          "next": "ordinary",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "refused_deal"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "accept",
+          "label": "Accept the arrangement.",
+          "next": "deal",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "accepted_deal"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "conditions",
+      "scene": "Office",
+      "target": "ledger",
+      "objective": "Inspect the acknowledgement before signing.",
+      "lines": [
+        {
+          "speaker": "You",
+          "text": "The form says C8,000 has been received. The payment column is already completed.",
+          "voice": "ch01_conditions_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Maro",
+          "text": "An accounting step. Your actual support follows later. You can trust the programme.",
+          "voice": "ch01_conditions_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "copy",
+          "label": "Ask for a copy first.",
+          "next": "copy_request",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "saw_false_receipt"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "refuse",
+          "label": "I will not sign for money I did not receive.",
+          "next": "ordinary",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "refused_deal",
+            "saw_false_receipt"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "sign",
+          "label": "Sign and take the envelope.",
+          "next": "deal",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "accepted_deal",
+            "saw_false_receipt"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "copy_request",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "Watch how Maro responds.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "Copies are issued after approval.",
+          "voice": "ch01_copy_request_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Clerk",
+          "text": "Maro, the chairman is calling.",
+          "voice": "ch01_copy_request_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Maro",
+          "text": "Stay here. Do not lose your place over paperwork.",
+          "voice": "ch01_copy_request_03",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "note",
+          "label": "Write down the reference number.",
+          "next": "reference",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "copied_ledger"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "wait",
+          "label": "Leave the paper untouched.",
+          "next": "ordinary",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "refused_deal"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "office",
+      "terminal": false
+    },
+    {
+      "id": "reference",
+      "scene": "Office",
+      "target": "ledger",
+      "objective": "Keep only what you actually observed.",
+      "lines": [
+        {
+          "speaker": "You",
+          "text": "Two entries use the same account. One carries Sifa's neighbour's surname.",
+          "voice": "ch01_reference_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "You",
+          "text": "A reference number is evidence of an entry. It does not yet explain where the money went.",
+          "voice": "ch01_reference_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "leave",
+          "label": "Leave before Maro returns.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "ledger_reference"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "paid_fee",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "Ask for proof of payment.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "Your file will move. Here is your receipt.",
+          "voice": "ch01_paid_fee_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "You",
+          "text": "The receipt is for C50. You paid C200.",
+          "voice": "ch01_paid_fee_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "challenge",
+          "label": "Ask him to correct it.",
+          "next": "fee_response",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "receipt_mismatch"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "keep",
+          "label": "Keep the receipt and seek advice.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "receipt_mismatch"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "ordinary",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "Keep a route open without signing.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "Then wait for the next batch. I cannot promise when.",
+          "voice": "ch01_ordinary_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Clerk",
+          "text": "Take the submission slip. The tracking number is at the bottom.",
+          "voice": "ch01_ordinary_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "submit",
+          "label": "Submit through the ordinary queue.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "ordinary_application"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "work",
+          "label": "Keep the papers and look for work.",
+          "next": "work_after",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "deferred_application"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "office",
+      "terminal": false
+    },
+    {
+      "id": "deal",
+      "scene": "Dispatch",
+      "target": "foreman",
+      "objective": "Deliver the envelope to the named recipient.",
+      "lines": [
+        {
+          "speaker": "Tendo",
+          "text": "That envelope is not for Dispatch. The man renting the back office uses our address.",
+          "voice": "ch01_deal_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Tendo",
+          "text": "You can still take it back. Once he has your signature, he has a story about you.",
+          "voice": "ch01_deal_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "return",
+          "label": "Return the envelope unopened.",
+          "next": "return_envelope",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "returned_envelope"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "deliver",
+          "label": "Hand it to the back office.",
+          "next": "back_office",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "delivered_envelope"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "dispatch",
+      "terminal": false
+    },
+    {
+      "id": "return_envelope",
+      "scene": "Office",
+      "target": "clerk",
+      "objective": "End the arrangement clearly.",
+      "lines": [
+        {
+          "speaker": "Maro",
+          "text": "You signed. Returning paper does not erase a signature.",
+          "voice": "ch01_return_envelope_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Clerk",
+          "text": "I will mark the envelope returned. Keep this copy.",
+          "voice": "ch01_return_envelope_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep the return record.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "return_record"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "paper",
+      "terminal": false
+    },
+    {
+      "id": "back_office",
+      "scene": "Dispatch",
+      "target": "parcel",
+      "objective": "Wait for the recipient.",
+      "lines": [
+        {
+          "speaker": "Recipient",
+          "text": "You are early. Good. C300 for transport.",
+          "voice": "ch01_back_office_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Recipient",
+          "text": "When somebody asks, you received your support. All of it.",
+          "voice": "ch01_back_office_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "money",
+          "label": "Take the C300.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 300,
+          "flags": [
+            "transport_payment"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse the money.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "refused_payment"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "dispatch",
+      "terminal": false
+    },
+    {
+      "id": "work_after",
+      "scene": "Dispatch",
+      "target": "foreman",
+      "objective": "Ask Tendo for an honest opening.",
+      "lines": [
+        {
+          "speaker": "Tendo",
+          "text": "No permanent job today. Come tomorrow with your identification. I can put you on the casual list.",
+          "voice": "ch01_work_after_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Tendo",
+          "text": "A list is not a promise. But at least you can read this one.",
+          "voice": "ch01_work_after_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "list",
+          "label": "Leave your name.",
+          "next": "consult",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "work_lead"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "dispatch",
+      "terminal": false
+    },
+    {
+      "id": "consult",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Get independent advice from Rehema.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "Nobody can promise you admission through a back office.",
+          "voice": "ch01_consult_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "Keep what you have. Do not accuse people using a rumour. We can verify references together.",
+          "voice": "ch01_consult_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "Returning the envelope matters. Keep that return record.",
+          "voice": "ch01_consult_03",
+          "whenFlag": "return_record",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "share",
+          "label": "Show her your papers.",
+          "next": "trust_rehema",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "rehema_knows"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "private",
+          "label": "Ask about ordinary admission only.",
+          "next": "admission",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "kept_private"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "campus",
+      "terminal": false
+    },
+    {
+      "id": "trust_rehema",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Decide whether to seek corroboration.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "Let me check the reference with the bursary office. Do not post it tonight.",
+          "voice": "ch01_trust_rehema_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "Your name belongs to you. Keep it that way.",
+          "voice": "ch01_trust_rehema_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "verify",
+          "label": "Let her verify the reference.",
+          "next": "admission",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "verification_requested"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "hold",
+          "label": "Ask her to wait.",
+          "next": "admission",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "verification_held"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "campus",
+      "terminal": false
+    },
+    {
+      "id": "admission",
+      "scene": "Campus",
+      "target": "rehema",
+      "objective": "Choose a next step you can control.",
+      "lines": [
+        {
+          "speaker": "Rehema",
+          "text": "There is an ordinary application and a hardship assessment. Neither needs Maro.",
+          "voice": "ch01_admission_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Rehema",
+          "text": "Bring the household documents. We can begin even while the other matter is unresolved.",
+          "voice": "ch01_admission_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "study",
+          "label": "Prepare a hardship application.",
+          "next": "supper_return",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "education_path"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "earn",
+          "label": "Work first, then apply.",
+          "next": "supper_return",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "work_path"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "campus",
+      "terminal": false
+    },
+    {
+      "id": "supper_return",
+      "scene": "Courtyard",
+      "target": "supper",
+      "objective": "Return to the household.",
+      "lines": [
+        {
+          "speaker": "Sifa",
+          "text": "You have the face of someone who found a shortcut with a queue on it.",
+          "voice": "ch01_supper_return_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Sifa",
+          "text": "Sit. Start with what you know. Leave what you suspect until after tea.",
+          "voice": "ch01_supper_return_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "confide",
+          "label": "Tell her what happened.",
+          "next": "second_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "sifa_knows"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "protect",
+          "label": "Tell her only about admission.",
+          "next": "second_sleep",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "sifa_unaware"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "cups",
+      "terminal": false
+    },
+    {
+      "id": "second_sleep",
+      "scene": "Room",
+      "target": "bed",
+      "objective": "Put the papers away and rest.",
+      "lines": [
+        {
+          "speaker": "You",
+          "text": "You fold the receipt into your notebook. Outside, the last conversation in the courtyard fades.",
+          "voice": "ch01_second_sleep_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "rest",
+          "label": "Turn out the light.",
+          "next": "knock",
+          "cost": 0,
+          "reward": 0,
+          "flags": [],
+          "trust": 0,
+          "effect": "night_resolution",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "sleep",
+      "terminal": false
+    },
+    {
+      "id": "knock",
+      "scene": "Night",
+      "target": "door",
+      "objective": "Someone is at the door.",
+      "lines": [
+        {
+          "speaker": "Visitor",
+          "text": "Maro needs the copy you took. We can settle this quietly.",
+          "voice": "ch01_knock_01",
+          "whenFlag": "collector_visits",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Phone",
+          "text": "Unknown number: Tell them the money arrived. We will call again.",
+          "voice": "ch01_knock_02",
+          "whenFlag": "collector_calls",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "Neighbour",
+          "text": "Sifa said you asked about the fund. My daughter signed that form too.",
+          "voice": "ch01_knock_03",
+          "whenFlag": "witness_visits",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "{contact}",
+          "text": "A man asked whether you were staying here. I did not answer. What happened today?",
+          "voice": "ch01_knock_04",
+          "whenFlag": "contact_warns",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [
+        {
+          "id": "together",
+          "label": "Wake your contact.",
+          "next": "cliffhanger",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "asked_for_support"
+          ],
+          "trust": 1,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        },
+        {
+          "id": "record",
+          "label": "Keep the message and stay inside.",
+          "next": "cliffhanger",
+          "cost": 0,
+          "reward": 0,
+          "flags": [
+            "preserved_contact"
+          ],
+          "trust": 0,
+          "effect": "",
+          "requireFlag": "",
+          "blockFlag": ""
+        }
+      ],
+      "sound": "knock",
+      "terminal": false
+    },
+    {
+      "id": "cliffhanger",
+      "scene": "Night",
+      "target": "phone",
+      "objective": "Your first night has changed tomorrow.",
+      "lines": [
+        {
+          "speaker": "You",
+          "text": "The application is still open. So is the question of who has been using your name.",
+          "voice": "ch01_cliffhanger_01",
+          "whenFlag": "",
+          "unlessFlag": ""
+        },
+        {
+          "speaker": "You",
+          "text": "Tomorrow, you have someone to speak to. And something worth keeping.",
+          "voice": "ch01_cliffhanger_02",
+          "whenFlag": "",
+          "unlessFlag": ""
+        }
+      ],
+      "choices": [],
+      "sound": "night",
+      "terminal": true
+    }
+  ]
+}

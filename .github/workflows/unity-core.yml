@@ -1,0 +1,20 @@
+name: Unity story core
+on:
+  push:
+    paths: ['unity/**', 'tools/StoryChecks/**', '.github/workflows/unity-core.yml']
+  pull_request:
+    paths: ['unity/**', 'tools/StoryChecks/**', '.github/workflows/unity-core.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  story:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile and explore all opening paths
+        run: dotnet run --project tools/StoryChecks/StoryChecks.csproj --configuration Release -- unity/Assets/Kesho/Resources/Story/opening.json

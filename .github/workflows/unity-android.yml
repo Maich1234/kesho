@@ -1,0 +1,40 @@
+name: Unity Android (licensed runner)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unity:
+    # A workstation with Unity Hub activation and Android support must register this label.
+    runs-on: [self-hosted, kesho-unity]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check editor availability
+        shell: bash
+        run: |
+          test -n "$UNITY_EDITOR" && test -x "$UNITY_EDITOR"
+      - name: Unity EditMode tests
+        shell: bash
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics -projectPath "$GITHUB_WORKSPACE/unity" -runTests -testPlatform EditMode -testResults "$GITHUB_WORKSPACE/unity-test-results.xml" -logFile "$GITHUB_WORKSPACE/unity-tests.log"
+      - name: Unity scene route tests
+        shell: bash
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics -projectPath "$GITHUB_WORKSPACE/unity" -runTests -testPlatform PlayMode -testResults "$GITHUB_WORKSPACE/unity-play-results.xml" -logFile "$GITHUB_WORKSPACE/unity-play.log"
+      - name: Build Android
+        shell: bash
+        run: |
+          "$UNITY_EDITOR" -batchmode -nographics -quit -projectPath "$GITHUB_WORKSPACE/unity" -buildTarget Android -executeMethod Kesho.Editor.ProjectSetup.Android -logFile "$GITHUB_WORKSPACE/unity-build.log"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Unity-build-evidence
+          path: |
+            unity/Builds/Android/*.apk
+            unity-play-results.xml
+            unity-play.log
+            unity-test-results.xml
+            unity-tests.log
+            unity-build.log
+          if-no-files-found: error
