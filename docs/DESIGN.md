@@ -70,7 +70,7 @@ Current opening scenes are wholly fictional and not claimed as researched adapta
 
 ## Architecture and delivery
 
-**22 October 2026 update:** Unity 6.3 LTS/C#/URP in `unity/` is the approved active engine. See [implementation plan](unity/IMPLEMENTATION_PLAN.md). The ordinary completed lifetime must provide at least 24 hours of meaningful active play; deeper paths retain the 30–50-hour ambition. The Godot milestones below describe historical work.
+**22 October 2026 update:** Unity 6.3 LTS/C#/URP in `unity/` is the approved active engine. See [implementation plan](unity/IMPLEMENTATION_PLAN.md). The clarified standard is 24 hours of meaningful active play for one complete ordinary path, starting at college and continuing through adult life to success, failure or death. Optional detours may extend that path; the 24 hours are not spread across alternative playthroughs. The Godot milestones below describe historical work.
 
 Historical v0.1 stack: Godot 4.5.1/GDScript, Supabase Auth/Postgres/Storage, authoritative live-session server. Offline state is local; RNG state, immutable decision IDs and schema version travel with saves. Public summaries are explicitly labelled unverified. Online balances, offices and rewards are server controlled. Put database RLS on private records, never distribute service-role credentials, and use idempotency keys for consequential online commands. Hosting and provider quotas are budget constraints, not evidence that live sessions are free at scale.
 

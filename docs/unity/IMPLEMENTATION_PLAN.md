@@ -6,8 +6,8 @@ Approved by the user on 22 October 2026. Supersedes the Godot gameplay rewrite. 
 
 - Unity 6 LTS, C#, URP. Android first, supported iPhones later. Landscape; tap-to-move first, optional joystick in the usability increment.
 - One coherent fictional African city and countryside, informed by researched contexts rather than a collage of ethnic stereotypes. Contemporary setting; later episodes may adapt mechanisms from verified 2007–2026 reporting, including reform successes.
-- Adult characters begin with limited means and choose background, appearance, gender and beliefs. Several connected paths, with family/romance central to the full life. One household protagonist is the focus.
-- Ordinary completed lifetime: **at least 24 hours of active gameplay**. Deeper branches: 30–50 hours. Early death is a shorter ending; prison, recovery and rebuilding may extend a life. Checkpoint and permanent modes retain their agreed meanings.
+- The lifetime begins at college entry, with a brief arrival/funding transition where needed. Adult characters begin with limited means and choose background, appearance, gender and beliefs. Several connected paths follow into adult life, with family/romance central. One household protagonist is the focus.
+- **One complete ordinary path targets 24 hours of meaningful active gameplay across the whole lifetime:** college, establishing an adult life, becoming someone, and a final outcome of success, failure or death. The 24 hours are not an opening-chapter budget or the combined length of alternative routes. The earlier 30–50-hour ambition applies to optional/deeper detours rather than the standard path. Early death remains a shorter ending under the agreed consequence modes; prison, recovery and rebuilding can change duration. Checkpoint and permanent modes retain their agreed meanings.
 - All powerful characters face an earned crisis. Honesty is not immunity; corruption is not guaranteed success or automatic death. Victimisation and medical outcomes are not morality punishments.
 - Offline and online lives remain separate. Supabase is planned for accounts, private cloud saves and storage. Shared political systems require authoritative commands, bounded institutional power and abuse moderation independent of fictional corruption.
 
@@ -15,13 +15,15 @@ Approved by the user on 22 October 2026. Supersedes the Godot gameplay rewrite. 
 
 | Stage | Baseline active time | Dramatic work |
 |---|---:|---|
-| Arrival and household | 3 h | Belonging, shelter, expectations, first opportunity |
-| Education/training/employment | 5 h | Capability, gatekeepers, dependency, friendships |
-| Independence and relationships | 5 h | Commitments, money, partner/family decisions |
-| Career/enterprise and pressure | 5 h | Compromise, responsibility, institutional exposure |
-| Influence and crisis | 4 h | Earlier choices converge; apparent victory can fracture |
-| Resolution and legacy | 2 h | Consequences, repair, rebuilding and ending |
-| Total | 24 h | Target to prove through content and playtests |
+| College and foundations | 5 h | Brief arrival, funding, study, friendships, first relationships and gatekeepers |
+| First foothold after college | 4 h | Graduation or leaving, work, unemployment, enterprise and first obligations |
+| Building an adult life | 5 h | Independence, partner/family decisions, responsibility and changing loyalties |
+| Becoming someone | 4 h | Career, business, community or public influence; wealth is one possible milestone |
+| Reckoning and crisis | 4 h | Earlier choices converge; success can unravel, or rebuilding and reform become possible |
+| Final outcome and legacy | 2 h | Earned success, failure or death; resolve the central conflict and household consequences |
+| Total for one complete ordinary path | 24 h | Entire lifetime arc, to be proved through content and playtests |
+
+Chapters cover years through meaningful transitions. The game does not simulate every day of a lifespan in real time. Completing college, getting a job or becoming a millionaire is progression, not automatically the end credits. A success/failure ending may close the life story while the protagonist is alive; death is another possible final outcome. The final crisis and resolution must complete the chosen path before it counts toward the 24-hour target.
 
 No waiting screen, compulsory repeat job, slow walking requirement or unskippable dialogue counts as delivering this target. Measure fastest ordinary completed routes as well as median first-time routes. Local engagement telemetry distinguishes active play from menus/background/extended inactivity; telemetry alone cannot prove meaningful duration.
 

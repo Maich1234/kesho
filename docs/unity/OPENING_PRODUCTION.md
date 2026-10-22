@@ -1,5 +1,7 @@
 # A Place Before Dark — Unity opening
 
+This chapter is the college-entry transition at the beginning of the lifetime. Production must lead into campus life and then adult life; the fund-office cliffhanger is not the full game ending. The complete ordinary path targets 24 hours across all life stages, as specified in the [implementation plan](IMPLEMENTATION_PLAN.md).
+
 ## Dramatic spine
 
 The player arrives with a family connection, C1,200 and an interview. A small favour at the Opportunity Fund asks them to sign for money they have not received. The household makes the risk personal; campus advice keeps a legitimate route alive. The final contact is different for someone who signed, someone who gathered a reference and someone who stayed outside the deal.

@@ -2,7 +2,7 @@
 
 A story-led African life simulation about family, opportunity and the hidden price of success.
 
-**Active development: Unity 6.3 LTS / C# / URP, in [`unity/`](unity/).** The approved direction is a complete ordinary lifetime of at least **24 hours of meaningful active play**, with deeper branches targeting 30–50 hours. These are production targets, not delivered content claims.
+**Active development: Unity 6.3 LTS / C# / URP, in [`unity/`](unity/).** The approved direction is **24 hours of meaningful active play for one complete ordinary life path**, from college through adult life and achievement to a final outcome of success, failure or death. Optional detours can extend that path. These are production targets, not delivered content claims.
 
 ## Current delivery
 
