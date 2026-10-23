@@ -32,6 +32,7 @@ namespace Kesho.Runtime
         {
             using(profileAwake.Auto())
             {
+                SessionAudioListener.Ensure();
                 scenery=new GameObject("Authored environment").transform; scenery.SetParent(transform,false);
                 sun=new GameObject("Daylight").AddComponent<Light>(); sun.transform.SetParent(transform); sun.type=LightType.Directional;
                 Box("Ground",new Vector3(0,-.16f,0),new Vector3(36,.3f,32),new Color(.76f,.67f,.5f));
@@ -44,7 +45,7 @@ namespace Kesho.Runtime
                 playerActor=Player.GetComponent<ComicActor>();
                 foreach(var actor in GetComponentsInChildren<ComicActor>()) if(actor!=playerActor) occupied.Add(StreetWalker.Cell(actor.transform.position));
                 var walker=Player.gameObject.AddComponent<StreetWalker>(); walker.Stage=this;
-                View=new GameObject("Camera").AddComponent<Camera>(); View.transform.SetParent(transform); View.tag="MainCamera"; View.gameObject.AddComponent<AudioListener>();
+                View=new GameObject("Camera").AddComponent<Camera>(); View.transform.SetParent(transform); View.tag="MainCamera";
                 View.orthographic=true; View.orthographicSize=9.7f; View.nearClipPlane=.1f; View.farClipPlane=100; View.backgroundColor=new Color(.69f,.83f,.87f); View.clearFlags=CameraClearFlags.SolidColor;
                 ResetCamera(); View.transform.position=cameraPosition; View.transform.LookAt(cameraLook);
                 ApplyTimeOfDay(sceneId=="Night"?DayPeriod.Night:DayPeriod.Afternoon);

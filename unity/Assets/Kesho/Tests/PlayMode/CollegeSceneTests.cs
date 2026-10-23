@@ -38,4 +38,25 @@ public sealed class CollegeSceneTests
         }
         LogAssert.NoUnexpectedReceived();
     }
+    [UnityTest] public IEnumerator PersistentListenerSurvivesSceneUnloadAndFollowsReplacementCamera()
+    {
+        // Check before requesting a gameplay scene: startup must already have its listener.
+        var listeners=Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+        Assert.AreEqual(1,System.Array.FindAll(listeners,l=>l.isActiveAndEnabled).Length,"Startup has exactly one active listener");
+        var listener=System.Array.Find(listeners,l=>l.isActiveAndEnabled);
+        Assert.IsNotNull(listener.GetComponent<SessionAudioListener>());
+        yield return SceneManager.LoadSceneAsync("Campus"); yield return null;
+        var campus=SceneManager.GetActiveScene();
+        var gap=SceneManager.CreateScene("Audio transition regression"); SceneManager.SetActiveScene(gap);
+        yield return SceneManager.UnloadSceneAsync(campus); yield return null;
+        Assert.IsTrue(listener && listener.isActiveAndEnabled,"Listener survives a gap with no gameplay camera");
+        yield return SceneManager.LoadSceneAsync("Room"); yield return null;
+        var stage=Object.FindFirstObjectByType<Stage>();
+        listeners=Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+        Assert.AreEqual(1,System.Array.FindAll(listeners,l=>l.isActiveAndEnabled).Length,"No duplicate listener after replacement scene");
+        Assert.AreSame(listener,System.Array.Find(listeners,l=>l.isActiveAndEnabled));
+        Assert.Less(Vector3.Distance(listener.transform.position,stage.View.transform.position),.001f);
+        Assert.Less(Quaternion.Angle(listener.transform.rotation,stage.View.transform.rotation),.01f);
+        LogAssert.NoUnexpectedReceived();
+    }
 }

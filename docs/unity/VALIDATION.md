@@ -1,4 +1,12 @@
-# Current validation — 0.6.1 asset import repair
+# Current validation — 0.6.2 audio-listener lifecycle repair
+
+Build #3's supplied log confirms revision `1c974a99f1a589f25b5f689771a8d94ef3fcab5d`, on Unity 6000.6.6f1. All **18 EditMode cases passed** (including icon, portrait, seven sounds, background JSON/save ordering and recovery). **16 of 17 PlayMode cases passed**. The sole failed case was `CollegeSceneTests.CampusMeshesAndAllHotspotsSurviveSceneLoad`: its strict log check caught a missing audio listener in the initial test scene. This is actual Unity test evidence for 0.6.1; it is not evidence of a successful APK or phone performance.
+
+0.6.2 creates one persistent listener before scene loading and before session sound playback. Scene cameras no longer own listeners. The persistent listener follows the active camera after camera easing and survives empty/loading scenes. The PlayMode runner bootstraps the same production listener for its initial empty backup scene. No log assertions or unit-test gates were disabled.
+
+Added a PlayMode lifecycle regression for exactly one startup listener, a complete gameplay-camera unload gap and following the replacement camera. Local Python tests/core tests/source parsing pass. The new Unity regression and repaired cloud build have not run here. [Full diagnosis and retry](BUILD_FIX_0_6_2.md). Runtime 0.6.2 / Android code 8.
+
+## Previous 0.6.1 asset import repair
 
 The uploaded Android build #2 checked out `473d6bfc6141ebb2d17b4d47ca0c24bc250e6fec`. It compiled scripts, reported unsupported version-1 TextureImporter/AudioImporter metadata, threw `BuildFailedException: Kesho app icon is missing`, and ended with failed PlayMode tests. The detailed failed-test names/assertions are not present in the supplied log; the test XML is needed to establish those failures. This is **not** a successful Unity build or acceptance result.
 

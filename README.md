@@ -6,6 +6,8 @@ A story-led African life simulation about family, opportunity and the hidden pri
 
 ## Current delivery
 
+Version **0.6.2** fixes the remaining build #3 failure: the missing audio listener during startup/scene loading. One persistent listener now follows the active camera; strict log checks remain enabled. See [build #3 evidence and the repair](docs/unity/BUILD_FIX_0_6_2.md). A successful APK rebuild is still required.
+
 Version **0.6.1** repairs the cloud import failure in the 0.6.0 icon/portrait/audio metadata and adds failed-test details to cloud logs. See the [build failure diagnosis and retry settings](docs/unity/BUILD_FIX_0_6_1.md). The failed run used Unity 6000.6.6f1 rather than the project pin 6000.3.26f1. A fresh successful Unity build is still required.
 
 Version **0.6.0** adds the Kesho launcher icon/browser favicon, camera and character movement polish, persistent customisation controls, pooled dialogue UI, immediate mute, baked foley and an ordered background autosave. See the [report fixes and outstanding runtime checks](docs/unity/RELEASE_0_6_0.md). Local core/storage/asset checks pass; Unity compilation, rendered quality and device performance remain unverified.

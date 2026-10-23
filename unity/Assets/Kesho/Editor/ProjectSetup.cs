@@ -59,12 +59,12 @@ namespace Kesho.Editor
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Universal Render Pipeline/Lit")),"Assets/Kesho/Resources/Materials/Blockout.mat");
             PlayerSettings.SetIcons(NamedBuildTarget.Unknown,new[]{icon},IconKind.Any);
             PlayerSettings.WebGL.template="PROJECT:Kesho";
-            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.6.1";
+            PlayerSettings.companyName="Wabunifu Labs"; PlayerSettings.productName="Kesho"; PlayerSettings.bundleVersion="0.6.2";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.wabunifu.kesho.unity");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
-            PlayerSettings.Android.bundleVersionCode=7;
+            PlayerSettings.Android.bundleVersionCode=8;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
             // Legacy input is used deliberately by the first touch controller and uGUI module.
             var playerSettings=AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");

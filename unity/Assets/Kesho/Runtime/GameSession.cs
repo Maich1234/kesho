@@ -34,7 +34,7 @@ namespace Kesho.Runtime
             Application.targetFrameRate=30; Screen.orientation=ScreenOrientation.LandscapeLeft;
             chapter=JsonUtility.FromJson<Chapter>(Resources.Load<TextAsset>("Story/opening").text); chapter.Validate();
             saves=new OfflineSave(Path.Combine(Application.persistentDataPath,"kesho-unity-v2"),chapter);
-            Sound=gameObject.AddComponent<Soundscape>();
+            SessionAudioListener.Ensure(); Sound=gameObject.AddComponent<Soundscape>();
             var ui=new GameObject("Story interface",typeof(RectTransform)); ui.transform.SetParent(transform); hud=ui.AddComponent<StoryHud>();
             SceneManager.sceneLoaded+=SceneReady;
         }
@@ -67,7 +67,7 @@ namespace Kesho.Runtime
         }
         void Menu()
         {
-            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.6.1"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
+            TrackView(Menu); playing=false; InConversation=false; onBack=ConfirmQuit; StopWalking(); Sound.StopVoice(); hud.Close(); hud.Objective("KESHO","College opening · 0.6.2"); if(stage) { stage.StopSpeaking(); stage.Preview(false); }
             hud.Title(); hud.AddText("Maweni College. Your first day. A stranger offers a shortcut.",22);
             hud.Button("Begin a life",CreateCharacter,true);
             if(saves.Read()!=null) hud.Button("Continue",()=>Begin(saves.Read(),true));
